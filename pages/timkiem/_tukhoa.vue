@@ -3,11 +3,11 @@
     <div class="page-width">
       <div style="width: 100%; height: 400px;" class="d-flex">
         <div
-          class="pt-4"
-          style="width: 250px; height: 100%; background-color: #fff"
+          class="pt-1 pb-3 pl-3"
+          style="width: 250px; height: 100%; background-color: #FCF3CF;"
           v-show="$vuetify.breakpoint.lgAndUp"
         >
-          <div v-for="danhMuc in danhMucs" :key="danhMuc.id" style="height: 45px">
+          <div v-for="danhMuc in danhMucs" :key="danhMuc.id" style="height: 43px">
             <NuxtLink :to="'/danhmuc/' + danhMuc.id" class="d-flex align-center">
               <v-avatar size="36">
                 <img
@@ -69,9 +69,7 @@
           <span class="text-icon">MIỄN PHÍ GIAO HÀNG</span>
         </div>
       </div>
-      <div
-        style="margin-top: 50px; font-size: 26px; font-weight: bold"
-      >{{tenDanhMuc}}</div>
+      <div style="margin-top: 50px; font-size: 26px; font-weight: bold">KẾT QUẢ TÌM KIẾM CHO: {{tuKhoaTimKiem}}</div>
       <v-progress-linear color="green darken-2" rounded value="100"></v-progress-linear>
       <v-text-field color="success" loading disabled v-if="loadSanPham"></v-text-field>
       <div
@@ -126,11 +124,11 @@ import shipIcon from "assets/image/icon/delivery.png";
 export default {
   layout: "header",
   data: () => ({
-    sanPhams: [{ danh_muc: { ten_danh_muc: "Danh mục" } }],
+    sanPhams: [],
     danhMucs: [],
-    tenDanhMuc: "",
     END_POINT_IMAGE: END_POINT_IMAGE,
     page: 1,
+    tuKhoaTimKiem: '',
     per_page: 20,
     total_page: 1,
     loadSanPham: true,
@@ -161,8 +159,10 @@ export default {
   methods: {
     async getSanPham() {
       this.loadSanPham = true;
+      let tuKhoa = this.$route.params.tukhoa
+      this.tuKhoaTimKiem = tuKhoa
       let data = await api.get("sanpham", {
-        danh_muc_id: this.$route.params.id,
+        search: tuKhoa,
         per_page: this.per_page,
         page: this.page,
       });
@@ -174,7 +174,6 @@ export default {
     async getDanhMuc() {
       let data = await api.get("danhmuc", { per_page: 9 });
       this.danhMucs = data.data.data;
-      this.tenDanhMuc = this.danhMucs.find(el => el.id == this.$route.params.id).ten_danh_muc
     },
     PaginateSanPham(val) {
       this.page = val;

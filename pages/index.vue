@@ -3,11 +3,11 @@
     <div class="page-width">
       <div style="width: 100%; height: 400px;" class="d-flex">
         <div
-          class="pt-4"
-          style="width: 250px; height: 100%; background-color: #fff"
+           class="pt-1 pb-3 pl-3"
+          style="width: 250px; height: 100%; background-color: #FCF3CF"
           v-show="$vuetify.breakpoint.lgAndUp"
         >
-          <div v-for="danhMuc in danhMucs" :key="danhMuc.id" style="height: 45px">
+          <div v-for="danhMuc in danhMucs" :key="danhMuc.id" style="height: 43px">
             <NuxtLink :to="'/danhmuc/' + danhMuc.id" class="d-flex align-center">
               <v-avatar size="36">
                 <img
@@ -91,12 +91,12 @@
             ></v-img>
             <v-card-title style="height: 95px">{{sanPham.ten_san_pham}}</v-card-title>
             <v-card-subtitle>{{formatCurrency(sanPham.gia_ban)}} VNĐ</v-card-subtitle>
-            <v-card-actions>
+            <!-- <v-card-actions>
               <v-btn class="ma-1 mt-0" outlined color="green">
                 <v-icon left>mdi-cart</v-icon>THÊM VÀO GIỎ
               </v-btn>
               <v-spacer></v-spacer>
-            </v-card-actions>
+            </v-card-actions> -->
           </NuxtLink>
         </v-card>
       </div>
@@ -196,7 +196,7 @@ export default {
   margin-left: 15px;
 }
 .text-icon {
-  font-size: 16px;
+  font-size: 13px;
   font-weight: bold;
   padding-left: 15px;
 }
