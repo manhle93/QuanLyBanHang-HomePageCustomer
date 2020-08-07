@@ -1,0 +1,13 @@
+.page-width {
+  width: 100%;
+  max-width: 1200px;
+}
+
+a {
+  text-decoration: none;
+}
+
+.image-cover {
+  background-repeat: no-repeat!important;
+  background-size: cover!important;
+}
