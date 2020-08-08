@@ -3,7 +3,7 @@
     <div class="page-width">
       <div style="width: 100%; height: 400px;" class="d-flex">
         <div
-           class="pt-1 pb-3 pl-3"
+          class="pt-1 pb-3 pl-3"
           style="width: 250px; height: 100%; background-color: #FCF3CF"
           v-show="$vuetify.breakpoint.lgAndUp"
         >
@@ -35,7 +35,7 @@
             </v-carousel-item>
           </v-carousel>
         </div>
-        <div style="width: 300px; height: 100%; padding-left: 10px">
+        <div style="width: 300px; height: 100%; padding-left: 10px" class="khuyen-mai">
           <div style="width: 290px; height: 195px; margin-top: 5px">
             <img
               src="https://t.a4vn.com/2018/10/3/bo-anh-hot-girl-xinh-dep-khoe-dang-tao-bao-voi-bikini-ab8.png"
@@ -51,8 +51,8 @@
           </div>
         </div>
       </div>
-      <div class="d-flex mt-5" style="justify-content: space-around">
-        <div style="height: 80px" class="d-flex align-center">
+      <div class="d-flex mt-5" style="justify-content: space-around; flex-wrap: wrap">
+        <div style="height: 80px;" class="d-flex align-center">
           <img :src="customerIcon" height="40" />
           <span class="text-icon">100.000 ++ KHÁCH HÀNG</span>
         </div>
@@ -96,7 +96,7 @@
                 <v-icon left>mdi-cart</v-icon>THÊM VÀO GIỎ
               </v-btn>
               <v-spacer></v-spacer>
-            </v-card-actions> -->
+            </v-card-actions>-->
           </NuxtLink>
         </v-card>
       </div>
@@ -199,5 +199,13 @@ export default {
   font-size: 13px;
   font-weight: bold;
   padding-left: 15px;
+}
+@media only screen and (max-width: 600px) {
+  .khuyen-mai {
+    display: none;
+  }
+  .text-icon {
+    font-size: 10px;
+  }
 }
 </style>
