@@ -8,6 +8,16 @@ a {
 }
 
 .image-cover {
-  background-repeat: no-repeat!important;
-  background-size: cover!important;
+  background-repeat: no-repeat !important;
+  background-size: cover !important;
 }
+.mo-ta img {
+  max-width: 100%;
+}
+.mo-ta {
+  text-align: justify;
+  text-justify: inter-word;
+  padding-left: 10px;
+  padding-right: 15px;
+}
+

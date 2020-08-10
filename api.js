@@ -15,6 +15,7 @@ export default {
     localStorage.removeItem('jwt_token')
   },
 
+
   processHeaders (header) {
     return header === true ? {Authorization: `Bearer ${this.getToken()}`} : header
   },
@@ -71,7 +72,7 @@ export default {
         })
         .catch(error => {
           if (this._shouldRefreshToken(error)) {
-            this.submitOnce('get', '/refreshtoken', {}, true)
+            this.submitOnce('get', 'auth/refresh', {}, true)
               .then(response => {
                 this.setToken(response.data.access_token)
                 this.submitOnce(method, url, params, auth)
@@ -100,7 +101,7 @@ export default {
 
   _shouldRefreshToken (error) {
     return error.response && error.response.status === 401
-      && (error.response.data.message === 'Token has expired' || error.response.data.message === 'Unauthenticated.')
+      && (error.response.data.code === 'token_expire' || error.response.data.code === 'unauthorized.')
   },
 
   _handleError (error, notify) {

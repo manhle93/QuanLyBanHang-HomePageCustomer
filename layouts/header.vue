@@ -39,9 +39,13 @@
             </NuxtLink>
           </div>
         </div>
-        <div style="text-align: center" class="mb-4">
-          <v-btn class="mr-2" small color="primary">Đăng ký</v-btn>
-          <v-btn class small color="orange">Đăng nhập</v-btn>
+        <div style="text-align: center" class="mb-4" v-if="!loggedIn">
+          <nuxt-link to="/dangky">
+            <v-btn class="mr-2" small color="primary">Đăng ký</v-btn>
+          </nuxt-link>
+          <nuxt-link to="/dangnhap">
+            <v-btn class small color="orange">Đăng nhập</v-btn>
+          </nuxt-link>
         </div>
       </div>
     </v-navigation-drawer>
@@ -75,8 +79,47 @@
               class="tim-kiem"
             ></v-text-field>
           </div>
-          <v-btn class="mr-2 button" small color="primary">Đăng ký</v-btn>
-          <v-btn class="mr-4 button" small color="orange">Đăng nhập</v-btn>
+          <nuxt-link to="/dangky" v-if="!loggedIn">
+            <v-btn class="mr-2 button" small color="primary">Đăng ký</v-btn>
+          </nuxt-link>
+          <nuxt-link to="/dangnhap" v-if="!loggedIn">
+            <v-btn class="mr-4 button" small color="orange">Đăng nhập</v-btn>
+          </nuxt-link>
+
+          <v-menu bottom origin="center center" transition="scale-transition" v-if="loggedIn">
+            <template v-slot:activator="{ on }">
+              <v-btn icon large v-on="on" class="mr-4">
+                <!-- <v-avatar size="40px" item v-if="user.anh_dai_dien">
+              <v-img :src="endPoint+ user.anh_dai_dien" alt="Vuetify"></v-img>
+            </v-avatar>
+            <v-avatar size="40px" item v-else>
+              <v-img src="./assets/avatar.jpg" alt="Vuetify"></v-img>
+                </v-avatar>-->
+                <v-avatar>
+                  <img :src="User.avatar ? END_POINT_IMAGE + User.avatar : avatar" alt="John" />
+                </v-avatar>
+              </v-btn>
+            </template>
+
+            <v-list>
+              <v-list-item @click="aboutMe">
+                <v-list-item-title>
+                  <v-icon class="mr-3">mdi-account</v-icon>Thông tin cá nhân
+                </v-list-item-title>
+              </v-list-item>
+              <v-list-item @click="myOrder">
+                <v-list-item-title>
+                  <v-icon class="mr-3">mdi-cart</v-icon>Đơn hàng của tôi
+                </v-list-item-title>
+              </v-list-item>
+              <v-list-item @click="logOut">
+                <v-list-item-title>
+                  <v-icon class="mr-3">mdi-backup-restore</v-icon>Đăng xuất
+                </v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+          <v-btn class="mr-4 user-name" outlined color="white" v-if="loggedIn">{{User.name}}</v-btn>
           <nuxt-link to="/giohang" class="pr-6">
             <v-badge color="red" :content="soLuongGioHang">
               <v-icon>mdi-cart</v-icon>
@@ -118,10 +161,21 @@
             />
             <div class="tieu-de">Sản phẩm bán chạy</div>
             <div class="search-mobile">
-              <input style="height: 35px; width: 350px; background-color: white; border-radius: 5px" type="text" placeholder="Hôm nay bạn muốn ăn gì?">
+              <v-form>
+                <input
+                  @keyup.enter="timKiem"
+                  v-model="search"
+                  style="height: 35px; width: 350px; background-color: white; border-radius: 5px"
+                  type="text"
+                  placeholder="Hôm nay bạn muốn ăn gì?"
+                />
+              </v-form>
             </div>
           </div>
-          <div class="page-width khuyen-mai" style="width: 300px; height: 100%; background-color: #196F3D"></div>
+          <div
+            class="page-width khuyen-mai"
+            style="width: 300px; height: 100%; background-color: #196F3D"
+          ></div>
         </div>
       </div>
     </v-app-bar>
@@ -129,9 +183,14 @@
     <v-main>
       <nuxt />
     </v-main>
-    <!-- <v-footer color="indigo" app>
-      <span class="white--text">&copy; {{ new Date().getFullYear() }}</span>
-    </v-footer>-->
+    <v-footer
+      :style="{background: 'url('+ footer +')'}"
+      style="width: 100%; height: 250px"
+      class="image-cover"
+    >
+      <!-- <span class="white--text">&copy; {{ new Date().getFullYear() }}</span> -->
+      <!-- <img :src="footer" width="100%"> -->
+    </v-footer>
   </v-app>
 </template>
 
@@ -140,6 +199,9 @@ import api from "@/api";
 import logo from "@/assets/image/logo.jpg";
 import { END_POINT_IMAGE } from "@/env";
 import product from "@/assets/image/product.png";
+import avatar from "@/assets/image/avatar_none.png";
+import footer from "@/assets/image/footer.png";
+
 export default {
   props: {
     source: String,
@@ -147,14 +209,23 @@ export default {
   data: () => ({
     leftMenu: false,
     logo: logo,
+    avatar: avatar,
+    footer: footer,
     danhMucs: [],
     END_POINT_IMAGE: END_POINT_IMAGE,
     product: product,
     search: null,
+    loggedIn: false,
+    User: {
+      name: "",
+      avatar_url: null,
+      roles: null,
+    },
   }),
   mounted() {
     this.getDanhMuc();
     this.getSoLuongGioHang();
+    this.me();
   },
   computed: {
     soLuongGioHang: {
@@ -167,6 +238,25 @@ export default {
     },
   },
   methods: {
+    async me() {
+      try {
+        let data = await api.get("auth/me");
+        this.User = data.data.data;
+        console.log(this.User);
+        this.loggedIn = true;
+      } catch (error) {
+        this.loggedIn = false;
+      }
+    },
+    async logOut() {
+      try {
+        await api.post("auth/logout");
+        api.deleteToken();
+        this.me();
+      } catch (error) {}
+    },
+    myOrder() {},
+    aboutMe() {},
     getSoLuongGioHang() {
       let product = JSON.parse(localStorage.getItem("gio_hang"));
       if (!product || product.length == 0) {
@@ -229,8 +319,11 @@ export default {
     justify-content: center;
   }
   ::placeholder {
-  padding-left: 15px;
-  font-style: italic;
-}
+    padding-left: 15px;
+    font-style: italic;
+  }
+  .user-name {
+    display: none;
+  }
 }
 </style>

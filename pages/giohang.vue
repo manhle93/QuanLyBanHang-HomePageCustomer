@@ -7,7 +7,7 @@
           <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">Đóng</v-btn>
         </template>
       </v-snackbar>
-      <div style="margin-top: 50px; font-size: 26px; font-weight: bold">GIỎ HÀNG</div>
+      <div style="margin-top: 50px; font-size: 26px; font-weight: bold" class="ml-3">GIỎ HÀNG</div>
       <v-progress-linear color="green darken-2" rounded value="100"></v-progress-linear>
       <v-text-field color="success" loading disabled v-if="loadSanPham"></v-text-field>
       <div
@@ -20,7 +20,7 @@
           v-for="sanPham in sanPhams"
           :key="sanPham.id"
         >
-          <div style="width: 200px; height: 100%;">
+          <div style="width: 200px; height: 100%;" class="ml-3">
             <v-img
               :src="sanPham.anh_dai_dien ? END_POINT_IMAGE +sanPham.anh_dai_dien : product"
               aspect-ratio="1.7"
@@ -28,17 +28,38 @@
             ></v-img>
           </div>
           <div style="height: 100%" class="flex-fill c-flex ml-6">
-            <div class="d-flex" style="justify-content: space-between">
+            <div class="d-flex" style="justify-content: space-between; flex-wrap: wrap">
               <div class="danh-muc">{{sanPham.ten_san_pham}}</div>
               <div class="danh-muc mr-8">{{formatCurrency(sanPham.gia_ban)}} đ</div>
             </div>
-            <div>Danh mục: {{sanPham.danh_muc ? sanPham.danh_muc.ten_danh_muc : ""}}</div>
-            <v-btn class="mx-2 mt-4" x-small fab dark color="pink" @click="xoaSanPham(sanPham.id)">
+            <div
+              class="hide-text"
+            >Danh mục: {{sanPham.danh_muc ? sanPham.danh_muc.ten_danh_muc : ""}}</div>
+            <v-btn
+              class="mx-2 mt-4 hide-text"
+              x-small
+              fab
+              dark
+              color="pink"
+              @click="xoaSanPham(sanPham.id)"
+            >
               <v-icon dark>mdi-delete</v-icon>
             </v-btn>
+            <input
+              class="delete-mobile"
+              @change="doiSoLuong(sanPham.so_luong)"
+              v-model="sanPham.so_luong"
+              style="width: 80%; border: 1px solid green; padding-left: 10px; border-radius: 5px"
+              label="Số lượng"
+              :min="1"
+              type="number"
+              outlined
+              dense
+            />
           </div>
-          <div style="width: 200px; height: 100%;">
+          <div style="width: 200px; height: 100%; display: flex; justify-content: flex-end">
             <v-text-field
+              class="hide-text"
               @change="doiSoLuong(sanPham.so_luong)"
               v-model="sanPham.so_luong"
               style="width: 80%"
@@ -48,22 +69,32 @@
               outlined
               dense
             ></v-text-field>
+            <v-btn
+              class="delete-mobile mr-4"
+              x-small
+              fab
+              dark
+              color="pink"
+              @click="xoaSanPham(sanPham.id)"
+            >
+              <v-icon dark>mdi-delete</v-icon>
+            </v-btn>
           </div>
         </div>
       </div>
       <div v-if="sanPhams.length > 0">
-        <div class="d-flex">
+        <div class="d-flex ml-3">
           <div style="width: 300px">
-            <v-text-field v-model="giamGia" style="width: 300px" label="Mã giảm giá" outlined dense></v-text-field>
+            <v-text-field v-model="giamGia" style="max-width: 300px" label="Mã giảm giá" outlined dense></v-text-field>
           </div>
-          <v-btn class="ml-4" color="primary">Áp dụng</v-btn>
+          <v-btn class="ml-4 mr-3" color="primary">Áp dụng</v-btn>
         </div>
-        <div class="dat-hang">Giảm giá: {{formatCurrency(giamGia)}} đ</div>
-        <div class="dat-hang">
+        <div class="dat-hang ml-3">Giảm giá: {{formatCurrency(giamGia)}} đ</div>
+        <div class="dat-hang ml-3">
           Tổng thanh toán:
           <span style="color: green; font-size: 22px">{{formatCurrency(tongTien)}} đ</span>
         </div>
-        <v-btn class="mt-3" style="color: white" color="green">ĐẶT HÀNG</v-btn>
+        <v-btn class="mt-3 ml-3" style="color: white" color="green">ĐẶT HÀNG</v-btn>
       </div>
       <div v-else style="width: 100%; text-align: center;">
         <img class="mb-4" :src="emptyCard" height="350px" />
@@ -168,7 +199,6 @@ export default {
       this.tongTien = this.tongTien - this.giamGia;
     },
     doiSoLuong(val) {
-
       this.tinhTongTien();
     },
     formatCurrency(n, separate = ".") {
@@ -200,5 +230,21 @@ export default {
   font-size: 18px;
   font-weight: bold;
   margin-bottom: 4px;
+}
+.delete-mobile {
+  display: none;
+}
+@media only screen and (max-width: 600px) {
+  .danh-muc {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 4px;
+  }
+  .hide-text {
+    display: none;
+  }
+  .delete-mobile {
+    display: inline;
+  }
 }
 </style>
