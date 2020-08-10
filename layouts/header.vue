@@ -161,13 +161,14 @@
             />
             <div class="tieu-de">Sản phẩm bán chạy</div>
             <div class="search-mobile">
-              <input
-                @keyup.enter="timKiem"
-                v-model="search"
-                style="height: 35px; width: 350px; background-color: white; border-radius: 5px"
-                type="text"
-                placeholder="Hôm nay bạn muốn ăn gì?"
-              />
+              <v-form v-on:submit.prevent="timKiem">
+                <input
+                  v-model="search"
+                  style="height: 35px; width: 350px; background-color: white; border-radius: 5px"
+                  type="text"
+                  placeholder="Hôm nay bạn muốn ăn gì?"
+                />
+              </v-form>
             </div>
           </div>
           <div
