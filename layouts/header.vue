@@ -39,7 +39,7 @@
             </NuxtLink>
           </div>
         </div>
-        <div style="text-align: center" class="mb-4" v-if="!loggedIn">
+        <div style="text-align: center" class="mb-12" v-if="!loggedIn">
           <nuxt-link to="/dangky">
             <v-btn class="mr-2" small color="primary">Đăng ký</v-btn>
           </nuxt-link>
@@ -161,15 +161,13 @@
             />
             <div class="tieu-de">Sản phẩm bán chạy</div>
             <div class="search-mobile">
-              <v-form>
-                <input
-                  @keyup.enter="timKiem"
-                  v-model="search"
-                  style="height: 35px; width: 350px; background-color: white; border-radius: 5px"
-                  type="text"
-                  placeholder="Hôm nay bạn muốn ăn gì?"
-                />
-              </v-form>
+              <input
+                @keyup.enter="timKiem"
+                v-model="search"
+                style="height: 35px; width: 350px; background-color: white; border-radius: 5px"
+                type="text"
+                placeholder="Hôm nay bạn muốn ăn gì?"
+              />
             </div>
           </div>
           <div
