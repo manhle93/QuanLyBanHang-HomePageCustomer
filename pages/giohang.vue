@@ -1,7 +1,7 @@
 <template>
   <v-layout justify-center>
     <div class="page-width">
-      <v-snackbar v-model="snackbar">
+      <v-snackbar v-model="snackbar" color="green">
         {{ noiDung }}
         <template v-slot:action="{ attrs }">
           <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">Đóng</v-btn>
@@ -85,7 +85,13 @@
       <div v-if="sanPhams.length > 0">
         <div class="d-flex ml-3">
           <div style="width: 300px">
-            <v-text-field v-model="giamGia" style="max-width: 300px" label="Mã giảm giá" outlined dense></v-text-field>
+            <v-text-field
+              v-model="giamGia"
+              style="max-width: 300px"
+              label="Mã giảm giá"
+              outlined
+              dense
+            ></v-text-field>
           </div>
           <v-btn class="ml-4 mr-3" color="primary">Áp dụng</v-btn>
         </div>
@@ -94,7 +100,7 @@
           Tổng thanh toán:
           <span style="color: green; font-size: 22px">{{formatCurrency(tongTien)}} đ</span>
         </div>
-        <v-btn class="mt-3 ml-3" style="color: white" color="green">ĐẶT HÀNG</v-btn>
+        <v-btn class="mt-3 ml-3" style="color: white" color="green" @click="showDatHang()">ĐẶT HÀNG</v-btn>
       </div>
       <div v-else style="width: 100%; text-align: center;">
         <img class="mb-4" :src="emptyCard" height="350px" />
@@ -104,6 +110,64 @@
         </nuxt-link>
       </div>
     </div>
+    <v-dialog v-model="dialog" max-width="500">
+      <v-card>
+        <v-card-title class="headline">Thông tin đặt hàng</v-card-title>
+        <v-form ref="form" class="pl-4 pr-4">
+          <label class="labelForm">Họ tên</label>
+          <v-text-field
+            prepend-inner-icon="mdi-account"
+            class="mt-1"
+            name="ten"
+            outlined
+            dense
+            type="E-Mail"
+            v-model="form.nguoi_mua_hang"
+            placeholder="Người mua hàng"
+            :rules="nameRules"
+          ></v-text-field>
+          <label class="labelForm">Số điện thoại</label>
+          <v-text-field
+            prepend-inner-icon="mdi-phone"
+            class="mt-1"
+            name="so_dien_thoai"
+            outlined
+            dense
+            type="E-Mail"
+            v-model="form.so_dien_thoai"
+            placeholder="Nhập số điện thoại"
+            :rules="phoneRules"
+          ></v-text-field>
+          <label class="labelForm">Địa chỉ nhận hàng</label>
+          <v-textarea
+            height="80"
+            prepend-inner-icon="mdi-map-marker"
+            class="mt-1"
+            outlined
+            dense
+            v-model="form.dia_chi"
+            placeholder="Địa chỉ nhận hàng"
+            :rules="passwordRules"
+          ></v-textarea>
+
+          <label class="labelForm">Ghi chú</label>
+          <v-textarea
+            height="80"
+            prepend-inner-icon="mdi-pen"
+            class="mt-1"
+            outlined
+            dense
+            v-model="form.ghi_chu"
+            placeholder="Ghi chú đơn hàng"
+          ></v-textarea>
+        </v-form>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" text @click="dialog = false">Hủy bỏ</v-btn>
+          <v-btn color="green darken-1" text @click="datHang()">Đặt hàng</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-layout>
 </template>
 
@@ -135,12 +199,61 @@ export default {
     customerIcon: customerIcon,
     refershIcon: refershIcon,
     cartIcon: cartIcon,
+    dialog: false,
+    form: {
+      ma: 'DH' + (new Date).getTime(),
+      nguoi_mua_hang: "",
+      so_dien_thoai: "",
+      dia_chi: "",
+      ghi_chu: "",
+      danhSachHang: []
+    },
+    passwordRules: [
+      (v) => !!v || "Địa chỉ nhận hàng không thể bỏ trống",
+      (v) => (v && v.length >= 6) || "Địa chỉ tối thiểu 6 ký tự",
+    ],
+    nameRules: [
+      (v) => !!v || "Tên không thể bỏ trống",
+      (v) => (v && v.length >= 2) || "Tên tối thiểu 2 ký tự",
+    ],
+    phoneRules: [
+      (v) => !!v || "Số điện thoại Không thể bỏ trống",
+      (v) => (v && v.length == 10) || "Số điện thoại không hợp lệ",
+    ],
   }),
   mounted() {
     this.getSanPham();
     this.getDanhMuc();
   },
   methods: {
+    async getInfo() {
+      try {
+        let data = await api.get("thongtindathang");
+        this.form.nguoi_mua_hang = data.data.data.ten;
+        this.form.so_dien_thoai = data.data.data.so_dien_thoai;
+        this.form.dia_chi = data.data.data.dia_chi;
+        this.form.giam_gia = this.giamGia
+        this.form.tong_tien = this.tongTien
+      } catch (error) {
+        this.form = {
+          ma: 'DH' + (new Date).getTime(),
+          nguoi_mua_hang: "",
+          so_dien_thoai: "",
+          dia_chi: "",
+          ghi_chu: "",
+          danhSachHang: this.sanPhams,
+          giam_gia: this.giamGia,
+          tong_tien: this.tongTien
+        };
+      }
+    },
+    showDatHang(){
+      this.dialog = true
+      this.getInfo()
+    },
+    validate() {
+      this.$refs.form.validate();
+    },
     async getSanPham() {
       this.loadSanPham = true;
       let product = JSON.parse(localStorage.getItem("gio_hang"));
@@ -163,6 +276,7 @@ export default {
       }
       this.tinhTongTien();
       this.loadSanPham = false;
+      this.form.danhSachHang = this.sanPhams
     },
     xoaSanPham(id) {
       let index = this.sanPhams.findIndex((el) => el.id == id);
@@ -210,6 +324,24 @@ export default {
         return ret;
       } catch (error) {
         return "0";
+      }
+    },
+
+    async datHang() {
+      if (this.$refs.form.validate()) {
+        try {
+          let data = await api.post('khachdathang', this.form);
+          this.snackbar = true
+          this.noiDung = "Đặt hàng thành công"
+          localStorage.removeItem('gio_hang')
+          this.dialog = false
+          this.getSanPham()
+          this.$store.commit("giohang/add", 0);
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        return console.log("Lỗi validate ", this.$refs.form);
       }
     },
   },

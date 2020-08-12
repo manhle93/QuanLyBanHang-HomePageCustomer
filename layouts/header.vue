@@ -107,11 +107,7 @@
                   <v-icon class="mr-3">mdi-account</v-icon>Thông tin cá nhân
                 </v-list-item-title>
               </v-list-item>
-              <v-list-item @click="myOrder">
-                <v-list-item-title>
-                  <v-icon class="mr-3">mdi-cart</v-icon>Đơn hàng của tôi
-                </v-list-item-title>
-              </v-list-item>
+
               <v-list-item @click="logOut">
                 <v-list-item-title>
                   <v-icon class="mr-3">mdi-backup-restore</v-icon>Đăng xuất
@@ -241,7 +237,6 @@ export default {
       try {
         let data = await api.get("auth/me");
         this.User = data.data.data;
-        console.log(this.User);
         this.loggedIn = true;
       } catch (error) {
         this.loggedIn = false;
@@ -255,7 +250,9 @@ export default {
       } catch (error) {}
     },
     myOrder() {},
-    aboutMe() {},
+    aboutMe() {
+      this.$router.push('trangcanhan')
+    },
     getSoLuongGioHang() {
       let product = JSON.parse(localStorage.getItem("gio_hang"));
       if (!product || product.length == 0) {
