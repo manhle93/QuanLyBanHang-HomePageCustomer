@@ -39,7 +39,7 @@
             </NuxtLink>
           </div>
         </div>
-        <div style="text-align: center" class="mb-12" v-if="!loggedIn">
+        <div style="text-align: center; margin-bottom: 100px" v-if="!loggedIn">
           <nuxt-link to="/dangky">
             <v-btn class="mr-2" small color="primary">Đăng ký</v-btn>
           </nuxt-link>
@@ -61,7 +61,9 @@
           ></v-app-bar-nav-icon>
           <NuxtLink to="/">
             <v-toolbar-title>
-              <img :src="logo" height="50" />
+              <div style="background: white; padding: 8px 8px 0px 8px">
+                <img :src="logo" height="50" />
+              </div>
             </v-toolbar-title>
           </NuxtLink>
           <div class="flex-fill d-flex align-center" style="height: 100%; justify-content: center">
@@ -73,7 +75,7 @@
               label="Tìm kiếm"
               solo
               hide-details
-              style="max-width: 500px; border-radius: 50px"
+              style="max-width: 500px; border-radius: 11px"
               prepend-inner-icon="mdi-yeast"
               @keyup.enter="timKiem"
               class="tim-kiem"
@@ -192,6 +194,8 @@
 <script>
 import api from "@/api";
 import logo from "@/assets/image/logo.jpg";
+import logonew from "@/assets/image/logonew.jpg";
+
 import { END_POINT_IMAGE } from "@/env";
 import product from "@/assets/image/product.png";
 import avatar from "@/assets/image/avatar_none.png";
@@ -204,6 +208,7 @@ export default {
   data: () => ({
     leftMenu: false,
     logo: logo,
+    logonew: logonew,
     avatar: avatar,
     footer: footer,
     danhMucs: [],
@@ -246,12 +251,13 @@ export default {
       try {
         await api.post("auth/logout");
         api.deleteToken();
-        this.me();
+        // this.me();
+        window.location.assign("/");
       } catch (error) {}
     },
     myOrder() {},
     aboutMe() {
-      this.$router.push('trangcanhan')
+      this.$router.push("trangcanhan");
     },
     getSoLuongGioHang() {
       let product = JSON.parse(localStorage.getItem("gio_hang"));

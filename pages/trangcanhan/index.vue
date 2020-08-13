@@ -1,9 +1,9 @@
 <template>
   <v-layout justify-center>
-    <v-snackbar v-model="snackbar">
+    <v-snackbar v-model="snackbar" :color="color">
       {{ noiDung }}
       <template v-slot:action="{ attrs }">
-        <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">Đóng</v-btn>
+        <v-btn text v-bind="attrs" @click="snackbar = false">Đóng</v-btn>
       </template>
     </v-snackbar>
     <div class="page-width">
@@ -11,14 +11,21 @@
         class="image-cover avatar mt-3"
         style="max-width: 100%; height: 300px; background: url('https://hinhchuctet.com/wp-content/uploads/2018/06/anh-bia-facebook-doc-dao-8.jpg')"
       >
-        <v-avatar size="200" style="margin-bottom: -60px; border: 4px solid white">
-          <img
-            :src="User.user.avatar_url ? END_POINT_IMAGE + User.user.avatar_url : avatar"
-            alt="John"
-          />
-        </v-avatar>
+        <a>
+          <v-avatar
+            size="200"
+            style="margin-bottom: -60px; border: 4px solid white"
+            @click="handleUpload"
+          >
+            <img
+              :src="User.user.avatar_url ? END_POINT_IMAGE + User.user.avatar_url : avatar"
+              alt="John"
+            />
+          </v-avatar>
+        </a>
+
+        <input ref="upload-image" style="display: none" type="file" @change="handleChange($event)" />
         <div class="name">{{User.ten}}</div>
-        <!-- <div style="height: 100px; width: 100%; background-color: white"></div> -->
       </div>
       <div class="d-flex" style="justify-content: center">
         <div class="mobile-name">{{User.ten}}</div>
@@ -46,8 +53,8 @@
               Ngày sinh: {{User.ngay_sinh}}
             </div>
             <div class="mb-2">
-              <v-icon class="mr-3">mdi-account</v-icon>
-              Giới tính: {{User.goi_tinh ? 'Nam' : 'Nữ'}}
+              <v-icon class="mr-3">mdi-human</v-icon>
+              Giới tính: {{User.gioi_tinh ? 'Nam' : 'Nữ'}}
             </div>
             <div class="mb-2">
               <v-icon class="mr-3">mdi-code-brackets</v-icon>
@@ -68,7 +75,7 @@
             </div>
             <div class="mb-2">
               <v-icon class="mr-3">mdi-checkbox-marked-circle-outline</v-icon>
-              Số dư: {{User.so_du}}
+              Số dư: {{formatCurrency(User.so_du)}} đ
             </div>
             <div class="mb-2">
               <v-icon class="mr-3">mdi-pencil</v-icon>
@@ -76,12 +83,12 @@
             </div>
             <div class="mb-2">
               <v-icon class="mr-3">mdi-calendar</v-icon>
-              Giao dịch cuối: {{User.giao_dich_cuoi}}
+              Giao dịch cuối: {{formatDatetime(User.giao_dich_cuoi)}}
             </div>
-            <v-btn class="mt-3 mb-3 mr-6" color="indigo" dark>
+            <v-btn class="mt-3 mb-3 mr-6" color="indigo" dark @click="showUpdate">
               <v-icon class="mr-3" small>mdi-pencil</v-icon>Cập nhật thông tin
             </v-btn>
-            <v-btn class="mt-1 mb-3 mr-6" color="green" dark>
+            <v-btn class="mt-1 mb-3 mr-6" color="green" dark @click="showChangePass">
               <v-icon class="mr-3" small>mdi-lock</v-icon>Đổi mật khẩu
             </v-btn>
           </div>
@@ -289,6 +296,18 @@
             placeholder="Nhập số điện thoại"
             :rules="phoneRules"
           ></v-text-field>
+          <label class="labelForm">E-Mail</label>
+          <v-text-field
+            prepend-inner-icon="mdi-email"
+            class="mt-1"
+            name="so_dien_thoai"
+            outlined
+            dense
+            type="E-Mail"
+            v-model="form.email"
+            placeholder="Địa chỉ email"
+            :rules="emailRules"
+          ></v-text-field>
           <label class="labelForm">Địa chỉ</label>
           <v-textarea
             height="80"
@@ -298,13 +317,93 @@
             dense
             v-model="form.dia_chi"
             placeholder="Địa chỉ nhận hàng"
-            :rules="passwordRules"
+            :rules="diaChidRules"
           ></v-textarea>
+
+          <label class="labelForm">Ngày sinh</label>
+          <v-text-field
+            prepend-inner-icon="mdi-calendar"
+            class="mt-1"
+            name="so_dien_thoai"
+            outlined
+            dense
+            type="date"
+            v-model="form.ngay_sinh"
+            placeholder="Nhập ngày sinh"
+          ></v-text-field>
+          <label class="labelForm">Giới tính</label>
+          <v-select
+            v-model="form.gioi_tinh"
+            dense
+            :items="gioiTinh"
+            label="Chọn giới tính"
+            item-text="ten"
+            item-value="id"
+            solo
+            prepend-inner-icon="mdi-human"
+          ></v-select>
+          <label class="labelForm">Facebook</label>
+          <v-text-field
+            prepend-inner-icon="mdi-facebook"
+            class="mt-1"
+            outlined
+            dense
+            type="E-Mail"
+            v-model="form.facebook"
+            placeholder="Link facebook"
+          ></v-text-field>
         </v-form>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="green darken-1" text @click="dialogInFo = false">Hủy bỏ</v-btn>
-          <v-btn color="green darken-1" text @click="datHang()">Đặt hàng</v-btn>
+          <v-btn color="green darken-1" text @click="updateInfo()">Cập nhật</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="dialogPass" max-width="500">
+      <v-card>
+        <v-card-title class="headline">Đổi mật khẩu</v-card-title>
+        <v-form ref="formMK" class="pl-4 pr-4">
+          <label class="labelForm">Mật khẩu hiện tại</label>
+          <v-text-field
+            prepend-inner-icon="mdi-lock"
+            class="mt-1"
+            name="ten"
+            outlined
+            dense
+            type="password"
+            v-model="pass.oldPassword"
+            placeholder="Mật khẩu hiện tại"
+            :rules="oldPassRules"
+          ></v-text-field>
+          <label class="labelForm">Mật khẩu mới</label>
+          <v-text-field
+            prepend-inner-icon="mdi-lock-outline"
+            class="mt-1"
+            outlined
+            dense
+            type="password"
+            v-model="pass.newPassword"
+            placeholder="Nhập mật khẩu mới"
+            :rules="newPassRules"
+          ></v-text-field>
+          <label class="labelForm">Xác nhận mật khẩu mới</label>
+          <v-text-field
+            prepend-inner-icon="mdi-lock-outline"
+            class="mt-1"
+            outlined
+            dense
+            type="password"
+            v-model="pass.reNewPassword"
+            placeholder="Nhập lại mật khẩu mới"
+            :rules="renewPassRules"
+          ></v-text-field>
+        </v-form>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" text @click="dialogPass = false">Hủy bỏ</v-btn>
+          <v-btn color="green darken-1" text @click="updatePass()">Cập nhật</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -325,28 +424,55 @@ export default {
     giaoDich: [],
     END_POINT_IMAGE: END_POINT_IMAGE,
     donHangs: [],
+    dialogPass: false,
+    color: "green",
+    pass: {
+      oldPassword: null,
+      newPassword: null,
+      reNewPassword: null,
+    },
     User: {
       user: {},
     },
+    gioiTinh: [
+      { ten: "Nam", id: true },
+      { ten: "Nữ", id: false },
+    ],
     dialogInFo: false,
     form: {
       ten: "",
       so_dien_thoai: "",
-      dia_chi: ""
+      dia_chi: "",
+      ngay_sinh: "",
+      email: "",
+      ma_so_thue: "",
+      facebook: "",
+      gioi_tinh: false,
     },
-    items2: [
-      {
-        icon: "assignment",
-        iconClass: "blue white--text",
-        title: "Vacation itinerary",
-        subtitle: "Jan 20, 2014",
-      },
-      {
-        icon: "call_to_action",
-        iconClass: "amber white--text",
-        title: "Kitchen remodel",
-        subtitle: "Jan 10, 2014",
-      },
+    diaChidRules: [
+      (v) => !!v || "Địa chỉ nhận hàng không thể bỏ trống",
+      (v) => (v && v.length >= 6) || "Địa chỉ tối thiểu 6 ký tự",
+    ],
+    emailRules: [
+      (v) => !!v || "Email không thể bỏ trống",
+      (v) => /.+@.+\..+/.test(v) || "E-mail không hợp lệ",
+    ],
+    nameRules: [
+      (v) => !!v || "Tên không thể bỏ trống",
+      (v) => (v && v.length >= 2) || "Tên tối thiểu 2 ký tự",
+    ],
+    phoneRules: [
+      (v) => !!v || "Số điện thoại Không thể bỏ trống",
+      (v) => (v && v.length == 10) || "Số điện thoại không hợp lệ",
+    ],
+    oldPassRules: [(v) => !!v || "Mật khẩu cũ không thể bỏ trống"],
+    newPassRules: [
+      (v) => !!v || "Mật khẩu mới không thể bỏ trống",
+      (v) => (v && v.length >= 6) || "Mật khẩu tối thiểu 6 ký tự",
+    ],
+    renewPassRules: [
+      (v) => !!v || "Hãy nhập lại mật khẩu mới",
+      (v) => (v && v.length >= 6) || "Tối thiểu 6 ký tự",
     ],
   }),
   mounted() {
@@ -359,10 +485,15 @@ export default {
         this.User = data.data.data;
         this.donHangs = data.data.don_hang;
         this.giaoDich = data.data.giao_dich;
-        console.log(this.giaoDich);
       } catch (error) {
         window.location.assign("/");
       }
+    },
+    validate() {
+      this.$refs.form.validate();
+    },
+    validatePass() {
+      this.$refs.formMK.validate();
     },
     formatCurrency(n, separate = ".") {
       try {
@@ -420,6 +551,85 @@ export default {
       } catch (error) {
         return "";
       }
+    },
+    async updateInfo() {
+      if (this.$refs.form.validate()) {
+        try {
+          let data = await api.post("capnhatkhachhang", this.form);
+          this.snackbar = true;
+          this.color = "green";
+          this.noiDung = "Cập nhật thành công";
+          this.dialogInFo = false;
+          this.me();
+        } catch (error) {
+          this.snackbar = true;
+          this.color = "pink";
+          this.noiDung = error.response.data.message;
+        }
+      } else {
+        return console.log("Lỗi validate ", this.$refs.form);
+      }
+    },
+    async handleChange(e) {
+      let files = e.target.files;
+      let data = new FormData();
+      data.append("file", files[0]);
+      try {
+        let img = await api.post("avatarkhachhang", data);
+        this.User.user.avatar_url = img.data.data;
+      } catch (error) {
+        this.snackbar = true;
+        this.color = "pink";
+        this.noiDung = "Không thể upload ảnh";
+      }
+    },
+    handleUpload() {
+      this.$refs["upload-image"].click();
+    },
+    showUpdate() {
+      this.dialogInFo = true;
+      this.form.ten = this.User.ten;
+      this.form.so_dien_thoai = this.User.so_dien_thoai;
+      this.form.email = this.User.email;
+      this.form.ngay_sinh = this.User.ngay_sinh;
+      this.form.dia_chi = this.User.dia_chi;
+      this.form.facebook = this.User.facebook;
+      this.form.gioi_tinh = this.User.gioi_tinh;
+    },
+    async updatePass() {
+      if (this.$refs.formMK.validate()) {
+        try {
+          await api.post("changepasskhachhang", this.pass);
+          this.snackbar = true;
+          this.color = "green";
+          this.noiDung = "Thay đổi mật khẩu thành công";
+          this.dialogPass = false
+          setTimeout(()=> {
+            this.logOut()
+          },1000)
+        } catch (error) {
+          this.dialogPass = false
+          this.snackbar = true;
+          this.color = "pink";
+          this.noiDung = error.response.data.message;
+        }
+      } else {
+        return console.log("Lỗi validate ", this.$refs.formMK);
+      }
+    },
+    showChangePass(){
+      this.dialogPass = true
+      this.pass.oldPassword = null
+      this.pass.newPassword = null
+      this.pass.reNewPassword = null
+    },
+    async logOut() {
+      try {
+        await api.post("auth/logout");
+        api.deleteToken();
+        // this.me();
+        window.location.assign("/");
+      } catch (error) {}
     },
   },
 };

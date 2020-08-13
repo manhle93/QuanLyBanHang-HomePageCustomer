@@ -11,7 +11,11 @@
             <v-avatar size="36">
               <img :src="danhMuc.anh_dai_dien ? END_POINT_IMAGE + danhMuc.anh_dai_dien : product " />
             </v-avatar>
-            <div class="danh-muc">{{danhMuc.ten_danh_muc}}</div>
+            <div
+            :title="danhMuc.ten_danh_muc"
+              class="danh-muc pr-2"
+              style="display: inline-block; width: 100%; white-space: nowrap; overflow: hidden !important; text-overflow: ellipsis;"
+            >{{danhMuc.ten_danh_muc}}</div>
           </NuxtLink>
         </div>
       </div>
@@ -98,19 +102,26 @@ export default {
         src:
           "http://apiruongbacthang.skymapglobal.vn/storage/images/avatar/1596774694.PNG",
       },
-            {
+      {
         src:
           "http://apiruongbacthang.skymapglobal.vn/storage/images/avatar/1596774690.PNG",
       },
     ],
   }),
+  async asyncData({ params }) {
+    console.log('erere')
+    let danhMucs = await this.getDanhMuc()
+    return {
+      danhMucs: danhMucs
+      }
+  },
   mounted() {
-    this.getDanhMuc();
+    
   },
   methods: {
     async getDanhMuc() {
       let data = await api.get("danhmuc", { per_page: 9 });
-      this.danhMucs = data.data.data;
+      return data.data.data
     },
   },
 };

@@ -7,7 +7,6 @@
       </template>
     </v-snackbar>
     <div class="page-width c-flex">
-      <Slider />
       <v-text-field color="success" loading disabled v-if="loadSanPham"></v-text-field>
       <div
         class="ml-3"
@@ -94,7 +93,6 @@ import refershIcon from "assets/image/icon/refresh.png";
 import cartIcon from "assets/image/icon/cart.png";
 import shipIcon from "assets/image/icon/delivery.png";
 import { END_POINT_IMAGE } from "@/env";
-
 import { mapMutations } from "vuex";
 export default {
   layout: "header",

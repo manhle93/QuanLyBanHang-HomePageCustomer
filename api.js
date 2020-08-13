@@ -46,7 +46,6 @@ export default {
   submitOnce (method, url, params = {}, auth = undefined) {
     let preUrl = ""
     if (url.substr(0,4) !== "http") {
-      console.log(END_POINT)
       preUrl = END_POINT
     }
     let obj = {
