@@ -1,7 +1,7 @@
 <template>
   <v-layout justify-center>
     <div class="page-width">
-      <div class="all-product">{{ tenDanhMuc }}</div>
+      <div class="all-product">Món ngon mỗi ngày: {{now}}</div>
       <v-progress-linear color="green darken-2" rounded value="100"></v-progress-linear>
       <v-text-field color="success" loading disabled v-if="loadSanPham"></v-text-field>
       <div
@@ -67,35 +67,28 @@ export default {
     total_page: 1,
     loadSanPham: true,
     product: product,
+    now: "",
   }),
-  watch: {
-    $route(to, from) {
-      this.getSanPham();
-      this.getDanhMuc()
-    },
-  },
+  watch: {},
   mounted() {
     this.getSanPham();
-    this.getDanhMuc();
+    let d = new Date();
+    let month = +d.getUTCMonth() + 1;
+    let day = d.getDate();
+    if (month < 10) {
+      month = "0" + month;
+    }
+    if (day < 10) {
+      day = "0" + day;
+    }
+    this.now =  day + "/" + month + "/" + d.getUTCFullYear();
   },
   methods: {
     async getSanPham() {
       this.loadSanPham = true;
-      let data = await api.get("sanpham", {
-        danh_muc_id: this.$route.params.id,
-        per_page: this.per_page,
-        page: this.page,
-      });
-      this.sanPhams = data.data.data.data;
-      this.total_page = data.data.data.last_page;
-      this.page = data.data.data.current_page;
+      let data = await api.get("idmonngonmoingay");
+      this.sanPhams = data.data;
       this.loadSanPham = false;
-    },
-    async getDanhMuc() {
-      let data = await api.get("danhmuc");
-      this.tenDanhMuc = data.data.data.find(
-        (el) => el.id == this.$route.params.id
-      ).ten_danh_muc;
     },
     PaginateSanPham(val) {
       this.page = val;

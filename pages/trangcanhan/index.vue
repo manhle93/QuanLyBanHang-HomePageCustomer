@@ -162,28 +162,28 @@
                 >Mới tạo</v-btn>
                 <v-btn
                   v-if="item.trang_thai == 'hoa_don'"
-                  class="ml-3"
+                  class="ml-3 mr-2"
                   small
                   outlined
                   color="green"
                 >Đã thanh toán</v-btn>
                 <v-btn
                   v-if="item.trang_thai == 'khach_huy'"
-                  class="ml-3"
+                  class="ml-3 mr-3"
                   small
                   outlined
                   color="purple"
                 >Đã hủy đơn</v-btn>
                 <v-btn
                   v-if="item.trang_thai == 'huy_hoa_don'"
-                  class="ml-3"
+                  class="ml-3 mr-3"
                   small
                   outlined
                   color="warning"
                 >Hủy hóa đơn</v-btn>
                 <v-btn
                   v-if="item.trang_thai == 'huy_bo'"
-                  class="ml-3"
+                  class="ml-3 mr-3"
                   small
                   outlined
                   color="pink"
@@ -213,7 +213,7 @@
                     <v-btn
                       v-bind="attrs"
                       v-on="on"
-                      class="mx-4"
+                      class="mr-12"
                       fab
                       dark
                       x-small

@@ -1,7 +1,7 @@
 <template>
   <v-layout justify-center>
     <div class="page-width">
-      <div class="all-product">{{ tenDanhMuc }}</div>
+      <div class="all-product">SẢN PHẨM BÁN CHẠY</div>
       <v-progress-linear color="green darken-2" rounded value="100"></v-progress-linear>
       <v-text-field color="success" loading disabled v-if="loadSanPham"></v-text-field>
       <div
@@ -14,11 +14,11 @@
           :key="sanPham.id"
           style="margin-bottom: 40px"
         >
-          <NuxtLink :to="'/sanpham/' + sanPham.id">
+          <NuxtLink :to="'/sanpham/' + sanPham.san_pham.id">
             <v-img
               :src="
-                sanPham.anh_dai_dien
-                  ? END_POINT_IMAGE + sanPham.anh_dai_dien
+                sanPham.san_pham.anh_dai_dien
+                  ? END_POINT_IMAGE + sanPham.san_pham.anh_dai_dien
                   : product
               "
               width="100%"
@@ -26,10 +26,10 @@
             ></v-img>
             <v-card-title style="height: 95px">
               {{
-              sanPham.ten_san_pham
+              sanPham.san_pham.ten_san_pham
               }}
             </v-card-title>
-            <v-card-subtitle>{{ formatCurrency(sanPham.gia_ban) }} VNĐ</v-card-subtitle>
+            <v-card-subtitle>{{ formatCurrency(sanPham.san_pham.gia_ban) }} VNĐ</v-card-subtitle>
             <!-- <v-card-actions>
               <v-btn class="ma-1 mt-0" outlined color="green">
                 <v-icon left>mdi-cart</v-icon>THÊM VÀO GIỎ
@@ -38,15 +38,6 @@
             </v-card-actions>-->
           </NuxtLink>
         </v-card>
-      </div>
-      <div class="text-center">
-        <v-pagination
-          v-model="page"
-          :length="total_page"
-          circle
-          @input="PaginateSanPham"
-          :total-visible="9"
-        ></v-pagination>
       </div>
     </div>
   </v-layout>
@@ -69,33 +60,17 @@ export default {
     product: product,
   }),
   watch: {
-    $route(to, from) {
-      this.getSanPham();
-      this.getDanhMuc()
-    },
   },
   mounted() {
     this.getSanPham();
-    this.getDanhMuc();
   },
   methods: {
     async getSanPham() {
       this.loadSanPham = true;
-      let data = await api.get("sanpham", {
-        danh_muc_id: this.$route.params.id,
-        per_page: this.per_page,
-        page: this.page,
+      let data = await api.get("sanphambanchaytrangchu", {
       });
-      this.sanPhams = data.data.data.data;
-      this.total_page = data.data.data.last_page;
-      this.page = data.data.data.current_page;
+      this.sanPhams = data.data;
       this.loadSanPham = false;
-    },
-    async getDanhMuc() {
-      let data = await api.get("danhmuc");
-      this.tenDanhMuc = data.data.data.find(
-        (el) => el.id == this.$route.params.id
-      ).ten_danh_muc;
     },
     PaginateSanPham(val) {
       this.page = val;

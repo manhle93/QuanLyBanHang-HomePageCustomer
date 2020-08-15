@@ -33,7 +33,7 @@
             >
               <div
                 class="image-cover"
-                :style="{background: 'url(' + item.src + ')'}"
+                :style="{background: 'url(' + END_POINT_IMAGE + item.hinh_anh + ')'}"
                 style="color: red; height: 100%"
               ></div>
             </v-carousel-item>
@@ -73,7 +73,7 @@
           <span class="text-icon">MIỄN PHÍ GIAO HÀNG</span>
         </div>
       </div>
-      <nuxt-child/>
+      <nuxt-child />
     </div>
   </v-layout>
 </template>
@@ -100,24 +100,7 @@ export default {
     refershIcon: refershIcon,
     cartIcon: cartIcon,
     shipIcon: shipIcon,
-    sliders: [
-      {
-        src:
-          "http://apiruongbacthang.skymapglobal.vn/storage/images/avatar/1596774682.PNG",
-      },
-      {
-        src:
-          "http://apiruongbacthang.skymapglobal.vn/storage/images/avatar/1596774686.PNG",
-      },
-      {
-        src:
-          "http://apiruongbacthang.skymapglobal.vn/storage/images/avatar/1596774694.PNG",
-      },
-      {
-        src:
-          "http://apiruongbacthang.skymapglobal.vn/storage/images/avatar/1596774690.PNG",
-      },
-    ],
+    sliders: [],
   }),
   async asyncData({ params }) {
     let danhMucs = await getDanhMuc();
@@ -125,8 +108,16 @@ export default {
       danhMucs: danhMucs,
     };
   },
-  mounted() {},
-  methods: {},
+  mounted() {
+    this.getSlider();
+  },
+  methods: {
+    async getSlider() {
+      let data = await api.get("slider");
+      this.sliders = data.data;
+      console.log(this.sliders)
+    },
+  },
 };
 </script>
 <style scoped>

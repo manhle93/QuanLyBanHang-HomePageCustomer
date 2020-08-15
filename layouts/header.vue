@@ -145,7 +145,7 @@
               src="https://image.flaticon.com/icons/svg/415/415753.svg"
               height="25"
             />
-            <div class="tieu-de">Món ngon mỗi ngày</div>
+            <nuxt-link to="/monngonmoingay"><div class="tieu-de" style="color: white">Món ngon mỗi ngày</div></nuxt-link>
             <img
               class="khuyen-mai"
               src="https://image.flaticon.com/icons/svg/3163/3163689.svg"
@@ -157,7 +157,9 @@
               src="https://image.flaticon.com/icons/svg/3199/3199306.svg"
               height="25"
             />
-            <div class="tieu-de">Sản phẩm bán chạy</div>
+            <nuxt-link to="/sanphambanchay">
+            <div class="tieu-de" style="color: white">Sản phẩm bán chạy</div>
+            </nuxt-link>
             <div class="search-mobile">
               <v-form v-on:submit.prevent="timKiem">
                 <input
@@ -257,7 +259,7 @@ export default {
     },
     myOrder() {},
     aboutMe() {
-      this.$router.push("trangcanhan");
+      this.$router.push("/trangcanhan");
     },
     getSoLuongGioHang() {
       let product = JSON.parse(localStorage.getItem("gio_hang"));
