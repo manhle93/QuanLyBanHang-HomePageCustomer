@@ -57,7 +57,7 @@
       </div>
       <div class="d-flex album-anh" v-if="sanPham.hinh_anhs && sanPham.hinh_anhs.length > 0">
         <div
-          style="height: 130px; max-width: 100px"
+          style="height: 130px; width: 100px"
           class="mr-3"
           v-for="hinhanh in sanPham.hinh_anhs"
           :key="hinhanh.id"
