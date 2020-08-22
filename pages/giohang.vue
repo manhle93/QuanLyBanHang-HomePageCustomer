@@ -101,6 +101,13 @@
           <span style="color: green; font-size: 22px">{{formatCurrency(tongTien)}} đ</span>
         </div>
         <v-btn class="mt-3 ml-3" style="color: white" color="green" @click="showDatHang()">ĐẶT HÀNG</v-btn>
+        <br />
+        <div style="width: 100%; text-align: center" class="tiep-tuc">
+        <nuxt-link to="/">
+          <v-btn color="primary">Tiếp tục mua sắm</v-btn>
+        </nuxt-link>
+        </div>
+
       </div>
       <div v-else style="width: 100%; text-align: center;">
         <img class="mb-4" :src="emptyCard" height="350px" />
@@ -201,12 +208,12 @@ export default {
     cartIcon: cartIcon,
     dialog: false,
     form: {
-      ma: 'DH' + (new Date).getTime(),
+      ma: "DH" + new Date().getTime(),
       nguoi_mua_hang: "",
       so_dien_thoai: "",
       dia_chi: "",
       ghi_chu: "",
-      danhSachHang: []
+      danhSachHang: [],
     },
     passwordRules: [
       (v) => !!v || "Địa chỉ nhận hàng không thể bỏ trống",
@@ -232,24 +239,24 @@ export default {
         this.form.nguoi_mua_hang = data.data.data.ten;
         this.form.so_dien_thoai = data.data.data.so_dien_thoai;
         this.form.dia_chi = data.data.data.dia_chi;
-        this.form.giam_gia = this.giamGia
-        this.form.tong_tien = this.tongTien
+        this.form.giam_gia = this.giamGia;
+        this.form.tong_tien = this.tongTien;
       } catch (error) {
         this.form = {
-          ma: 'DH' + (new Date).getTime(),
+          ma: "DH" + new Date().getTime(),
           nguoi_mua_hang: "",
           so_dien_thoai: "",
           dia_chi: "",
           ghi_chu: "",
           danhSachHang: this.sanPhams,
           giam_gia: this.giamGia,
-          tong_tien: this.tongTien
+          tong_tien: this.tongTien,
         };
       }
     },
-    showDatHang(){
-      this.dialog = true
-      this.getInfo()
+    showDatHang() {
+      this.dialog = true;
+      this.getInfo();
     },
     validate() {
       this.$refs.form.validate();
@@ -276,7 +283,7 @@ export default {
       }
       this.tinhTongTien();
       this.loadSanPham = false;
-      this.form.danhSachHang = this.sanPhams
+      this.form.danhSachHang = this.sanPhams;
     },
     xoaSanPham(id) {
       let index = this.sanPhams.findIndex((el) => el.id == id);
@@ -330,12 +337,12 @@ export default {
     async datHang() {
       if (this.$refs.form.validate()) {
         try {
-          let data = await api.post('khachdathang', this.form);
-          this.snackbar = true
-          this.noiDung = "Đặt hàng thành công"
-          localStorage.removeItem('gio_hang')
-          this.dialog = false
-          this.getSanPham()
+          let data = await api.post("khachdathang", this.form);
+          this.snackbar = true;
+          this.noiDung = "Đặt hàng thành công";
+          localStorage.removeItem("gio_hang");
+          this.dialog = false;
+          this.getSanPham();
           this.$store.commit("giohang/add", 0);
         } catch (error) {
           console.log(error);
@@ -377,6 +384,9 @@ export default {
   }
   .delete-mobile {
     display: inline;
+  }
+  .tiep-tuc {
+    display: none;
   }
 }
 </style>

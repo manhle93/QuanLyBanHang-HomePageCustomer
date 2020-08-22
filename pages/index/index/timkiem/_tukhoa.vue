@@ -62,27 +62,55 @@ export default {
     $route(to, from) {
       this.$nextTick(async () => {
         await this.getSanPham();
-      })
-      
+      });
     },
   },
-  fetch(){
-    this.getSanPham()
+  fetch() {
+    this.getSanPham();
   },
   methods: {
     async getSanPham() {
       this.loadSanPham = true;
       let tuKhoa = this.$route.params.tukhoa;
       this.tuKhoaTimKiem = tuKhoa;
-      let data = await api.get("sanpham", {
-        search: tuKhoa,
-        per_page: this.per_page,
-        page: this.page,
-      }, false, false);
+      let data = await api.get(
+        "sanpham",
+        {
+          search: tuKhoa,
+          per_page: this.per_page,
+          page: this.page,
+        },
+        false,
+        false
+      );
       this.sanPhams = data.data.data.data;
       this.total_page = data.data.data.last_page;
       this.page = data.data.data.current_page;
       this.loadSanPham = false;
+    },
+    addGioHang(id) {
+      let product = JSON.parse(localStorage.getItem("gio_hang"));
+      if (!product) {
+        product = [];
+      }
+      let sP = {};
+      let check = product.find((el) => el.san_pham_id == id);
+      if (check) {
+        check.so_luong = check.so_luong + 1;
+      } else {
+        sP.so_luong = 1;
+        sP.san_pham_id = id;
+        product.push(sP);
+      }
+
+      let so_luong = 0;
+      for (let item of product) {
+        so_luong = Number(so_luong) + Number(item.so_luong);
+      }
+      this.snackbar = true;
+      this.noiDung = "Đã thêm vào giỏ hàng";
+      this.$store.commit("giohang/add", so_luong);
+      localStorage.setItem("gio_hang", JSON.stringify(product));
     },
     PaginateSanPham(val) {
       this.page = val;

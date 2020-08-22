@@ -81,7 +81,7 @@ export default {
     if (day < 10) {
       day = "0" + day;
     }
-    this.now =  day + "/" + month + "/" + d.getUTCFullYear();
+    this.now = day + "/" + month + "/" + d.getUTCFullYear();
   },
   methods: {
     async getSanPham() {
@@ -89,6 +89,30 @@ export default {
       let data = await api.get("idmonngonmoingay");
       this.sanPhams = data.data;
       this.loadSanPham = false;
+    },
+    addGioHang(id) {
+      let product = JSON.parse(localStorage.getItem("gio_hang"));
+      if (!product) {
+        product = [];
+      }
+      let sP = {};
+      let check = product.find((el) => el.san_pham_id == id);
+      if (check) {
+        check.so_luong = check.so_luong + 1;
+      } else {
+        sP.so_luong = 1;
+        sP.san_pham_id = id;
+        product.push(sP);
+      }
+
+      let so_luong = 0;
+      for (let item of product) {
+        so_luong = Number(so_luong) + Number(item.so_luong);
+      }
+      this.snackbar = true;
+      this.noiDung = "Đã thêm vào giỏ hàng";
+      this.$store.commit("giohang/add", so_luong);
+      localStorage.setItem("gio_hang", JSON.stringify(product));
     },
     PaginateSanPham(val) {
       this.page = val;

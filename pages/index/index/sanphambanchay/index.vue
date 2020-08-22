@@ -59,18 +59,40 @@ export default {
     loadSanPham: true,
     product: product,
   }),
-  watch: {
-  },
+  watch: {},
   mounted() {
     this.getSanPham();
   },
   methods: {
     async getSanPham() {
       this.loadSanPham = true;
-      let data = await api.get("sanphambanchaytrangchu", {
-      });
+      let data = await api.get("sanphambanchaytrangchu", {});
       this.sanPhams = data.data;
       this.loadSanPham = false;
+    },
+    addGioHang(id) {
+      let product = JSON.parse(localStorage.getItem("gio_hang"));
+      if (!product) {
+        product = [];
+      }
+      let sP = {};
+      let check = product.find((el) => el.san_pham_id == id);
+      if (check) {
+        check.so_luong = check.so_luong + 1;
+      } else {
+        sP.so_luong = 1;
+        sP.san_pham_id = id;
+        product.push(sP);
+      }
+
+      let so_luong = 0;
+      for (let item of product) {
+        so_luong = Number(so_luong) + Number(item.so_luong);
+      }
+      this.snackbar = true;
+      this.noiDung = "Đã thêm vào giỏ hàng";
+      this.$store.commit("giohang/add", so_luong);
+      localStorage.setItem("gio_hang", JSON.stringify(product));
     },
     PaginateSanPham(val) {
       this.page = val;

@@ -85,6 +85,9 @@
               <v-icon class="mr-3">mdi-calendar</v-icon>
               Giao dịch cuối: {{formatDatetime(User.giao_dich_cuoi)}}
             </div>
+            <v-btn class="mt-3 mb-2 mr-6" color="teal" dark>
+              <v-icon class="mr-3" small>mdi-book-open-variant</v-icon>Báo cáo
+            </v-btn>
             <v-btn class="mt-3 mb-3 mr-6" color="indigo" dark @click="showUpdate">
               <v-icon class="mr-3" small>mdi-pencil</v-icon>Cập nhật thông tin
             </v-btn>
@@ -603,12 +606,12 @@ export default {
           this.snackbar = true;
           this.color = "green";
           this.noiDung = "Thay đổi mật khẩu thành công";
-          this.dialogPass = false
-          setTimeout(()=> {
-            this.logOut()
-          },1000)
+          this.dialogPass = false;
+          setTimeout(() => {
+            this.logOut();
+          }, 1000);
         } catch (error) {
-          this.dialogPass = false
+          this.dialogPass = false;
           this.snackbar = true;
           this.color = "pink";
           this.noiDung = error.response.data.message;
@@ -617,11 +620,11 @@ export default {
         return console.log("Lỗi validate ", this.$refs.formMK);
       }
     },
-    showChangePass(){
-      this.dialogPass = true
-      this.pass.oldPassword = null
-      this.pass.newPassword = null
-      this.pass.reNewPassword = null
+    showChangePass() {
+      this.dialogPass = true;
+      this.pass.oldPassword = null;
+      this.pass.newPassword = null;
+      this.pass.reNewPassword = null;
     },
     async logOut() {
       try {

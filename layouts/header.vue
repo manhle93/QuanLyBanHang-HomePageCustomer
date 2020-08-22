@@ -145,20 +145,22 @@
               src="https://image.flaticon.com/icons/svg/415/415753.svg"
               height="25"
             />
-            <nuxt-link to="/monngonmoingay"><div class="tieu-de" style="color: white">Món ngon mỗi ngày</div></nuxt-link>
+            <nuxt-link to="/monngonmoingay">
+              <div class="tieu-de" style="color: white">Bếp Nhà Ruộng</div>
+            </nuxt-link>
             <img
               class="khuyen-mai"
               src="https://image.flaticon.com/icons/svg/3163/3163689.svg"
               height="25"
             />
-            <div class="tieu-de">Khuyễn mãi hot</div>
+            <div class="tieu-de">Hàng giảm giá</div>
             <img
               class="khuyen-mai"
               src="https://image.flaticon.com/icons/svg/3199/3199306.svg"
               height="25"
             />
             <nuxt-link to="/sanphambanchay">
-            <div class="tieu-de" style="color: white">Sản phẩm bán chạy</div>
+              <div class="tieu-de" style="color: white">Sinh thái Ruộng Bậc Thang</div>
             </nuxt-link>
             <div class="search-mobile">
               <v-form v-on:submit.prevent="timKiem">

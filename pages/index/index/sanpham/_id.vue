@@ -8,34 +8,46 @@
     </v-snackbar>
     <div class="page-width c-flex">
       <v-text-field color="success" loading disabled v-if="loadSanPham"></v-text-field>
-      <div
+      <!-- <div
         class="ml-3"
         style="margin-top: 0px; font-size: 28px; font-weight: bold"
-      >Sản phẩm {{sanPham.ten_san_pham}}</div>
-      <v-progress-linear color="green darken-2" rounded value="100"></v-progress-linear>
+      >Sản phẩm {{sanPham.ten_san_pham}}</div>-->
+      <v-progress-linear color="green darken-2" rounded value="100" style="height: 2px"></v-progress-linear>
       <div class="d-flex" style="flex-wrap: wrap; margin-top: 20px; justify-content: center">
         <div style="max-width: 90%; height: 450px;" class="c-flex">
           <v-img
             aspect-ratio="1.7"
             :src="(sanPham.anh_dai_dien && image) ? image : (sanPham.anh_dai_dien && !image) ? END_POINT_IMAGE + sanPham.anh_dai_dien : product"
             style="width: 550px; height: 450px"
-          />
+          >
+            <v-btn
+              small
+              color="pink"
+              dark
+              v-if="!sanPham.san_pham_ton_kho || !sanPham.san_pham_ton_kho.so_luong > 0"
+            >Hết hàng</v-btn>
+            <v-btn small color="success" dark v-else>Còn hàng</v-btn>
+          </v-img>
         </div>
         <div class="c-flex flex-fill thongtin-sanpham" style="height: 400px; max-width: 90%">
           <div
-            style="font-size: 28px; font-weight: bold; margin-bottom: 10px; text-align:center"
-          >{{sanPham.ten_san_pham}}</div>
+            style="font-size: 30px; font-weight: light; margin-bottom: 10px;"
+          >{{sanPham.ten_san_pham.toUpperCase()}}</div>
           <div class="c-flex khung-thuoctinh">
             <div
-              style="color: green; font-size: 28px; font-weight: bold"
-            >{{formatCurrency(sanPham.gia_ban)}} đ/{{sanPham.don_vi_tinh}}</div>
-            <div class="thuoc-tinh" style="margin-top: 40px">Đơn vị tính: {{sanPham.don_vi_tinh}}</div>
+              style="color: green; font-size: 24px; font-weight: 500"
+            >{{formatCurrency(sanPham.gia_ban)}} đ</div>
+            <div class="thuoc-tinh" style="margin-top: 20px">Đơn vị tính: {{sanPham.don_vi_tinh}}</div>
             <div
               class="thuoc-tinh"
             >Thương hiệu: {{sanPham.thuong_hieu ? sanPham.thuong_hieu.ten: ''}}</div>
             <div
               class="thuoc-tinh"
             >Thuộc danh mục: {{sanPham.danh_muc ? sanPham.danh_muc.ten_danh_muc : ""}}</div>
+            <div
+              v-if="(!sanPham.san_pham_ton_kho || !sanPham.san_pham_ton_kho.so_luong > 0)"
+              class="co-hang"
+            >Dự kiến TG nhập hàng: {{ sanPham.created_at }}</div>
           </div>
           <div class="d-flex">
             <div style="width: 200px" class="mr-4">
@@ -49,10 +61,24 @@
                 dense
               ></v-text-field>
             </div>
-            <v-btn x-large color="success" dark @click="addGioHang">
+            <v-btn
+              v-if="(!sanPham.san_pham_ton_kho || !sanPham.san_pham_ton_kho.so_luong > 0)"
+              x-large
+              color="pink"
+              dark
+              @click="addGioHang"
+            >
+              <v-icon left>mdi-cart</v-icon>ĐẶT TRƯỚC
+            </v-btn>
+            <v-btn v-else x-large color="success" dark @click="addGioHang">
               <v-icon left>mdi-cart</v-icon>THÊM VÀO GIỎ
             </v-btn>
           </div>
+          <nuxt-link :to="'/'">
+          <v-btn class='tiep-tuc' color="indigo" dark >
+            <v-icon left>mdi-arrow-left</v-icon>TIẾP TỤC MUA HÀNG
+          </v-btn>
+          </nuxt-link>
         </div>
       </div>
       <div class="d-flex album-anh" v-if="sanPham.hinh_anhs && sanPham.hinh_anhs.length > 0">
@@ -213,6 +239,12 @@ export default {
   font-weight: bold;
   margin-left: 15px;
 }
+.co-hang {
+  font-size: 14px;
+  font-style: italic;
+  color: red;
+  margin-bottom: 10px;
+}
 .text-icon {
   font-size: 16px;
   font-weight: bold;
@@ -224,8 +256,8 @@ export default {
   font-weight: bold;
 }
 .khung-thuoctinh {
-  border: 2px solid green;
-  padding-left: 20px;
+  /* border: 2px solid green;
+  padding-left: 20px; */
   padding-top: 15px;
   border-radius: 20px;
   margin-bottom: 20px;
@@ -246,6 +278,9 @@ export default {
     max-width: 100%;
     margin-top: -20px;
     margin-left: 25px;
+  }
+  .tiep-tuc {
+    display: none;
   }
 }
 </style>
