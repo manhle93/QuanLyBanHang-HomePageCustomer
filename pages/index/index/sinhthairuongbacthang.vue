@@ -17,7 +17,8 @@
         </nuxt-link>
         <div class="flex-fill c-flex pl-6">
           <nuxt-link :to="'baiviet/' + baiViet.id">
-          <div style="font-weight: bold; font-size: 22px">{{baiViet.tieu_de}}</div>
+          <div v-if="baiViet.tieu_de.length > 90" style="font-weight: bold; font-size: 22px">{{baiViet.tieu_de.substr(0, 90)}}...</div>
+          <div v-else style="font-weight: bold; font-size: 22px">{{baiViet.tieu_de}}</div>
           </nuxt-link>
           <!-- <div v-html="parseText(baiViet.noi_dung)"></div> -->
           <div class="noi-dung" style="text-align: justify; text-justify: inter-word;" v-if="baiViet.noi_dung.length > 250">{{baiViet.noi_dung.substr(0, 250)}}...</div>

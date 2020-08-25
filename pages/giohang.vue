@@ -24,10 +24,13 @@
         v-if="sanPhams.length > 0 && !loadSanPham"
         class="mb-3 pb-3 pr-3 mt-3"
         :elevation="20"
-       >
+      >
         <v-card-title style="color: #145A32">Danh sách sản phẩm đặt mua</v-card-title>
         <v-card-subtitle>Giao hàng trong ngày</v-card-subtitle>
-        <div class="pt-3 pr-3" style="display: flex; flex-direction: row-reverse; flex-wrap: wrap; overflow-y: auto; max-height: 450px">
+        <div
+          class="pt-3 pr-3"
+          style="display: flex; flex-direction: row-reverse; flex-wrap: wrap; overflow-y: auto; max-height: 450px"
+        >
           <div
             class="d-flex"
             style="height: 140px; width: 100%"
@@ -108,7 +111,7 @@
               ></v-text-field>
             </div>
             <v-btn class="ml-4 mr-3" color="primary">Áp dụng</v-btn>
-          </div> -->
+          </div>-->
           <div class="dat-hang ml-3">Giảm giá: {{formatCurrency(giamGia)}} đ</div>
           <div class="dat-hang ml-3">
             Tổng thanh toán:
@@ -130,16 +133,19 @@
         v-if="!loadSanPham && sanPhamDatHangs.length > 0"
         class="mb-3 pb-3 pr-3 mt-3"
         :elevation="20"
-       >
+      >
         <v-card-title style="color: #F60257">Danh sách sản phẩm đặt trước</v-card-title>
         <v-card-subtitle>Giao hàng khi sản phẩm được nhập về</v-card-subtitle>
-        <div  class="pt-3 pr-3" style="display: flex; flex-direction: row-reverse; flex-wrap: wrap;  overflow-y: auto; max-height: 450px">
+        <div
+          class="pt-3 pr-3"
+          style="display: flex; flex-direction: row-reverse; flex-wrap: wrap;  overflow-y: auto; max-height: 450px"
+        >
           <div
             class="d-flex"
             style="height: 140px; width: 100%"
             v-for="sanPham in sanPhamDatHangs"
             :key="sanPham.id"
-             >
+          >
             <div style="width: 200px; height: 100%;" class="ml-3">
               <v-img
                 :src="sanPham.anh_dai_dien ? END_POINT_IMAGE +sanPham.anh_dai_dien : product"
@@ -214,7 +220,7 @@
               ></v-text-field>
             </div>
             <v-btn class="ml-4 mr-3" color="primary">Áp dụng</v-btn>
-          </div> -->
+          </div>-->
           <div class="dat-hang ml-3">Giảm giá: {{formatCurrency(giamGiaDathang)}} đ</div>
           <div class="dat-hang ml-3">
             Tổng thanh toán:
@@ -287,7 +293,11 @@
           ></v-text-field>
 
           <label v-if="form.mua_hang" class="labelForm">Thời gian nhận hàng mong muốn</label>
-          <v-text-field v-if="form.mua_hang" type="datetime-local" v-model="form.thoi_gian_nhan_hang"></v-text-field>
+          <v-text-field
+            v-if="form.mua_hang"
+            type="datetime-local"
+            v-model="form.thoi_gian_nhan_hang"
+          ></v-text-field>
           <label class="labelForm">Ghi chú</label>
           <v-text-field
             height="80"
@@ -355,8 +365,8 @@ export default {
     cartIcon: cartIcon,
     dialog: false,
     phuongThucThanhToan: [
-      { id: 'tai_khoan', ten: "Tài khoản" },
-      { id: 'cod', ten: "Ship COD" },
+      { id: "tai_khoan", ten: "Tài khoản" },
+      { id: "cod", ten: "Ship COD" },
     ],
     form: {
       ma: "DH" + new Date().getTime(),
@@ -365,7 +375,7 @@ export default {
       dia_chi: "",
       ghi_chu: "",
       mua_hang: true,
-      phuong_thuc_thanh_toan: 'cod',
+      phuong_thuc_thanh_toan: "cod",
       danhSachHang: [],
       datHang: [],
       thoi_gian_nhan_hang: null,
@@ -386,7 +396,7 @@ export default {
   mounted() {
     this.getSanPham();
     this.getDanhMuc();
-    this.getSanPhamDathang();
+    // this.getSanPhamDathang();
   },
   methods: {
     async getInfo() {
@@ -400,7 +410,7 @@ export default {
         this.form.datHang = this.sanPhamDatHangs;
         this.form.mua_hang = true;
         this.form.danhSachHang = this.sanPhams;
-        this.form.phuong_thuc_thanh_toan = 'tai_khoan';
+        this.form.phuong_thuc_thanh_toan = "tai_khoan";
       } catch (error) {
         this.form = {
           ma: "DH" + new Date().getTime(),
@@ -413,7 +423,7 @@ export default {
           datHang: this.sanPhamDatHangs,
           giam_gia: this.giamGia,
           tong_tien: this.tongTien,
-          phuong_thuc_thanh_toan: 'cod',
+          phuong_thuc_thanh_toan: "cod",
         };
       }
     },
@@ -443,17 +453,23 @@ export default {
         san_pham_id: san_pham_id,
       });
       this.sanPhams = data.data;
+      await this.getSanPhamDathang();
       for (let item of this.sanPhams) {
         for (let i of product) {
           if (i.san_pham_id == item.id) {
             item["so_luong"] = i.so_luong;
           }
         }
+        if (!item.san_pham_ton_kho || !(item.san_pham_ton_kho.so_luong > 0)) {
+          this.sanPhams.splice(this.sanPhams.indexOf(item), 1);
+          this.sanPhamDatHangs.push(item);
+        }
       }
-
       this.tinhTongTien();
+      this.tinhTongTienDatHang();
       this.loadSanPham = false;
       this.form.danhSachHang = this.sanPhams;
+      this.form.danhSachHang = this.sanPhamDatHangs;
     },
 
     async getSanPhamDathang() {
@@ -475,10 +491,11 @@ export default {
             item["so_luong"] = i.so_luong;
           }
         }
+        if (item.san_pham_ton_kho && item.san_pham_ton_kho.so_luong > 0) {
+          this.sanPhamDatHangs.splice(this.sanPhamDatHangs.indexOf(item), 1);
+          this.sanPhams.push(item);
+        }
       }
-      this.tinhTongTienDatHang();
-      this.loadSanPham = false;
-      this.form.danhSachHang = this.sanPhamDatHangs;
     },
     xoaSanPham(id) {
       let index = this.sanPhams.findIndex((el) => el.id == id);
@@ -610,17 +627,17 @@ export default {
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #f1f1f1; 
+  background: #f1f1f1;
 }
- 
+
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #888; 
+  background: #888;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #555; 
+  background: #555;
 }
 @media only screen and (max-width: 600px) {
   .danh-muc {
