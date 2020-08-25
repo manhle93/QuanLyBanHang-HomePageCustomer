@@ -48,10 +48,11 @@
           </div>
 
           <div style="width: 290px; height: 195px; margin-top: 5px">
-            <img
+             <v-img height="193px"  style="border-radius: 15px" src="http://apiruongbacthang.skymapglobal.vn/storage/images/avatar/1596775191.PNG" aspect-ratio="1.7"></v-img>
+            <!-- <img
               src="http://apiruongbacthang.skymapglobal.vn/storage/images/avatar/1596775191.PNG"
               style="height: 193px; width: 290px; border-radius: 15px"
-            />
+            /> -->
           </div>
         </div>
       </div>

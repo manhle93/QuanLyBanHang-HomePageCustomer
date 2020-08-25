@@ -13,7 +13,7 @@
       <div
         style="margin-top: 50px; display: flex; flex-direction: row-reverse; flex-wrap: wrap;"
         v-else
-      >
+        >
         <v-card
           class="mx-auto san-pham"
           v-for="(sanPham, index) in sanPhams"
@@ -23,7 +23,7 @@
           <NuxtLink :to="'/sanpham/' + sanPham.id">
             <v-img
               :src=" sanPham.anh_dai_dien ? END_POINT_IMAGE + sanPham.anh_dai_dien : product"
-              :lazy-src=" sanPham.anh_dai_dien ? END_POINT_IMAGE + sanPham.anh_dai_dien: product"
+              :lazy-src="product"
               width="100%"
               height="200"
             >
@@ -31,7 +31,7 @@
                 small
                 color="pink"
                 dark
-                v-if="!sanPham.san_pham_ton_kho || !sanPham.san_pham_ton_kho.so_luong > 0"
+                v-if="!sanPham.san_pham_ton_kho || !(sanPham.san_pham_ton_kho.so_luong > 0)"
               >Hết hàng</v-btn>
               <v-btn small color="success" dark v-else>Còn hàng</v-btn>
             </v-img>

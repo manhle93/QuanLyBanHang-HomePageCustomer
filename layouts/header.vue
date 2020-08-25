@@ -153,13 +153,15 @@
               src="https://image.flaticon.com/icons/svg/3163/3163689.svg"
               height="25"
             />
-            <div class="tieu-de">Hàng giảm giá</div>
+             <nuxt-link to="/sanphambanchay">
+            <div class="tieu-de" style="color: white">Sản phẩm bán chạy</div>
+             </nuxt-link>
             <img
               class="khuyen-mai"
               src="https://image.flaticon.com/icons/svg/3199/3199306.svg"
               height="25"
             />
-            <nuxt-link to="/sanphambanchay">
+            <nuxt-link to="/sinhthairuongbacthang">
               <div class="tieu-de" style="color: white">Sinh thái Ruộng Bậc Thang</div>
             </nuxt-link>
             <div class="search-mobile">

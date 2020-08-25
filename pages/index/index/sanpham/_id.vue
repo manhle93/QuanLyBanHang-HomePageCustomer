@@ -62,22 +62,22 @@
               ></v-text-field>
             </div>
             <v-btn
-              v-if="(!sanPham.san_pham_ton_kho || !sanPham.san_pham_ton_kho.so_luong > 0)"
+              v-if="(!sanPham.san_pham_ton_kho || !(sanPham.san_pham_ton_kho.so_luong > 0))"
               x-large
               color="pink"
               dark
-              @click="addGioHang"
+              @click="datTruoc()"
             >
               <v-icon left>mdi-cart</v-icon>ĐẶT TRƯỚC
             </v-btn>
-            <v-btn v-else x-large color="success" dark @click="addGioHang">
+            <v-btn v-else x-large color="success" dark @click="addGioHang()">
               <v-icon left>mdi-cart</v-icon>THÊM VÀO GIỎ
             </v-btn>
           </div>
           <nuxt-link :to="'/'">
-          <v-btn class='tiep-tuc' color="indigo" dark >
-            <v-icon left>mdi-arrow-left</v-icon>TIẾP TỤC MUA HÀNG
-          </v-btn>
+            <v-btn class="tiep-tuc" color="indigo" dark>
+              <v-icon left>mdi-arrow-left</v-icon>TIẾP TỤC MUA HÀNG
+            </v-btn>
           </nuxt-link>
         </div>
       </div>
@@ -146,20 +146,6 @@ export default {
     cartIcon: cartIcon,
     shipIcon: shipIcon,
     END_POINT_IMAGE: END_POINT_IMAGE,
-    sliders: [
-      {
-        src:
-          "https://znews-photo.zadn.vn/w660/Uploaded/lce_qdhuc/2019_04_20/thumb1.jpg",
-      },
-      {
-        src:
-          "https://image.winudf.com/v2/image1/Z3NleHkuaG90Z2lybHMuZ2FpeGluaC5nc2V4eV9zY3JlZW5fNl8xNTQ0OTQ5NTkxXzA0MA/screen-6.jpg?fakeurl=1&type=.jpg",
-      },
-      {
-        src:
-          "https://thuthuatnhanh.com/wp-content/uploads/2018/07/anh-girl-xinh-gai-dep.jpg",
-      },
-    ],
   }),
   computed: {},
   mounted() {
@@ -222,6 +208,36 @@ export default {
       }
       this.$store.commit("giohang/add", so_luong);
       localStorage.setItem("gio_hang", JSON.stringify(product));
+      this.snackbar = true;
+      this.noiDung = "Đã thêm vào giỏ hàng";
+    },
+    datTruoc() {
+      if (this.soLuong < 1) {
+        this.snackbar = true;
+        this.noiDung = "Số lượng sản phẩm không hợp lệ";
+        return;
+      }
+      let product = JSON.parse(localStorage.getItem("dat_truoc"));
+      if (!product) {
+        product = [];
+      }
+      let sP = {};
+
+      let check = product.find((el) => el.san_pham_id == this.$route.params.id);
+      if (check) {
+        check.so_luong = check.so_luong + this.soLuong;
+      } else {
+        sP.so_luong = this.soLuong;
+        sP.san_pham_id = this.$route.params.id;
+        product.push(sP);
+      }
+
+      let so_luong = 0;
+      for (let item of product) {
+        so_luong = Number(so_luong) + Number(item.so_luong);
+      }
+      // this.$store.commit("giohang/add", so_luong);
+      localStorage.setItem("dat_truoc", JSON.stringify(product));
       this.snackbar = true;
       this.noiDung = "Đã thêm vào giỏ hàng";
     },

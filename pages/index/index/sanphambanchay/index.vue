@@ -7,36 +7,67 @@
       <div
         style="margin-top: 50px; display: flex; flex-direction: row-reverse; flex-wrap: wrap;"
         v-else
-      >
+        >
         <v-card
           class="mx-auto san-pham"
-          v-for="sanPham in sanPhams"
-          :key="sanPham.id"
+          v-for="(sanPham, index) in sanPhams"
+          :key="index"
           style="margin-bottom: 40px"
         >
-          <NuxtLink :to="'/sanpham/' + sanPham.san_pham.id">
+          <NuxtLink :to="'/sanpham/' + sanPham.id">
             <v-img
-              :src="
-                sanPham.san_pham.anh_dai_dien
-                  ? END_POINT_IMAGE + sanPham.san_pham.anh_dai_dien
-                  : product
-              "
+              :src=" sanPham.san_pham.anh_dai_dien ? END_POINT_IMAGE + sanPham.san_pham.anh_dai_dien : product"
+              :lazy-src="product"
               width="100%"
               height="200"
-            ></v-img>
-            <v-card-title style="height: 95px">
-              {{
-              sanPham.san_pham.ten_san_pham
-              }}
-            </v-card-title>
-            <v-card-subtitle>{{ formatCurrency(sanPham.san_pham.gia_ban) }} VNĐ</v-card-subtitle>
-            <!-- <v-card-actions>
-              <v-btn class="ma-1 mt-0" outlined color="green">
-                <v-icon left>mdi-cart</v-icon>THÊM VÀO GIỎ
-              </v-btn>
-              <v-spacer></v-spacer>
-            </v-card-actions>-->
+            >
+              <v-btn
+                small
+                color="pink"
+                dark
+                v-if="!sanPham.san_pham.san_pham_ton_kho || !(sanPham.san_pham.san_pham_ton_kho.so_luong > 0)"
+              >Hết hàng</v-btn>
+              <v-btn small color="success" dark v-else>Còn hàng</v-btn>
+            </v-img>
           </NuxtLink>
+
+          <v-card-title
+            style="height: 95px; color: #145A32"
+            class="ten-sanpham"
+          >{{ sanPham.san_pham.ten_san_pham }}</v-card-title>
+          <v-card-subtitle class="d-flex align-center" style="justify-content: space-between">
+            <span
+              style="color: #764B09; font-size: 16px; font-weight: bold"
+            >{{ formatCurrency(sanPham.san_pham.gia_ban) }} đ</span>
+
+            <v-btn
+              v-if="sanPham.san_pham.san_pham_ton_kho && sanPham.san_pham.san_pham_ton_kho.so_luong > 0"
+              color="green"
+              class="mx-2 gio-hang"
+              fab
+              dark
+              small
+              @click="addGioHang(sanPham.san_pham_id)"
+            >
+              <v-icon>mdi-cart</v-icon>
+            </v-btn>
+            <v-btn v-else color="#9E9E9E" class="mx-2 gio-hang" fab dark small>
+              <v-icon>mdi-cart</v-icon>
+            </v-btn>
+            <v-btn
+              icon
+              @click="addSanPhamYeuThich(sanPham.san_pham_id)"
+              :style="{color: sanPham.daYeuThich ? 'red' : 'gray'}"
+            >
+              <v-icon>mdi-heart</v-icon>
+            </v-btn>
+          </v-card-subtitle>
+          <!-- <v-card-actions class="mb-3">
+            <v-btn class="ma-1 mt-0" outlined color="green">
+              <v-icon left>mdi-cart</v-icon>THÊM VÀO GIỎ
+            </v-btn>
+            <v-spacer></v-spacer>
+          </v-card-actions>-->
         </v-card>
       </div>
     </div>
@@ -65,10 +96,36 @@ export default {
   },
   methods: {
     async getSanPham() {
+      let product = JSON.parse(localStorage.getItem("san_pham_yeu_thich"));
       this.loadSanPham = true;
       let data = await api.get("sanphambanchaytrangchu", {});
-      this.sanPhams = data.data;
+      this.sanPhams = data.data.map((e) => {
+        e.daYeuThich = false;
+        return e;
+      });
+      for (let item of this.sanPhams) {
+        if (product && product.includes(item.san_pham_id)) {
+          item.daYeuThich = true;
+        } else item.daYeuThich = false;
+      }
       this.loadSanPham = false;
+    },
+    addSanPhamYeuThich(id) {
+      this.sanPhams.find((el) => el.san_pham_id == id).daYeuThich = !this.sanPhams.find(
+        (el) => el.san_pham_id == id
+      ).daYeuThich;
+      let product = JSON.parse(localStorage.getItem("san_pham_yeu_thich"));
+      if (!product) {
+        product = [];
+      }
+      let sP = {};
+      let check = product.findIndex((el) => el == id);
+      if (check !== -1) {
+        product.splice(check, 1);
+      } else {
+        product.push(id);
+      }
+      localStorage.setItem("san_pham_yeu_thich", JSON.stringify(product));
     },
     addGioHang(id) {
       let product = JSON.parse(localStorage.getItem("gio_hang"));

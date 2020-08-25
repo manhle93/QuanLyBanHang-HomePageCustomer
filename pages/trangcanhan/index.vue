@@ -164,6 +164,20 @@
                   color="indigo"
                 >Mới tạo</v-btn>
                 <v-btn
+                  v-if="item.trang_thai == 'mua_hang_online'"
+                  class="ml-3"
+                  small
+                  outlined
+                  color="indigo"
+                >Đơn mua hàng</v-btn>
+                <v-btn
+                  v-if="item.trang_thai == 'dat_hang_online'"
+                  class="ml-3"
+                  small
+                  outlined
+                  color="cyan "
+                >Đơn đặt trước</v-btn>
+                <v-btn
                   v-if="item.trang_thai == 'hoa_don'"
                   class="ml-3 mr-2"
                   small

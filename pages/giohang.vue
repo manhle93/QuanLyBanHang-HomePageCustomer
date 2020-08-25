@@ -1,115 +1,245 @@
 <template>
   <v-layout justify-center>
     <div class="page-width">
-      <v-snackbar v-model="snackbar" color="green">
+      <v-snackbar v-model="snackbar" :color="colorSnackbar">
         {{ noiDung }}
         <template v-slot:action="{ attrs }">
-          <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">Đóng</v-btn>
+          <v-btn color="white" text v-bind="attrs" @click="snackbar = false">Đóng</v-btn>
         </template>
       </v-snackbar>
-      <div style="margin-top: 50px; font-size: 26px; font-weight: bold" class="ml-3">GIỎ HÀNG</div>
+      <div
+        class="ml-3"
+        style="display: flex; flex-direction: row; justify-content: space-between; margin-top: 50px;"
+      >
+        <div style="font-size: 26px; font-weight: bold">GIỎ HÀNG</div>
+        <nuxt-link to="/">
+          <v-btn color="primary">
+            <v-icon class="mr-2">mdi-shopping</v-icon>Tiếp tục mua sắm
+          </v-btn>
+        </nuxt-link>
+      </div>
       <v-progress-linear color="green darken-2" rounded value="100"></v-progress-linear>
       <v-text-field color="success" loading disabled v-if="loadSanPham"></v-text-field>
-      <div
-        style="margin-top: 30px; display: flex; flex-direction: row-reverse; flex-wrap: wrap;"
-        v-else
-      >
-        <div
-          class="d-flex"
-          style="height: 140px; width: 100%"
-          v-for="sanPham in sanPhams"
-          :key="sanPham.id"
-        >
-          <div style="width: 200px; height: 100%;" class="ml-3">
-            <v-img
-              :src="sanPham.anh_dai_dien ? END_POINT_IMAGE +sanPham.anh_dai_dien : product"
-              aspect-ratio="1.7"
-              style="max-width: 200px; max-height: 140px; border-radius: 15px"
-            ></v-img>
-          </div>
-          <div style="height: 100%" class="flex-fill c-flex ml-6">
-            <div class="d-flex" style="justify-content: space-between; flex-wrap: wrap">
-              <div class="danh-muc">{{sanPham.ten_san_pham}}</div>
-              <div class="danh-muc mr-8">{{formatCurrency(sanPham.gia_ban)}} đ</div>
+      <v-card
+        v-if="sanPhams.length > 0 && !loadSanPham"
+        class="mb-3 pb-3 pr-3 mt-3"
+        :elevation="20"
+       >
+        <v-card-title style="color: #145A32">Danh sách sản phẩm đặt mua</v-card-title>
+        <v-card-subtitle>Giao hàng trong ngày</v-card-subtitle>
+        <div class="pt-3 pr-3" style="display: flex; flex-direction: row-reverse; flex-wrap: wrap; overflow-y: auto; max-height: 450px">
+          <div
+            class="d-flex"
+            style="height: 140px; width: 100%"
+            v-for="sanPham in sanPhams"
+            :key="sanPham.id"
+          >
+            <div style="width: 200px; height: 100%;" class="ml-3">
+              <v-img
+                :src="sanPham.anh_dai_dien ? END_POINT_IMAGE +sanPham.anh_dai_dien : product"
+                aspect-ratio="1.7"
+                style="max-width: 200px; max-height: 140px; border-radius: 15px"
+              ></v-img>
             </div>
-            <div
-              class="hide-text"
-            >Danh mục: {{sanPham.danh_muc ? sanPham.danh_muc.ten_danh_muc : ""}}</div>
-            <v-btn
-              class="mx-2 mt-4 hide-text"
-              x-small
-              fab
-              dark
-              color="pink"
-              @click="xoaSanPham(sanPham.id)"
-            >
-              <v-icon dark>mdi-delete</v-icon>
-            </v-btn>
-            <input
-              class="delete-mobile"
-              @change="doiSoLuong(sanPham.so_luong)"
-              v-model="sanPham.so_luong"
-              style="width: 80%; border: 1px solid green; padding-left: 10px; border-radius: 5px"
-              label="Số lượng"
-              :min="1"
-              type="number"
-              outlined
-              dense
-            />
-          </div>
-          <div style="width: 200px; height: 100%; display: flex; justify-content: flex-end">
-            <v-text-field
-              class="hide-text"
-              @change="doiSoLuong(sanPham.so_luong)"
-              v-model="sanPham.so_luong"
-              style="width: 80%"
-              label="Số lượng"
-              :min="1"
-              type="number"
-              outlined
-              dense
-            ></v-text-field>
-            <v-btn
-              class="delete-mobile mr-4"
-              x-small
-              fab
-              dark
-              color="pink"
-              @click="xoaSanPham(sanPham.id)"
-            >
-              <v-icon dark>mdi-delete</v-icon>
-            </v-btn>
+            <div style="height: 100%" class="flex-fill c-flex ml-6">
+              <div class="d-flex" style="justify-content: space-between; flex-wrap: wrap">
+                <div class="danh-muc">{{sanPham.ten_san_pham}}</div>
+                <div class="danh-muc mr-8">{{formatCurrency(sanPham.gia_ban)}} đ</div>
+              </div>
+              <div
+                class="hide-text"
+              >Danh mục: {{sanPham.danh_muc ? sanPham.danh_muc.ten_danh_muc : ""}}</div>
+              <v-btn
+                class="mx-2 mt-4 hide-text"
+                x-small
+                fab
+                dark
+                color="pink"
+                @click="xoaSanPham(sanPham.id)"
+              >
+                <v-icon dark>mdi-delete</v-icon>
+              </v-btn>
+              <input
+                class="delete-mobile"
+                @change="doiSoLuong(sanPham.so_luong)"
+                v-model="sanPham.so_luong"
+                style="width: 80%; border: 1px solid green; padding-left: 10px; border-radius: 5px"
+                label="Số lượng"
+                :min="1"
+                type="number"
+                outlined
+                dense
+              />
+            </div>
+            <div style="width: 200px; height: 100%; display: flex; justify-content: flex-end">
+              <v-text-field
+                class="hide-text"
+                @change="doiSoLuong(sanPham.so_luong)"
+                v-model="sanPham.so_luong"
+                style="width: 80%"
+                label="Số lượng"
+                :min="1"
+                type="number"
+                outlined
+                dense
+              ></v-text-field>
+              <v-btn
+                class="delete-mobile mr-4"
+                x-small
+                fab
+                dark
+                color="pink"
+                @click="xoaSanPham(sanPham.id)"
+              >
+                <v-icon dark>mdi-delete</v-icon>
+              </v-btn>
+            </div>
           </div>
         </div>
-      </div>
-      <div v-if="sanPhams.length > 0">
-        <div class="d-flex ml-3">
-          <div style="width: 300px">
-            <v-text-field
-              v-model="giamGia"
-              style="max-width: 300px"
-              label="Mã giảm giá"
-              outlined
-              dense
-            ></v-text-field>
+        <div v-if="sanPhams.length > 0" class="mt-3">
+          <!-- <div class="d-flex ml-3">
+            <div style="width: 300px">
+              <v-text-field
+                v-model="giamGia"
+                style="max-width: 300px"
+                label="Mã giảm giá"
+                outlined
+                dense
+              ></v-text-field>
+            </div>
+            <v-btn class="ml-4 mr-3" color="primary">Áp dụng</v-btn>
+          </div> -->
+          <div class="dat-hang ml-3">Giảm giá: {{formatCurrency(giamGia)}} đ</div>
+          <div class="dat-hang ml-3">
+            Tổng thanh toán:
+            <span
+              style="color: green; font-size: 22px"
+            >{{formatCurrency(tongTien)}} đ</span>
           </div>
-          <v-btn class="ml-4 mr-3" color="primary">Áp dụng</v-btn>
+          <v-btn
+            class="mt-3 ml-3"
+            style="color: white"
+            color="green"
+            @click="showDatHang(true)"
+          >MUA HÀNG</v-btn>
+          <br />
         </div>
-        <div class="dat-hang ml-3">Giảm giá: {{formatCurrency(giamGia)}} đ</div>
-        <div class="dat-hang ml-3">
-          Tổng thanh toán:
-          <span style="color: green; font-size: 22px">{{formatCurrency(tongTien)}} đ</span>
+      </v-card>
+
+      <v-card
+        v-if="!loadSanPham && sanPhamDatHangs.length > 0"
+        class="mb-3 pb-3 pr-3 mt-3"
+        :elevation="20"
+       >
+        <v-card-title style="color: #F60257">Danh sách sản phẩm đặt trước</v-card-title>
+        <v-card-subtitle>Giao hàng khi sản phẩm được nhập về</v-card-subtitle>
+        <div  class="pt-3 pr-3" style="display: flex; flex-direction: row-reverse; flex-wrap: wrap;  overflow-y: auto; max-height: 450px">
+          <div
+            class="d-flex"
+            style="height: 140px; width: 100%"
+            v-for="sanPham in sanPhamDatHangs"
+            :key="sanPham.id"
+             >
+            <div style="width: 200px; height: 100%;" class="ml-3">
+              <v-img
+                :src="sanPham.anh_dai_dien ? END_POINT_IMAGE +sanPham.anh_dai_dien : product"
+                aspect-ratio="1.7"
+                style="max-width: 200px; max-height: 140px; border-radius: 15px"
+              ></v-img>
+            </div>
+            <div style="height: 100%" class="flex-fill c-flex ml-6">
+              <div class="d-flex" style="justify-content: space-between; flex-wrap: wrap">
+                <div class="danh-muc">{{sanPham.ten_san_pham}}</div>
+                <div class="danh-muc mr-8">{{formatCurrency(sanPham.gia_ban)}} đ</div>
+              </div>
+              <div
+                class="hide-text"
+              >Danh mục: {{sanPham.danh_muc ? sanPham.danh_muc.ten_danh_muc : ""}}</div>
+              <v-btn
+                class="mx-2 mt-4 hide-text"
+                x-small
+                fab
+                dark
+                color="pink"
+                @click="xoaSanPhamDatHang(sanPham.id)"
+              >
+                <v-icon dark>mdi-delete</v-icon>
+              </v-btn>
+              <input
+                class="delete-mobile"
+                @change="doiSoLuong(sanPham.so_luong)"
+                v-model="sanPham.so_luong"
+                style="width: 80%; border: 1px solid green; padding-left: 10px; border-radius: 5px"
+                label="Số lượng"
+                :min="1"
+                type="number"
+                outlined
+                dense
+              />
+            </div>
+            <div style="width: 200px; height: 100%; display: flex; justify-content: flex-end">
+              <v-text-field
+                class="hide-text"
+                @change="doiSoLuong(sanPham.so_luong)"
+                v-model="sanPham.so_luong"
+                style="width: 80%"
+                label="Số lượng"
+                :min="1"
+                type="number"
+                outlined
+                dense
+              ></v-text-field>
+              <v-btn
+                class="delete-mobile mr-4"
+                x-small
+                fab
+                dark
+                color="pink"
+                @click="xoaSanPhamDatHang(sanPham.id)"
+              >
+                <v-icon dark>mdi-delete</v-icon>
+              </v-btn>
+            </div>
+          </div>
         </div>
-        <v-btn class="mt-3 ml-3" style="color: white" color="green" @click="showDatHang()">ĐẶT HÀNG</v-btn>
-        <br />
-        <div style="width: 100%; text-align: center" class="tiep-tuc">
+        <div v-if="sanPhams.length > 0" class="mt-3">
+          <!-- <div class="d-flex ml-3">
+            <div style="width: 300px">
+              <v-text-field
+                v-model="giamGiaDathang"
+                style="max-width: 300px"
+                label="Mã giảm giá"
+                outlined
+                dense
+              ></v-text-field>
+            </div>
+            <v-btn class="ml-4 mr-3" color="primary">Áp dụng</v-btn>
+          </div> -->
+          <div class="dat-hang ml-3">Giảm giá: {{formatCurrency(giamGiaDathang)}} đ</div>
+          <div class="dat-hang ml-3">
+            Tổng thanh toán:
+            <span
+              style="color: #F60257; font-size: 22px"
+            >{{formatCurrency(tongTienDatHang)}} đ</span>
+          </div>
+          <v-btn
+            class="mt-3 ml-3"
+            style="color: white"
+            color="pink"
+            @click="showDatHang(false)"
+          >ĐẶT TRƯỚC</v-btn>
+          <br />
+        </div>
+      </v-card>
+      <!-- <div style="width: 100%; text-align: center" class="tiep-tuc">
         <nuxt-link to="/">
           <v-btn color="primary">Tiếp tục mua sắm</v-btn>
         </nuxt-link>
-        </div>
-
-      </div>
-      <div v-else style="width: 100%; text-align: center;">
+      </div>-->
+      <div
+        v-if="sanPhams.length <= 0 && sanPhamDatHangs.length <=0"
+        style="width: 100%; text-align: center;"
+      >
         <img class="mb-4" :src="emptyCard" height="350px" />
         <div class="mb-6">Không có sản phẩm nào trong giỏ hàng của bạn</div>
         <nuxt-link to="/">
@@ -119,7 +249,7 @@
     </div>
     <v-dialog v-model="dialog" max-width="500">
       <v-card>
-        <v-card-title class="headline">Thông tin đặt hàng</v-card-title>
+        <v-card-title class="headline">Thông tin đơn hàng</v-card-title>
         <v-form ref="form" class="pl-4 pr-4">
           <label class="labelForm">Họ tên</label>
           <v-text-field
@@ -146,8 +276,7 @@
             :rules="phoneRules"
           ></v-text-field>
           <label class="labelForm">Địa chỉ nhận hàng</label>
-          <v-textarea
-            height="80"
+          <v-text-field
             prepend-inner-icon="mdi-map-marker"
             class="mt-1"
             outlined
@@ -155,10 +284,12 @@
             v-model="form.dia_chi"
             placeholder="Địa chỉ nhận hàng"
             :rules="passwordRules"
-          ></v-textarea>
+          ></v-text-field>
 
+          <label v-if="form.mua_hang" class="labelForm">Thời gian nhận hàng mong muốn</label>
+          <v-text-field v-if="form.mua_hang" type="datetime-local" v-model="form.thoi_gian_nhan_hang"></v-text-field>
           <label class="labelForm">Ghi chú</label>
-          <v-textarea
+          <v-text-field
             height="80"
             prepend-inner-icon="mdi-pen"
             class="mt-1"
@@ -166,12 +297,25 @@
             dense
             v-model="form.ghi_chu"
             placeholder="Ghi chú đơn hàng"
-          ></v-textarea>
+          ></v-text-field>
+          <label v-if="form.mua_hang" class="labelForm">Phương thức thanh toán</label>
+          <v-select
+            v-if="form.mua_hang"
+            v-model="form.phuong_thuc_thanh_toan"
+            dense
+            :items="phuongThucThanhToan"
+            label="Chọn phương thức thanh toán"
+            item-text="ten"
+            item-value="id"
+            solo
+            prepend-inner-icon="mdi-cash-usd"
+          ></v-select>
         </v-form>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="green darken-1" text @click="dialog = false">Hủy bỏ</v-btn>
-          <v-btn color="green darken-1" text @click="datHang()">Đặt hàng</v-btn>
+          <v-btn v-if="form.mua_hang" color="green darken-1" text @click="datHang()">Mua hàng</v-btn>
+          <v-btn v-else color="pink darken-1" text @click="datHang()">Đặt hàng</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -190,10 +334,13 @@ export default {
   layout: "header",
   data: () => ({
     sanPhams: [],
+    sanPhamDatHangs: [],
     danhMucs: [],
     emptyCard: emptyCard,
     END_POINT_IMAGE: END_POINT_IMAGE,
-    giamGia: 0,
+    tongTienDatHang: 0,
+    giamGiaDathang: 0,
+    colorSnackbar: "green",
     tongTien: 0,
     page: 1,
     per_page: 20,
@@ -207,13 +354,21 @@ export default {
     refershIcon: refershIcon,
     cartIcon: cartIcon,
     dialog: false,
+    phuongThucThanhToan: [
+      { id: 'tai_khoan', ten: "Tài khoản" },
+      { id: 'cod', ten: "Ship COD" },
+    ],
     form: {
       ma: "DH" + new Date().getTime(),
       nguoi_mua_hang: "",
       so_dien_thoai: "",
       dia_chi: "",
       ghi_chu: "",
+      mua_hang: true,
+      phuong_thuc_thanh_toan: 'cod',
       danhSachHang: [],
+      datHang: [],
+      thoi_gian_nhan_hang: null,
     },
     passwordRules: [
       (v) => !!v || "Địa chỉ nhận hàng không thể bỏ trống",
@@ -231,6 +386,7 @@ export default {
   mounted() {
     this.getSanPham();
     this.getDanhMuc();
+    this.getSanPhamDathang();
   },
   methods: {
     async getInfo() {
@@ -241,6 +397,10 @@ export default {
         this.form.dia_chi = data.data.data.dia_chi;
         this.form.giam_gia = this.giamGia;
         this.form.tong_tien = this.tongTien;
+        this.form.datHang = this.sanPhamDatHangs;
+        this.form.mua_hang = true;
+        this.form.danhSachHang = this.sanPhams;
+        this.form.phuong_thuc_thanh_toan = 'tai_khoan';
       } catch (error) {
         this.form = {
           ma: "DH" + new Date().getTime(),
@@ -249,14 +409,23 @@ export default {
           dia_chi: "",
           ghi_chu: "",
           danhSachHang: this.sanPhams,
+          mua_hang: true,
+          datHang: this.sanPhamDatHangs,
           giam_gia: this.giamGia,
           tong_tien: this.tongTien,
+          phuong_thuc_thanh_toan: 'cod',
         };
       }
     },
-    showDatHang() {
+    async showDatHang(muaHang) {
       this.dialog = true;
-      this.getInfo();
+      await this.getInfo();
+      this.form.mua_hang = muaHang;
+      if (!muaHang) {
+        this.form.tong_tien = this.tongTienDatHang;
+        this.form.giam_gia = this.giamGiaDathang;
+      }
+      console.log(this.form);
     },
     validate() {
       this.$refs.form.validate();
@@ -281,9 +450,35 @@ export default {
           }
         }
       }
+
       this.tinhTongTien();
       this.loadSanPham = false;
       this.form.danhSachHang = this.sanPhams;
+    },
+
+    async getSanPhamDathang() {
+      this.loadSanPham = true;
+      let product = JSON.parse(localStorage.getItem("dat_truoc"));
+      if (!product) {
+        this.loadSanPham = false;
+        this.sanPhamDatHangs = [];
+        return;
+      }
+      let san_pham_id = product.map((el) => Number(el.san_pham_id));
+      let data = await api.get("sanphamgiohang", {
+        san_pham_id: san_pham_id,
+      });
+      this.sanPhamDatHangs = data.data;
+      for (let item of this.sanPhamDatHangs) {
+        for (let i of product) {
+          if (i.san_pham_id == item.id) {
+            item["so_luong"] = i.so_luong;
+          }
+        }
+      }
+      this.tinhTongTienDatHang();
+      this.loadSanPham = false;
+      this.form.danhSachHang = this.sanPhamDatHangs;
     },
     xoaSanPham(id) {
       let index = this.sanPhams.findIndex((el) => el.id == id);
@@ -303,6 +498,23 @@ export default {
         localStorage.setItem("gio_hang", JSON.stringify(sp));
       }
     },
+    xoaSanPhamDatHang(id) {
+      let index = this.sanPhamDatHangs.findIndex((el) => el.id == id);
+      this.sanPhamDatHangs.splice(index, 1);
+      if (this.sanPhamDatHangs.length == 0) {
+        localStorage.removeItem("dat_truoc");
+      } else {
+        let sp = [];
+        for (let item of this.sanPhams) {
+          let i = {};
+          i.san_pham_id = item.id;
+          i.so_luong = item.so_luong;
+          sp.push(i);
+          this.tinhTongTienDatHang();
+        }
+        localStorage.setItem("dat_truoc", JSON.stringify(sp));
+      }
+    },
     async getDanhMuc() {
       let data = await api.get("danhmuc", { per_page: 9 });
       this.danhMucs = data.data.data;
@@ -319,8 +531,17 @@ export default {
       }
       this.tongTien = this.tongTien - this.giamGia;
     },
+    tinhTongTienDatHang() {
+      this.tongTienDatHang = 0;
+      for (let item of this.sanPhamDatHangs) {
+        this.tongTienDatHang =
+          this.tongTienDatHang + Number(item.so_luong) * Number(item.gia_ban);
+      }
+      this.tongTienDatHang = this.tongTienDatHang - this.giamGiaDathang;
+    },
     doiSoLuong(val) {
       this.tinhTongTien();
+      this.tinhTongTienDatHang();
     },
     formatCurrency(n, separate = ".") {
       try {
@@ -338,14 +559,22 @@ export default {
       if (this.$refs.form.validate()) {
         try {
           let data = await api.post("khachdathang", this.form);
+          this.colorSnackbar = "green";
           this.snackbar = true;
           this.noiDung = "Đặt hàng thành công";
-          localStorage.removeItem("gio_hang");
+          if (this.form.mua_hang) {
+            localStorage.removeItem("gio_hang");
+            this.$store.commit("giohang/add", 0);
+            this.getSanPham();
+          } else {
+            localStorage.removeItem("dat_truoc");
+            this.getSanPhamDathang();
+          }
           this.dialog = false;
-          this.getSanPham();
-          this.$store.commit("giohang/add", 0);
         } catch (error) {
-          console.log(error);
+          this.colorSnackbar = "pink";
+          this.snackbar = true;
+          this.noiDung = error.response.data.message;
         }
       } else {
         return console.log("Lỗi validate ", this.$refs.form);
@@ -372,6 +601,26 @@ export default {
 }
 .delete-mobile {
   display: none;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
 }
 @media only screen and (max-width: 600px) {
   .danh-muc {
