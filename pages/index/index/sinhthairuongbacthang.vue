@@ -73,6 +73,7 @@ export default {
       let data = await api.get("baiviet", {
         per_page: this.per_page,
         page: this.page,
+        trang_thai: 'xuat_ban'
       });
       this.baiViets = data.data.data.data;
 
