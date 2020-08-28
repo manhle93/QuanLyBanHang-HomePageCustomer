@@ -217,7 +217,7 @@
                       dark
                       x-small
                       color="pink"
-                      v-if="item.trang_thai == 'moi_tao'"
+                      v-if="item.trang_thai == 'moi_tao' || item.trang_thai == 'mua_hang_online'|| item.trang_thai == 'dat_hang_online'"
                       @click="huyDon(item.id)"
                     >
                       <v-icon dark>mdi-close</v-icon>
