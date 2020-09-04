@@ -65,7 +65,7 @@
                 <img :src="logo" height="50" />
               </div>
             </v-toolbar-title>
-            <div class="c-flex ml-3 phone" style="align-items: flex-start;">
+            <!-- <div class="c-flex ml-3 phone" style="align-items: flex-start;">
               <v-btn
                 @mouseover="showFace"
                 @mouseleave="hideFace"
@@ -114,10 +114,10 @@
                 <v-icon class="mr-3">mdi-phone</v-icon>
                 <span style="font-size: 16px">08.666.99806</span>
               </v-btn>
-            </div>
+            </div>-->
           </NuxtLink>
           <div
-            class="flex-fill d-flex align-center mr-6"
+            class="flex-fill d-flex align-center ml-4"
             style="height: 100%; justify-content: center"
           >
             <v-text-field
@@ -128,11 +128,23 @@
               label="Tìm kiếm"
               solo
               hide-details
-              style="max-width: 400px; border-radius: 11px"
+              style="max-width: 400px; border-radius: 5px"
               prepend-inner-icon="mdi-yeast"
               @keyup.enter="timKiem"
               class="tim-kiem"
             ></v-text-field>
+          </div>
+          <div class="d-flex mr-6 ml-3">
+            <!-- <v-btn x-small dark fab color="indigo" class="mr-3">
+              <v-icon>mdi-facebook</v-icon>
+            </v-btn> -->
+           <a href=""> <img src="https://image.flaticon.com/icons/svg/145/145802.svg" height="33" class="mr-3"></a>
+            <div class="pr-4 d-flex">
+              <v-btn x-small dark fab color="pink">
+                <v-icon>mdi-phone</v-icon>
+              </v-btn>
+              <span style="font-size: 20px; font-weight: bold; font-style: italic; font-family: 'time new roman" class="mt-1 ml-1 so-dien-thoai">08.666.99806</span>
+            </div>
           </div>
           <nuxt-link to="/dangky" v-if="!loggedIn">
             <v-btn class="mr-2 button" small color="primary">Đăng ký</v-btn>
@@ -170,7 +182,7 @@
               </v-list-item>
             </v-list>
           </v-menu>
-          <v-btn small class="mr-4 user-name" outlined color="white" v-if="loggedIn">{{User.name}}</v-btn>
+          <!-- <v-btn small class="mr-4 user-name" outlined color="white" v-if="loggedIn">{{User.name}}</v-btn> -->
           <nuxt-link to="/giohang" class="pr-6">
             <v-badge color="red" :content="soLuongGioHang">
               <v-icon>mdi-cart</v-icon>
@@ -382,7 +394,15 @@ export default {
 .search-mobile {
   display: none;
 }
+@media only screen and (max-width: 1100px) {
+  .so-dien-thoai {
+    display: none;
+  }
+}
 @media only screen and (max-width: 800px) {
+  .so-dien-thoai {
+    display: none;
+  }
   .user-name {
     display: none;
   }
