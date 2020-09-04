@@ -59,14 +59,67 @@
             @click.stop="leftMenu = !leftMenu"
             v-show="!$vuetify.breakpoint.lgAndUp"
           ></v-app-bar-nav-icon>
-          <NuxtLink to="/">
+          <NuxtLink to="/" class="d-flex">
             <v-toolbar-title>
               <div style="background: white; padding: 8px 8px 0px 8px">
                 <img :src="logo" height="50" />
               </div>
             </v-toolbar-title>
+            <div class="c-flex ml-3 phone" style="align-items: flex-start;">
+              <v-btn
+                @mouseover="showFace"
+                @mouseleave="hideFace"
+                v-show="!faceShow"
+                class="mb-1"
+                x-small
+                dark
+                fab
+                color="indigo"
+              >
+                <v-icon>mdi-facebook</v-icon>
+              </v-btn>
+              <v-btn
+                class="mb-1"
+                @mouseover="showFace"
+                @mouseleave="hideFace"
+                small
+                dark
+                color="indigo"
+                v-show="faceShow"
+              >
+                <v-icon class="mr-3">mdi-facebook</v-icon>
+                <span style="font-size: 16px">RBT</span>
+              </v-btn>
+
+              <v-btn
+                v-show="!phoneShow"
+                @mouseover="showPhone"
+                @mouseleave="hidePhone"
+                x-small
+                dark
+                fab
+                color="pink"
+              >
+                <v-icon>mdi-phone</v-icon>
+              </v-btn>
+
+              <v-btn
+                @mouseover="showPhone"
+                @mouseleave="hidePhone"
+                small
+                dark
+                color="pink"
+                v-show="phoneShow"
+              >
+                <v-icon class="mr-3">mdi-phone</v-icon>
+                <span style="font-size: 16px">08.666.99806</span>
+              </v-btn>
+            </div>
           </NuxtLink>
-          <div class="flex-fill d-flex align-center" style="height: 100%; justify-content: center">
+          <div
+            class="flex-fill d-flex align-center mr-6"
+            style="height: 100%; justify-content: center"
+          >
             <v-text-field
               v-model="search"
               light
@@ -75,7 +128,7 @@
               label="Tìm kiếm"
               solo
               hide-details
-              style="max-width: 500px; border-radius: 11px"
+              style="max-width: 400px; border-radius: 11px"
               prepend-inner-icon="mdi-yeast"
               @keyup.enter="timKiem"
               class="tim-kiem"
@@ -117,7 +170,7 @@
               </v-list-item>
             </v-list>
           </v-menu>
-          <v-btn class="mr-4 user-name" outlined color="white" v-if="loggedIn">{{User.name}}</v-btn>
+          <v-btn small class="mr-4 user-name" outlined color="white" v-if="loggedIn">{{User.name}}</v-btn>
           <nuxt-link to="/giohang" class="pr-6">
             <v-badge color="red" :content="soLuongGioHang">
               <v-icon>mdi-cart</v-icon>
@@ -153,9 +206,9 @@
               src="https://image.flaticon.com/icons/svg/3163/3163689.svg"
               height="25"
             />
-             <nuxt-link to="/sanphambanchay">
-            <div class="tieu-de" style="color: white">Sản phẩm bán chạy</div>
-             </nuxt-link>
+            <nuxt-link to="/sanphambanchay">
+              <div class="tieu-de" style="color: white">Sản phẩm bán chạy</div>
+            </nuxt-link>
             <img
               class="khuyen-mai"
               src="https://image.flaticon.com/icons/svg/3199/3199306.svg"
@@ -222,6 +275,8 @@ export default {
     product: product,
     search: null,
     loggedIn: false,
+    phoneShow: false,
+    faceShow: false,
     User: {
       name: "",
       avatar_url: null,
@@ -252,6 +307,18 @@ export default {
       } catch (error) {
         this.loggedIn = false;
       }
+    },
+    showPhone() {
+      this.phoneShow = true;
+    },
+    hidePhone() {
+      this.phoneShow = false;
+    },
+    showFace() {
+      this.faceShow = true;
+    },
+    hideFace() {
+      this.faceShow = false;
     },
     async logOut() {
       try {
@@ -291,6 +358,13 @@ export default {
 };
 </script>
 <style scoped>
+.c-flex {
+  display: flex;
+  flex-direction: column;
+}
+.phone {
+  width: 40px;
+}
 .danh-muc {
   font-size: 14px;
   font-weight: bold;
@@ -307,6 +381,14 @@ export default {
 }
 .search-mobile {
   display: none;
+}
+@media only screen and (max-width: 800px) {
+  .user-name {
+    display: none;
+  }
+  .phone {
+    width: 180px;
+  }
 }
 @media only screen and (max-width: 600px) {
   .button {

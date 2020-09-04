@@ -96,7 +96,10 @@
             </v-btn>
           </div>
 
-          <div class="c-flex thongtin-canhan mb-4" style="margin-top: 15px; padding-left: 0px">
+          <div
+            class="c-flex thongtin-canhan mb-4 overflow-y-auto"
+            style="margin-top: 15px; padding-left: 0px; max-height:600px"
+          >
             <div class="tieude ml-6">LỊCH SỬ GIAO DỊCH</div>
             <v-list-item v-for="item in giaoDich" :key="item.id">
               <v-btn v-if="item.trang_thai == 'nop_tien'" class="mx-2" fab dark small color="green">
@@ -148,10 +151,13 @@
         </div>
 
         <div
+          id="scroll-target"
           class="flex-fill don-hang pl-4 pb-8 pr-4"
-          style="min-height: 600px; background-color: #FEF5E7"
+          style="min-height: 600px; background-color: #FEF5E7;"
+          v-scroll="onScroll"
         >
           <div class="tieude mt-4 ml-10 mb-6">DANH SÁCH ĐƠN ĐẶT HÀNG</div>
+
           <v-card v-for="(item, index) in donHangs" :key="item.id" class="pb-4">
             <div style="font-weight: bold" class="mt-6 d-flex pt-4 pl-4">
               <div>{{index + 1}}. Mã đơn: {{item.ma}}</div>
@@ -281,6 +287,10 @@
             <div class="tien">Giảm giá: {{formatCurrency(item.giam_gia)}} đ</div>
             <div class="tien">Thanh toán: {{formatCurrency(+item.tong_tien - +item.giam_gia)}} đ</div>
           </v-card>
+          <v-progress-linear v-show="loadMore" indeterminate color="green"></v-progress-linear>
+          <div class="mt-4 text-center" v-if="!all">
+            <v-btn @click="getDonHang()" color="primary" dark>XEM THÊM</v-btn>
+          </div>
         </div>
       </div>
     </div>
@@ -435,6 +445,11 @@ import { END_POINT_IMAGE, END_POINT } from "@/env";
 export default {
   layout: "header",
   data: () => ({
+    per_page: 3,
+    page: 0,
+    loadMore: true,
+    all: false,
+    isActive: false,
     avatar: avatar,
     snackbar: false,
     noiDung: "",
@@ -494,17 +509,44 @@ export default {
   }),
   mounted() {
     this.me();
+    this.getDonHang();
+  },
+  watch: {
+    isActive(val) {
+      console.log(val);
+    },
   },
   methods: {
     async me() {
       try {
         let data = await api.get("profilekhachhang");
         this.User = data.data.data;
-        this.donHangs = data.data.don_hang;
+        // this.donHangs = data.data.don_hang;
         this.giaoDich = data.data.giao_dich;
       } catch (error) {
         window.location.assign("/");
       }
+    },
+    async getDonHang() {
+      this.page += 1;
+      this.loadMore = true;
+      let data = await api.get("donhangmobile", {
+        per_page: this.per_page,
+        page: this.page,
+      });
+      console.log(data);
+      if (this.page == data.data.last_page) {
+        this.all = true;
+      }
+      this.loadMore = false;
+      this.donHangs.push(...data.data.data);
+    },
+    onScroll(e) {
+      // console.log(e);
+      // if(e.target.scrollTop >= 1197){
+      //   this.per_page = this.per_page +1
+      //   this.getDonHang()
+      // }
     },
     validate() {
       this.$refs.form.validate();
@@ -699,6 +741,24 @@ export default {
   font-size: 15px;
   margin-top: 8px;
   margin-left: 15px;
+}
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 @media only screen and (max-width: 600px) {
   .avatar {
