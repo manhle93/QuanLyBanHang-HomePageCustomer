@@ -1,7 +1,10 @@
-# customer
+## HỆ THỐNG QUẢN LÝ THƯƠNG MẠI ĐIỆN TỬ - GIAO DIỆN KHÁCH HÀNG
 
-## Build Setup
-HỆ THỐNG QUẢN LÝ THƯƠNG MẠI ĐIỆN TỬ - GIAO DIỆN KHÁCH HÀNG
+### Demo
+
+![demo](http://apiruongbacthang.skymapglobal.vn/storage/images/avatar/1600764233.png)
+
+### Cài đặt
 ```bash
 # install dependencies
 $ yarn install
