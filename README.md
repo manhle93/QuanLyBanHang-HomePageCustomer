@@ -1,7 +1,7 @@
 # customer
 
 ## Build Setup
-
+HỆ THỐNG QUẢN LÝ THƯƠNG MẠI ĐIỆN TỬ - GIAO DIỆN KHÁCH HÀNG
 ```bash
 # install dependencies
 $ yarn install
@@ -18,3 +18,5 @@ $ yarn generate
 ```
 
 For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
+
+MANHLE - SKYMAPGLOBAL
