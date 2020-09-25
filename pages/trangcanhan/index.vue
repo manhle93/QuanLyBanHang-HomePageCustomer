@@ -443,6 +443,9 @@ import avatar from "@/assets/image/avatar_none.png";
 import { END_POINT_IMAGE, END_POINT } from "@/env";
 
 export default {
+  head: () => ({
+    title: 'Trang Cá Nhân'
+  }),
   layout: "header",
   data: () => ({
     per_page: 3,
