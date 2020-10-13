@@ -438,6 +438,9 @@ import refershIcon from "assets/image/icon/refresh.png";
 import cartIcon from "assets/image/icon/cart.png";
 import emptyCard from "assets/image/empty_cart.png";
 export default {
+  head: () => ({
+    title: 'Giỏ Hàng'
+  }),
   layout: "header",
   data: () => ({
     sanPhams: [],

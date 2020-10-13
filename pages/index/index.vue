@@ -93,6 +93,9 @@ async function getDanhMuc() {
 }
 
 export default {
+  head: () => ({
+    title: 'Trang Chủ'
+  }),
   data: () => ({
     danhMucs: [],
     END_POINT_IMAGE: END_POINT_IMAGE,
