@@ -4,12 +4,19 @@
       <v-snackbar v-model="snackbar" :color="colorSnackbar">
         {{ noiDung }}
         <template v-slot:action="{ attrs }">
-          <v-btn color="white" text v-bind="attrs" @click="snackbar = false">Đóng</v-btn>
+          <v-btn color="white" text v-bind="attrs" @click="snackbar = false"
+            >Đóng</v-btn
+          >
         </template>
       </v-snackbar>
       <div
         class="ml-3"
-        style="display: flex; flex-direction: row; justify-content: space-between; margin-top: 50px;"
+        style="
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          margin-top: 50px;
+        "
       >
         <div style="font-size: 26px; font-weight: bold">GIỎ HÀNG</div>
         <nuxt-link to="/">
@@ -18,18 +25,35 @@
           </v-btn>
         </nuxt-link>
       </div>
-      <v-progress-linear color="green darken-2" rounded value="100"></v-progress-linear>
-      <v-text-field color="success" loading disabled v-if="loadSanPham"></v-text-field>
+      <v-progress-linear
+        color="green darken-2"
+        rounded
+        value="100"
+      ></v-progress-linear>
+      <v-text-field
+        color="success"
+        loading
+        disabled
+        v-if="loadSanPham"
+      ></v-text-field>
       <v-card
         v-if="sanPhams.length > 0 && !loadSanPham"
         class="mb-3 pb-3 pr-3 mt-3"
         :elevation="20"
       >
-        <v-card-title style="color: #145A32">Danh sách sản phẩm đặt mua</v-card-title>
+        <v-card-title style="color: #145a32"
+          >Danh sách sản phẩm đặt mua</v-card-title
+        >
         <v-card-subtitle>Giao hàng trong ngày</v-card-subtitle>
         <div
           class="pt-3 pr-3"
-          style="display: flex; flex-direction: row-reverse; flex-wrap: wrap; overflow-y: auto; max-height: 450px"
+          style="
+            display: flex;
+            flex-direction: row-reverse;
+            flex-wrap: wrap;
+            overflow-y: auto;
+            max-height: 450px;
+          "
         >
           <div
             class="d-flex"
@@ -37,21 +61,31 @@
             v-for="sanPham in sanPhams"
             :key="sanPham.id"
           >
-            <div style="width: 200px; height: 100%;" class="ml-3">
+            <div style="width: 200px; height: 100%" class="ml-3">
               <v-img
-                :src="sanPham.anh_dai_dien ? END_POINT_IMAGE +sanPham.anh_dai_dien : product"
+                :src="
+                  sanPham.anh_dai_dien
+                    ? END_POINT_IMAGE + sanPham.anh_dai_dien
+                    : product
+                "
                 aspect-ratio="1.7"
                 style="max-width: 200px; max-height: 140px; border-radius: 15px"
               ></v-img>
             </div>
             <div style="height: 100%" class="flex-fill c-flex ml-6">
-              <div class="d-flex" style="justify-content: space-between; flex-wrap: wrap">
-                <div class="danh-muc">{{sanPham.ten_san_pham}}</div>
-                <div class="danh-muc mr-8">{{formatCurrency(sanPham.gia_ban)}} đ</div>
-              </div>
               <div
-                class="hide-text"
-              >Danh mục: {{sanPham.danh_muc ? sanPham.danh_muc.ten_danh_muc : ""}}</div>
+                class="d-flex"
+                style="justify-content: space-between; flex-wrap: wrap"
+              >
+                <div class="danh-muc">{{ sanPham.ten_san_pham }}</div>
+                <div class="danh-muc mr-8">
+                  {{ formatCurrency(sanPham.gia_ban) }} đ
+                </div>
+              </div>
+              <div class="hide-text">
+                Danh mục:
+                {{ sanPham.danh_muc ? sanPham.danh_muc.ten_danh_muc : "" }}
+              </div>
               <v-btn
                 class="mx-2 mt-4 hide-text"
                 x-small
@@ -66,7 +100,12 @@
                 class="delete-mobile"
                 @change="doiSoLuong(sanPham.so_luong)"
                 v-model="sanPham.so_luong"
-                style="width: 80%; border: 1px solid green; padding-left: 10px; border-radius: 5px"
+                style="
+                  width: 80%;
+                  border: 1px solid green;
+                  padding-left: 10px;
+                  border-radius: 5px;
+                "
                 label="Số lượng"
                 :min="1"
                 type="number"
@@ -74,7 +113,14 @@
                 dense
               />
             </div>
-            <div style="width: 200px; height: 100%; display: flex; justify-content: flex-end">
+            <div
+              style="
+                width: 200px;
+                height: 100%;
+                display: flex;
+                justify-content: flex-end;
+              "
+            >
               <v-text-field
                 class="hide-text"
                 @change="doiSoLuong(sanPham.so_luong)"
@@ -112,19 +158,22 @@
             </div>
             <v-btn class="ml-4 mr-3" color="primary">Áp dụng</v-btn>
           </div>-->
-          <div class="dat-hang ml-3">Giảm giá: {{formatCurrency(giamGia)}} đ</div>
+          <div class="dat-hang ml-3">
+            Giảm giá: {{ formatCurrency(giamGia) }} đ
+          </div>
           <div class="dat-hang ml-3">
             Tổng thanh toán:
-            <span
-              style="color: green; font-size: 22px"
-            >{{formatCurrency(tongTien)}} đ</span>
+            <span style="color: green; font-size: 22px"
+              >{{ formatCurrency(tongTien) }} đ</span
+            >
           </div>
           <v-btn
             class="mt-3 ml-3"
             style="color: white"
             color="green"
             @click="showDatHang(true)"
-          >MUA HÀNG</v-btn>
+            >MUA HÀNG</v-btn
+          >
           <br />
         </div>
       </v-card>
@@ -134,11 +183,19 @@
         class="mb-3 pb-3 pr-3 mt-3"
         :elevation="20"
       >
-        <v-card-title style="color: #F60257">Danh sách sản phẩm đặt trước</v-card-title>
+        <v-card-title style="color: #f60257"
+          >Danh sách sản phẩm đặt trước</v-card-title
+        >
         <v-card-subtitle>Giao hàng khi sản phẩm được nhập về</v-card-subtitle>
         <div
           class="pt-3 pr-3"
-          style="display: flex; flex-direction: row-reverse; flex-wrap: wrap;  overflow-y: auto; max-height: 450px"
+          style="
+            display: flex;
+            flex-direction: row-reverse;
+            flex-wrap: wrap;
+            overflow-y: auto;
+            max-height: 450px;
+          "
         >
           <div
             class="d-flex"
@@ -146,21 +203,31 @@
             v-for="sanPham in sanPhamDatHangs"
             :key="sanPham.id"
           >
-            <div style="width: 200px; height: 100%;" class="ml-3">
+            <div style="width: 200px; height: 100%" class="ml-3">
               <v-img
-                :src="sanPham.anh_dai_dien ? END_POINT_IMAGE +sanPham.anh_dai_dien : product"
+                :src="
+                  sanPham.anh_dai_dien
+                    ? END_POINT_IMAGE + sanPham.anh_dai_dien
+                    : product
+                "
                 aspect-ratio="1.7"
                 style="max-width: 200px; max-height: 140px; border-radius: 15px"
               ></v-img>
             </div>
             <div style="height: 100%" class="flex-fill c-flex ml-6">
-              <div class="d-flex" style="justify-content: space-between; flex-wrap: wrap">
-                <div class="danh-muc">{{sanPham.ten_san_pham}}</div>
-                <div class="danh-muc mr-8">{{formatCurrency(sanPham.gia_ban)}} đ</div>
-              </div>
               <div
-                class="hide-text"
-              >Danh mục: {{sanPham.danh_muc ? sanPham.danh_muc.ten_danh_muc : ""}}</div>
+                class="d-flex"
+                style="justify-content: space-between; flex-wrap: wrap"
+              >
+                <div class="danh-muc">{{ sanPham.ten_san_pham }}</div>
+                <div class="danh-muc mr-8">
+                  {{ formatCurrency(sanPham.gia_ban) }} đ
+                </div>
+              </div>
+              <div class="hide-text">
+                Danh mục:
+                {{ sanPham.danh_muc ? sanPham.danh_muc.ten_danh_muc : "" }}
+              </div>
               <v-btn
                 class="mx-2 mt-4 hide-text"
                 x-small
@@ -175,7 +242,12 @@
                 class="delete-mobile"
                 @change="doiSoLuong(sanPham.so_luong)"
                 v-model="sanPham.so_luong"
-                style="width: 80%; border: 1px solid green; padding-left: 10px; border-radius: 5px"
+                style="
+                  width: 80%;
+                  border: 1px solid green;
+                  padding-left: 10px;
+                  border-radius: 5px;
+                "
                 label="Số lượng"
                 :min="1"
                 type="number"
@@ -183,7 +255,14 @@
                 dense
               />
             </div>
-            <div style="width: 200px; height: 100%; display: flex; justify-content: flex-end">
+            <div
+              style="
+                width: 200px;
+                height: 100%;
+                display: flex;
+                justify-content: flex-end;
+              "
+            >
               <v-text-field
                 class="hide-text"
                 @change="doiSoLuong(sanPham.so_luong)"
@@ -208,7 +287,7 @@
             </div>
           </div>
         </div>
-        <div v-if="sanPhams.length > 0" class="mt-3">
+        <div v-if="sanPhamDatHangs.length > 0" class="mt-3">
           <!-- <div class="d-flex ml-3">
             <div style="width: 300px">
               <v-text-field
@@ -221,19 +300,22 @@
             </div>
             <v-btn class="ml-4 mr-3" color="primary">Áp dụng</v-btn>
           </div>-->
-          <div class="dat-hang ml-3">Giảm giá: {{formatCurrency(giamGiaDathang)}} đ</div>
+          <div class="dat-hang ml-3">
+            Giảm giá: {{ formatCurrency(giamGiaDathang) }} đ
+          </div>
           <div class="dat-hang ml-3">
             Tổng thanh toán:
-            <span
-              style="color: #F60257; font-size: 22px"
-            >{{formatCurrency(tongTienDatHang)}} đ</span>
+            <span style="color: #f60257; font-size: 22px"
+              >{{ formatCurrency(tongTienDatHang) }} đ</span
+            >
           </div>
           <v-btn
             class="mt-3 ml-3"
             style="color: white"
             color="pink"
             @click="showDatHang(false)"
-          >ĐẶT TRƯỚC</v-btn>
+            >ĐẶT TRƯỚC</v-btn
+          >
           <br />
         </div>
       </v-card>
@@ -243,8 +325,8 @@
         </nuxt-link>
       </div>-->
       <div
-        v-if="sanPhams.length <= 0 && sanPhamDatHangs.length <=0"
-        style="width: 100%; text-align: center;"
+        v-if="sanPhams.length <= 0 && sanPhamDatHangs.length <= 0"
+        style="width: 100%; text-align: center"
       >
         <img class="mb-4" :src="emptyCard" height="350px" />
         <div class="mb-6">Không có sản phẩm nào trong giỏ hàng của bạn</div>
@@ -292,8 +374,11 @@
             :rules="passwordRules"
           ></v-text-field>
 
-          <label v-if="form.mua_hang" class="labelForm">Thời gian nhận hàng mong muốn</label>
+          <label v-if="form.mua_hang" class="labelForm"
+            >Thời gian nhận hàng mong muốn</label
+          >
           <v-text-field
+            :rules="TimeRules"
             v-if="form.mua_hang"
             type="datetime-local"
             v-model="form.thoi_gian_nhan_hang"
@@ -308,7 +393,9 @@
             v-model="form.ghi_chu"
             placeholder="Ghi chú đơn hàng"
           ></v-text-field>
-          <label v-if="form.mua_hang" class="labelForm">Phương thức thanh toán</label>
+          <label v-if="form.mua_hang" class="labelForm"
+            >Phương thức thanh toán</label
+          >
           <v-select
             v-if="form.mua_hang"
             v-model="form.phuong_thuc_thanh_toan"
@@ -323,9 +410,19 @@
         </v-form>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="green darken-1" text @click="dialog = false">Hủy bỏ</v-btn>
-          <v-btn v-if="form.mua_hang" color="green darken-1" text @click="datHang()">Mua hàng</v-btn>
-          <v-btn v-else color="pink darken-1" text @click="datHang()">Đặt hàng</v-btn>
+          <v-btn color="green darken-1" text @click="dialog = false"
+            >Hủy bỏ</v-btn
+          >
+          <v-btn
+            v-if="form.mua_hang"
+            color="green darken-1"
+            text
+            @click="datHang()"
+            >Mua hàng</v-btn
+          >
+          <v-btn v-else color="pink darken-1" text @click="datHang()"
+            >Đặt hàng</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -366,7 +463,7 @@ export default {
     dialog: false,
     phuongThucThanhToan: [
       { id: "tai_khoan", ten: "Tài khoản" },
-      { id: "cod", ten: "Ship COD" },
+      { id: "tien_mat", ten: "Tiền mặt" },
     ],
     form: {
       ma: "DH" + new Date().getTime(),
@@ -378,7 +475,7 @@ export default {
       phuong_thuc_thanh_toan: "cod",
       danhSachHang: [],
       datHang: [],
-      thoi_gian_nhan_hang: null,
+      thoi_gian_nhan_hang: new Date(),
     },
     passwordRules: [
       (v) => !!v || "Địa chỉ nhận hàng không thể bỏ trống",
@@ -388,6 +485,7 @@ export default {
       (v) => !!v || "Tên không thể bỏ trống",
       (v) => (v && v.length >= 2) || "Tên tối thiểu 2 ký tự",
     ],
+    TimeRules: [(v) => (new Date(v) > Date.now()) || "Thời gian không hợp lệ"],
     phoneRules: [
       (v) => !!v || "Số điện thoại Không thể bỏ trống",
       (v) => (v && v.length == 10) || "Số điện thoại không hợp lệ",
@@ -396,7 +494,7 @@ export default {
   mounted() {
     this.getSanPham();
     this.getDanhMuc();
-    // this.getSanPhamDathang();
+    this.getSanPhamDathang();
   },
   methods: {
     async getInfo() {
@@ -435,7 +533,6 @@ export default {
         this.form.tong_tien = this.tongTienDatHang;
         this.form.giam_gia = this.giamGiaDathang;
       }
-      console.log(this.form);
     },
     validate() {
       this.$refs.form.validate();
@@ -453,7 +550,7 @@ export default {
         san_pham_id: san_pham_id,
       });
       this.sanPhams = data.data;
-      await this.getSanPhamDathang();
+      // await this.getSanPhamDathang();
       for (let item of this.sanPhams) {
         for (let i of product) {
           if (i.san_pham_id == item.id) {
@@ -496,6 +593,7 @@ export default {
           this.sanPhams.push(item);
         }
       }
+      this.loadSanPham = false;
     },
     xoaSanPham(id) {
       let index = this.sanPhams.findIndex((el) => el.id == id);
