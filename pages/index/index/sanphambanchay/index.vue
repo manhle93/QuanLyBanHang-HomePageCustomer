@@ -21,13 +21,13 @@
               width="100%"
               height="200"
             >
-              <v-btn
+              <!-- <v-btn
                 small
                 color="pink"
                 dark
                 v-if="!sanPham.san_pham.san_pham_ton_kho || !(sanPham.san_pham.san_pham_ton_kho.so_luong > 0)"
               >Hết hàng</v-btn>
-              <v-btn small color="success" dark v-else>Còn hàng</v-btn>
+              <v-btn small color="success" dark v-else>Còn hàng</v-btn> -->
             </v-img>
           </NuxtLink>
 
