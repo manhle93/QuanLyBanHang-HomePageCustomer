@@ -1,13 +1,19 @@
 <template>
   <v-layout justify-center>
+    <v-snackbar v-model="snackbar" color="green">
+      {{ noiDung }}
+      <template v-slot:action="{ attrs }">
+        <v-btn text v-bind="attrs" @click="snackbar = false">Đóng</v-btn>
+      </template>
+    </v-snackbar>
     <div class="page-width">
-      <div class="all-product">KẾT QUẢ TÌM KIẾM CHO: {{tuKhoaTimKiem}}</div>
+      <div style class="all-product">TOÀN BỘ SẢN PHẨM</div>
       <v-progress-linear color="green darken-2" rounded value="100"></v-progress-linear>
       <v-text-field color="success" loading disabled v-if="loadSanPham"></v-text-field>
       <div
         style="margin-top: 50px; display: flex; flex-direction: row-reverse; flex-wrap: wrap;"
         v-else
-       >
+        >
         <v-card
           class="mx-auto san-pham"
           v-for="(sanPham, index) in sanPhams"
@@ -88,51 +94,49 @@ import api from "@/api";
 import { END_POINT_IMAGE } from "@/env";
 import product from "@/assets/image/product.png";
 export default {
-  layout: "header",
   data: () => ({
     sanPhams: [],
     danhMucs: [],
     END_POINT_IMAGE: END_POINT_IMAGE,
     page: 1,
-    tuKhoaTimKiem: "",
     per_page: 20,
     total_page: 1,
     loadSanPham: true,
     product: product,
+    snackbar: false,
+    noiDung: "",
+    test: "green",
+    sliders: [
+      {
+        src:
+          "https://znews-photo.zadn.vn/w660/Uploaded/lce_qdhuc/2019_04_20/thumb1.jpg",
+      },
+      {
+        src:
+          "https://image.winudf.com/v2/image1/Z3NleHkuaG90Z2lybHMuZ2FpeGluaC5nc2V4eV9zY3JlZW5fNl8xNTQ0OTQ5NTkxXzA0MA/screen-6.jpg?fakeurl=1&type=.jpg",
+      },
+      {
+        src:
+          "https://thuthuatnhanh.com/wp-content/uploads/2018/07/anh-girl-xinh-gai-dep.jpg",
+      },
+    ],
   }),
-  // mounted() {
-  //   this.getSanPham();
-  // },
-  watch: {
-    $route(to, from) {
-      this.$nextTick(async () => {
-        await this.getSanPham();
-      });
-    },
-  },
-  created() {
+  mounted() {
     this.getSanPham();
   },
   methods: {
     async getSanPham() {
       let product = JSON.parse(localStorage.getItem("san_pham_yeu_thich"));
       this.loadSanPham = true;
-      let tuKhoa = this.$route.params.tukhoa;
-      this.tuKhoaTimKiem = tuKhoa;
-      let data = await api.get(
-        "sanpham",
-        {
-          search: this.$route.params.tukhoa,
-          per_page: this.per_page,
-          page: this.page,
-        },
-        false,
-        false
-      );
+      let data = await api.get("sanpham", {
+        per_page: this.per_page,
+        page: this.page,
+      });
       this.sanPhams = data.data.data.data.map((e) => {
         e.daYeuThich = false;
         return e;
       });
+
       for (let item of this.sanPhams) {
         if (product && product.includes(item.id)) {
           item.daYeuThich = true;
@@ -141,24 +145,6 @@ export default {
       this.total_page = data.data.data.last_page;
       this.page = data.data.data.current_page;
       this.loadSanPham = false;
-    },
-    addSanPhamYeuThich(id) {
-      this.sanPhams.find((el) => el.id == id).daYeuThich = !this.sanPhams.find(
-        (el) => el.id == id
-      ).daYeuThich;
-      console.log(this.sanPhams, id);
-      let product = JSON.parse(localStorage.getItem("san_pham_yeu_thich"));
-      if (!product) {
-        product = [];
-      }
-      let sP = {};
-      let check = product.findIndex((el) => el == id);
-      if (check !== -1) {
-        product.splice(check, 1);
-      } else {
-        product.push(id);
-      }
-      localStorage.setItem("san_pham_yeu_thich", JSON.stringify(product));
     },
     addGioHang(id) {
       let product = JSON.parse(localStorage.getItem("gio_hang"));
@@ -184,6 +170,34 @@ export default {
       this.$store.commit("giohang/add", so_luong);
       localStorage.setItem("gio_hang", JSON.stringify(product));
     },
+    addSanPhamYeuThich(id) {
+      this.sanPhams.find((el) => el.id == id).daYeuThich = !this.sanPhams.find(
+        (el) => el.id == id
+      ).daYeuThich;
+      console.log(this.sanPhams, id);
+      let product = JSON.parse(localStorage.getItem("san_pham_yeu_thich"));
+      if (!product) {
+        product = [];
+      }
+      let sP = {};
+      let check = product.findIndex((el) => el == id);
+      if (check !== -1) {
+        product.splice(check, 1);
+      } else {
+        product.push(id);
+      }
+      localStorage.setItem("san_pham_yeu_thich", JSON.stringify(product));
+    },
+
+    // checkSanPhamYeuThich(id) {
+    //   console.log("dsa", id);
+    //   let product = JSON.parse(localStorage.getItem("san_pham_yeu_thich"));
+    //   if (!product) {
+    //     product = [];
+    //   }
+    //   return product.includes(id);
+    // },
+
     PaginateSanPham(val) {
       this.page = val;
       this.getSanPham();
@@ -209,25 +223,37 @@ export default {
   margin-left: 15px;
 }
 .text-icon {
-  font-size: 16px;
+  font-size: 13px;
   font-weight: bold;
   padding-left: 15px;
+}
+.all-product {
+  margin-top: 50px;
+  font-size: 22px;
+  color: green;
 }
 .san-pham {
   width: 250px;
 }
-.all-product {
-  margin-top: 50px;
-  font-size: 26px;
-  font-weight: bold;
-}
 @media only screen and (max-width: 600px) {
-  .san-pham {
-    max-width: 170px;
+  .khuyen-mai {
+    display: none;
+  }
+  .text-icon {
+    font-size: 10px;
+  }
+  .ten-sanpham {
+    font-size: 14px;
   }
   .all-product {
     font-size: 24px;
     margin-left: 10px;
+  }
+  .san-pham {
+    max-width: 170px;
+  }
+  .gio-hang {
+    display: none;
   }
 }
 </style>

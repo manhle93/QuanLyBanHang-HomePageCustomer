@@ -134,7 +134,6 @@ export default {
       this.sanPhams.find((el) => el.id == id).daYeuThich = !this.sanPhams.find(
         (el) => el.id == id
       ).daYeuThich;
-      console.log(this.sanPhams, id);
       let product = JSON.parse(localStorage.getItem("san_pham_yeu_thich"));
       if (!product) {
         product = [];
@@ -202,7 +201,7 @@ export default {
   padding-left: 15px;
 }
 .san-pham {
-  max-width: 250px;
+  width: 250px;
 }
 .all-product {
   margin-top: 50px;

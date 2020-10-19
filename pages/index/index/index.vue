@@ -7,83 +7,126 @@
       </template>
     </v-snackbar>
     <div class="page-width">
-      <div style class="all-product">TOÀN BỘ SẢN PHẨM</div>
-      <v-progress-linear color="green darken-2" rounded value="100"></v-progress-linear>
-      <v-text-field color="success" loading disabled v-if="loadSanPham"></v-text-field>
-      <div
-        style="margin-top: 50px; display: flex; flex-direction: row-reverse; flex-wrap: wrap;"
-        v-else
-        >
-        <v-card
-          class="mx-auto san-pham"
-          v-for="(sanPham, index) in sanPhams"
+      <div style class="all-product">DANH SÁCH SẢN PHẨM</div>
+      <v-progress-linear
+        color="green darken-2"
+        rounded
+        value="100"
+      ></v-progress-linear>
+      <v-text-field
+        color="success"
+        loading
+        disabled
+        v-if="loadSanPham"
+      ></v-text-field>
+      <div style="display: flex; flex-direction: column" v-else>
+        <div
+          style="margin-top: 50px; display: flex; flex-direction: column"
+          v-for="(item, index) in dataSP"
           :key="index"
-          style="margin-bottom: 40px"
         >
-          <NuxtLink :to="'/sanpham/' + sanPham.id">
-            <v-img
-              :src=" sanPham.anh_dai_dien ? END_POINT_IMAGE + sanPham.anh_dai_dien : product"
-              :lazy-src="product"
-              width="100%"
-              height="200"
+          <div
+            style="
+              display: flex;
+              flex-direction: row;
+              justify-content: space-between;
+            "
+          >
+            <div class="ten-danhmuc mb-3 ml-1">{{ item.ten_danh_muc }}</div>
+            <div
+              class="mb-1 ten-danhmuc"
+              style="font-size: 22px; font-style: normal"
             >
-              <!-- <v-btn
-                small
-                color="pink"
-                dark
-                v-if="!sanPham.san_pham_ton_kho || !(sanPham.san_pham_ton_kho.so_luong > 0)"
-              >Hết hàng</v-btn>
-              <v-btn small color="success" dark v-else>Còn hàng</v-btn> -->
-            </v-img>
-          </NuxtLink>
+              {{ item.so_mat_hang }} Sản phẩm
+            </div>
+          </div>
+          <v-progress-linear
+            color="teal"
+            rounded
+            value="100"
+          ></v-progress-linear>
+          <br />
+          <v-sheet class="mx-auto" elevation="8" max-width="100%">
+            <v-slide-group
+              v-model="model"
+              class="pt-6 pb-6 pl-0"
+              active-class="success"
+              show-arrows
+            >
+              <v-slide-item
+                v-for="(sanPham, index) in item.san_pham"
+                :key="index"
+              >
+                <v-card class="mx-auto san-pham ma-5 mr-5 ml-3">
+                  <NuxtLink :to="'/sanpham/' + sanPham.id">
+                    <v-img
+                      :src="
+                        sanPham.anh_dai_dien
+                          ? END_POINT_IMAGE + sanPham.anh_dai_dien
+                          : product
+                      "
+                      :lazy-src="product"
+                      width="100%"
+                      height="200"
+                    >
+                    </v-img>
+                  </NuxtLink>
+                  <v-card-title
+                    style="height: 95px; color: #145a32"
+                    class="ten-sanpham"
+                    >{{ sanPham.ten_san_pham }}</v-card-title
+                  >
+                  <v-card-subtitle
+                    class="d-flex align-center"
+                    style="justify-content: space-between"
+                  >
+                    <span
+                      style="color: #764b09; font-size: 16px; font-weight: bold"
+                      >{{ formatCurrency(sanPham.gia_ban) }} đ</span
+                    >
 
-          <v-card-title
-            style="height: 95px; color: #145A32"
-            class="ten-sanpham"
-          >{{ sanPham.ten_san_pham }}</v-card-title>
-          <v-card-subtitle class="d-flex align-center" style="justify-content: space-between">
-            <span
-              style="color: #764B09; font-size: 16px; font-weight: bold"
-            >{{ formatCurrency(sanPham.gia_ban) }} đ</span>
-
-            <v-btn
-              v-if="sanPham.san_pham_ton_kho && sanPham.san_pham_ton_kho.so_luong > 0"
-              color="green"
-              class="mx-2 gio-hang"
-              fab
-              dark
-              small
-              @click="addGioHang(sanPham.id)"
-            >
-              <v-icon>mdi-cart</v-icon>
-            </v-btn>
-            <v-btn v-else color="#9E9E9E" class="mx-2 gio-hang" fab dark small>
-              <v-icon>mdi-cart</v-icon>
-            </v-btn>
-            <v-btn
-              icon
-              @click="addSanPhamYeuThich(sanPham.id)"
-              :style="{color: sanPham.daYeuThich ? 'red' : 'gray'}"
-            >
-              <v-icon>mdi-heart</v-icon>
-            </v-btn>
-          </v-card-subtitle>
-          <!-- <v-card-actions class="mb-3">
-            <v-btn class="ma-1 mt-0" outlined color="green">
-              <v-icon left>mdi-cart</v-icon>THÊM VÀO GIỎ
-            </v-btn>
-            <v-spacer></v-spacer>
-          </v-card-actions>-->
-        </v-card>
-      </div>
-      <div class="text-center">
-        <v-pagination
-          v-model="page"
-          :length="total_page"
-          circle
-          @input="PaginateSanPham"
-          :total-visible="9"
-        ></v-pagination>
+                    <v-btn
+                      v-if="
+                        sanPham.san_pham_ton_kho &&
+                        sanPham.san_pham_ton_kho.so_luong > 0
+                      "
+                      color="green"
+                      class="mx-2 gio-hang"
+                      fab
+                      dark
+                      small
+                      @click="addGioHang(sanPham.id)"
+                    >
+                      <v-icon>mdi-cart</v-icon>
+                    </v-btn>
+                    <v-btn
+                      v-else
+                      color="#9E9E9E"
+                      class="mx-2 gio-hang"
+                      fab
+                      dark
+                      small
+                    >
+                      <v-icon>mdi-cart</v-icon>
+                    </v-btn>
+                    <v-btn
+                      icon
+                      @click="addSanPhamYeuThich(sanPham.id)"
+                      :style="{ color: sanPham.daYeuThich ? 'red' : 'gray' }"
+                    >
+                      <v-icon>mdi-heart</v-icon>
+                    </v-btn>
+                  </v-card-subtitle>
+                </v-card>
+              </v-slide-item>
+            </v-slide-group>
+            <div class="text-center mb-6">
+              <nuxt-link :to="'/danhmuc/' + item.id">
+                <v-btn class="ma-2" outlined color="green"> Xem tất cả </v-btn>
+              </nuxt-link>
+            </div>
+          </v-sheet>
+        </div>
       </div>
     </div>
   </v-layout>
@@ -95,10 +138,12 @@ import { END_POINT_IMAGE } from "@/env";
 import product from "@/assets/image/product.png";
 export default {
   data: () => ({
+    model: null,
     sanPhams: [],
     danhMucs: [],
     END_POINT_IMAGE: END_POINT_IMAGE,
     page: 1,
+    dataSP: [],
     per_page: 20,
     total_page: 1,
     loadSanPham: true,
@@ -122,7 +167,8 @@ export default {
     ],
   }),
   mounted() {
-    this.getSanPham();
+    // this.getSanPham();
+    this.getData();
   },
   methods: {
     async getSanPham() {
@@ -144,6 +190,25 @@ export default {
       }
       this.total_page = data.data.data.last_page;
       this.page = data.data.data.current_page;
+      this.loadSanPham = false;
+    },
+    async getData() {
+      let product = JSON.parse(localStorage.getItem("san_pham_yeu_thich"));
+      this.loadSanPham = true;
+      let data = await api.get("danhmucmobile");
+      data.data.map(el=>{
+        el.san_pham.map(it=>{
+          it.daYeuThich = false
+        })
+      })
+      this.dataSP = data.data
+      this.dataSP.map((el) => {
+        for (let item of el.san_pham) {
+          if (product && product.includes(item.id)) {
+            item.daYeuThich = true;
+          } else item.daYeuThich = false;
+        }
+      });
       this.loadSanPham = false;
     },
     addGioHang(id) {
@@ -170,11 +235,15 @@ export default {
       this.$store.commit("giohang/add", so_luong);
       localStorage.setItem("gio_hang", JSON.stringify(product));
     },
+
     addSanPhamYeuThich(id) {
-      this.sanPhams.find((el) => el.id == id).daYeuThich = !this.sanPhams.find(
-        (el) => el.id == id
-      ).daYeuThich;
-      console.log(this.sanPhams, id);
+      this.dataSP.map((it) => {
+        let check = it.san_pham.find((el) => el.id == id);
+        if (check) {
+          it.san_pham.find((el) => el.id == id).daYeuThich = !check.daYeuThich;
+        }
+      });
+      console.log("das", this.dataSP);
       let product = JSON.parse(localStorage.getItem("san_pham_yeu_thich"));
       if (!product) {
         product = [];
@@ -233,7 +302,13 @@ export default {
   color: green;
 }
 .san-pham {
-  max-width: 250px;
+  max-width: 240px;
+}
+.ten-danhmuc {
+  color: green;
+  font-style: italic;
+  font-weight: bold;
+  font-size: 28px;
 }
 @media only screen and (max-width: 600px) {
   .khuyen-mai {

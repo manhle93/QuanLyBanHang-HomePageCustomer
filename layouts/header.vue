@@ -251,13 +251,25 @@
     <v-main>
       <nuxt />
     </v-main>
-    <v-footer
+    <!-- <v-footer
       :style="{background: 'url('+ footer +')'}"
       style="width: 100%; height: 250px"
       class="image-cover"
     >
-      <!-- <span class="white--text">&copy; {{ new Date().getFullYear() }}</span> -->
-      <!-- <img :src="footer" width="100%"> -->
+    </v-footer> -->
+    <v-footer class="d-flex" style="height: 150px; margin-top: 50px">
+      <v-layout justify-center>
+      <div style="display: flex; flex-direction: row; justify-content: space-between" class="page-width">
+        <img :src="logo" style="height: 80px">
+        <div style="display: flex; flex-direction: column;" class="pl-4">
+          <div style="font-size: 18px; font-weight: bold">Công ty cổ phần ruộng bậc thang</div>
+          <div>Mã số doanh nghiệp: 0107522785 do Sở Kế hoạch và Đầu Tư Thành phố Hà Nội cấp ngày 29/07/2016</div>
+          <div>Hotline: 0943.360.361 - Email: contact@soibien.vn</div>
+          <div>Địa chỉ: Phòng 2410, tầng 24, nhà B1, tòa nhà New Sky Line, Phường Văn Quán, Quận Hà Đông, Hà Nội</div>
+        </div>
+        <img :src="logoBoCongThuong" style="height: 60px">
+      </div>
+      </v-layout>
     </v-footer>
   </v-app>
 </template>
@@ -265,6 +277,9 @@
 <script>
 import api from "@/api";
 import logo from "@/assets/image/logo.jpg";
+
+import logoBoCongThuong from "@/assets/image/logobct.png";
+
 import logonew from "@/assets/image/logonew.jpg";
 
 import { END_POINT_IMAGE } from "@/env";
@@ -280,6 +295,7 @@ export default {
     leftMenu: false,
     logo: logo,
     logonew: logonew,
+    logoBoCongThuong: logoBoCongThuong,
     avatar: avatar,
     footer: footer,
     danhMucs: [],
@@ -389,7 +405,6 @@ export default {
 }
 .tieu-de {
   font-size: 16px;
-  font-weight: bold;
 }
 .search-mobile {
   display: none;

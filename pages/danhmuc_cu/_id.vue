@@ -122,7 +122,7 @@ export default {
   padding-left: 15px;
 }
 .san-pham {
-  max-width: 250px;
+  width: 250px;
 }
 .all-product {
   margin-top: 50px;

@@ -162,7 +162,7 @@ export default {
   color: green;
 }
 .san-pham {
-  max-width: 250px;
+  width: 250px;
 }
 @media only screen and (max-width: 600px) {
   .khuyen-mai {

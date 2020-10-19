@@ -109,7 +109,6 @@ export default {
     ],
   }),
   async asyncData({ params }) {
-    console.log('erere')
     let danhMucs = await this.getDanhMuc()
     return {
       danhMucs: danhMucs

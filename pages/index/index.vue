@@ -4,7 +4,7 @@
       <div style="width: 100%; height: 400px;" class="d-flex">
         <div
           class="pt-1 pb-3 pl-3"
-          style="width: 250px; height: 100%; background-color: #FCF3CF"
+          style="width: 250px; height: 100%; background-color: #F0F3F4"
           v-show="$vuetify.breakpoint.lgAndUp"
         >
           <div v-for="danhMuc in danhMucs" :key="danhMuc.id" style="height: 43px">
@@ -119,7 +119,6 @@ export default {
     async getSlider() {
       let data = await api.get("slider");
       this.sliders = data.data;
-      console.log(this.sliders)
     },
   },
 };
@@ -141,7 +140,7 @@ export default {
   font-weight: bold;
 }
 .san-pham {
-  max-width: 250px;
+  width: 250px;
 }
 @media only screen and (max-width: 600px) {
   .khuyen-mai {
