@@ -214,6 +214,7 @@ export default {
   margin-top: 50px;
   font-size: 26px;
   font-weight: bold;
+  color: green;
 }
 @media only screen and (max-width: 600px) {
   .san-pham {
