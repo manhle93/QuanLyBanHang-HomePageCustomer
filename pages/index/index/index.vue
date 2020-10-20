@@ -7,6 +7,61 @@
       </template>
     </v-snackbar>
     <div class="page-width">
+          <div style="display: flex; flex-direction: row-reverse; flex-wrap: wrap">
+      <v-hover
+        v-slot:default="{ hover }"
+        v-for="danhMuc in dataSP"
+        :key="danhMuc.id"
+      >
+        <v-card
+          class="mx-auto"
+          color="grey lighten-4"
+          width="250"
+          style="margin-top: 30px"
+        >
+          <n-link :to="'/danhmuc/' + danhMuc.id">
+            <v-img
+              :aspect-ratio="16 / 9"
+              :src="
+                danhMuc.anh_dai_dien
+                  ? END_POINT_IMAGE + danhMuc.anh_dai_dien
+                  : product
+              "
+            >
+              <v-expand-transition>
+                <div
+                  v-if="hover"
+                  class="d-flex transition-fast-in-fast-out green v-card--reveal display-3 white--text"
+                  style="height: 100%"
+                >
+                  <div style="font-size: 28px">
+                    {{ danhMuc.so_mat_hang }} Sản phẩm
+                  </div>
+                </div>
+              </v-expand-transition>
+            </v-img>
+          </n-link>
+          <v-card-text class="pt-6" style="position: relative">
+            <v-btn
+              absolute
+              color="green"
+              small
+              class="white--text"
+              fab
+              right
+              top
+              @click="clickDanhMuc(danhMuc.id)"
+            >
+              <v-icon>mdi-cart</v-icon>
+            </v-btn>
+            <div style="font-size: 18px; color: green">
+              {{ danhMuc.ten_danh_muc }}
+            </div>
+            <div class="font-weight-light title mb-2"></div>
+          </v-card-text>
+        </v-card>
+      </v-hover>
+    </div>
       <div style class="all-product">DANH SÁCH SẢN PHẨM</div>
       <v-progress-linear
         color="green darken-2"
@@ -196,12 +251,12 @@ export default {
       let product = JSON.parse(localStorage.getItem("san_pham_yeu_thich"));
       this.loadSanPham = true;
       let data = await api.get("danhmucmobile");
-      data.data.map(el=>{
-        el.san_pham.map(it=>{
-          it.daYeuThich = false
-        })
-      })
-      this.dataSP = data.data
+      data.data.map((el) => {
+        el.san_pham.map((it) => {
+          it.daYeuThich = false;
+        });
+      });
+      this.dataSP = data.data;
       this.dataSP.map((el) => {
         for (let item of el.san_pham) {
           if (product && product.includes(item.id)) {
@@ -330,5 +385,16 @@ export default {
   .gio-hang {
     display: none;
   }
+}
+</style>
+
+<style>
+.v-card--reveal {
+  align-items: center;
+  bottom: 0;
+  justify-content: center;
+  opacity: 0.8;
+  position: absolute;
+  width: 100%;
 }
 </style>
