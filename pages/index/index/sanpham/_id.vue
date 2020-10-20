@@ -47,7 +47,7 @@
             <div
               v-if="(!sanPham.san_pham_ton_kho || !sanPham.san_pham_ton_kho.so_luong > 0)"
               class="co-hang"
-            >Dự kiến TG nhập hàng: {{ sanPham.created_at }}</div>
+            >Dự kiến TG nhập hàng: {{ new Date().getDate() +1 }}/{{ new Date().getMonth()+1 }} </div>
           </div>
           <div class="d-flex">
             <div style="width: 200px" class="mr-4">

@@ -143,7 +143,7 @@
               <v-btn x-small dark fab color="pink">
                 <v-icon>mdi-phone</v-icon>
               </v-btn>
-              <span style="font-size: 20px; font-weight: bold; font-style: italic; font-family: 'time new roman" class="mt-1 ml-1 so-dien-thoai">08.666.99806</span>
+              <span style="font-size: 20px; font-weight: bold; font-style: italic; font-family: 'time new roman" class="mt-1 ml-1 so-dien-thoai">086.296.8081</span>
             </div>
           </div>
           <nuxt-link to="/dangky" v-if="!loggedIn">
@@ -262,10 +262,10 @@
       <div style="display: flex; flex-direction: row; justify-content: space-between" class="page-width">
         <img :src="logo" style="height: 80px">
         <div style="display: flex; flex-direction: column;" class="pl-4">
-          <div style="font-size: 18px; font-weight: bold">Công ty cổ phần ruộng bậc thang</div>
-          <div>Mã số doanh nghiệp: 0107522785 do Sở Kế hoạch và Đầu Tư Thành phố Hà Nội cấp ngày 29/07/2016</div>
-          <div>Hotline: 0943.360.361 - Email: contact@soibien.vn</div>
-          <div>Địa chỉ: Phòng 2410, tầng 24, nhà B1, tòa nhà New Sky Line, Phường Văn Quán, Quận Hà Đông, Hà Nội</div>
+          <div style="font-size: 18px; font-weight: bold">RUỘNG BẬC THANG</div>
+          <div>Số ĐKKD: 21A8000753</div>
+          <div>Hotline: 086.296.8081 - Email: hotro@ruongbacthang.com.vn</div>
+          <div>Địa chỉ: 54 Ngọc Hân Công Chúa – Tp Bắc Ninh</div>
         </div>
         <img :src="logoBoCongThuong" style="height: 60px">
       </div>
