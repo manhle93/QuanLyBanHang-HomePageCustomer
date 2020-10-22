@@ -257,15 +257,15 @@
       class="image-cover"
     >
     </v-footer> -->
-    <v-footer class="d-flex" style="height: 150px; margin-top: 50px">
+    <v-footer class="d-flex" style="height: 110px; margin-top: 5px">
       <v-layout justify-center>
       <div style="display: flex; flex-direction: row; justify-content: space-between" class="page-width">
         <img :src="logo" style="height: 80px">
         <div style="display: flex; flex-direction: column;" class="pl-4">
-          <div style="font-size: 18px; font-weight: bold">RUỘNG BẬC THANG</div>
-          <div>Số ĐKKD: 21A8000753</div>
-          <div>Hotline: 086.296.8081 - Email: hotro@ruongbacthang.com.vn</div>
-          <div>Địa chỉ: 54 Ngọc Hân Công Chúa – Tp Bắc Ninh</div>
+          <div style="font-size: 16px; font-weight: bold">RUỘNG BẬC THANG</div>
+          <div style="font-size: 14px;">Số ĐKKD: 21A8000753</div>
+          <div style="font-size: 14px;">Hotline: 086.296.8081 - Email: hotro@ruongbacthang.com.vn</div>
+          <div style="font-size: 14px;">Địa chỉ: 54 Ngọc Hân Công Chúa – Tp Bắc Ninh</div>
         </div>
         <img :src="logoBoCongThuong" style="height: 60px">
       </div>

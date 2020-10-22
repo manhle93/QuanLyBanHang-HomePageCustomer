@@ -58,19 +58,19 @@
       </div>
       <div class="d-flex mt-5" style="justify-content: space-around; flex-wrap: wrap">
         <div style="height: 80px;" class="d-flex align-center">
-          <img :src="customerIcon" height="40" />
+          <img :src="customerIcon" height="30" />
           <span class="text-icon">100.000 ++ KHÁCH HÀNG</span>
         </div>
         <div style="height: 80px" class="d-flex align-center">
-          <img :src="refershIcon" height="40" />
+          <img :src="refershIcon" height="30" />
           <span class="text-icon">ĐỔI TRẢ HÀNG, HOÀN TIỀN</span>
         </div>
         <div style="height: 80px" class="d-flex align-center">
-          <img :src="cartIcon" height="40" />
+          <img :src="cartIcon" height="30" />
           <span class="text-icon">GIAO HÀNG ĐÚNG GIỜ</span>
         </div>
         <div style="height: 80px" class="d-flex align-center">
-          <img :src="shipIcon" height="40" />
+          <img :src="shipIcon" height="30" />
           <span class="text-icon">MIỄN PHÍ GIAO HÀNG</span>
         </div>
       </div>

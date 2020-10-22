@@ -7,12 +7,7 @@
       </template>
     </v-snackbar>
     <div class="page-width">
-      <div style class="all-product">DANH SÁCH SẢN PHẨM</div>
-      <v-progress-linear
-        color="green darken-2"
-        rounded
-        value="100"
-      ></v-progress-linear>
+      <div style="border-bottom: solid 1px green;" class="all-product">DANH SÁCH SẢN PHẨM</div>
       <v-text-field
         color="success"
         loading
@@ -35,7 +30,7 @@
             <div class="ten-danhmuc mb-3 ml-1">{{ item.ten_danh_muc }}</div>
             <div
               class="mb-1 ten-danhmuc"
-              style="font-size: 22px; font-style: normal"
+              style="font-size: 18px; font-style: normal"
             >
               {{ item.so_mat_hang }} Sản phẩm
             </div>
@@ -72,7 +67,7 @@
                     </v-img>
                   </NuxtLink>
                   <v-card-title
-                    style="height: 95px; color: #145a32"
+                    style="height: 95px; color: black;font-size: 16px;font-weight: normal"
                     class="ten-sanpham"
                     >{{ sanPham.ten_san_pham }}</v-card-title
                   >
@@ -81,9 +76,12 @@
                     style="justify-content: space-between"
                   >
                     <span
-                      style="color: #764b09; font-size: 16px; font-weight: bold"
-                      >{{ formatCurrency(sanPham.gia_ban) }} đ</span
-                    >
+                      style="color: red; font-size: 16px; font-weight: bold"
+                      >{{ formatCurrency(sanPham.gia_ban) }} đ
+                    </span>
+                    <span style="color: black; font-size: 14px; font-weight: normal">
+                      /{{sanPham.don_vi_tinh}} 
+                    </span>
 
                     <v-btn
                       v-if="
@@ -297,8 +295,8 @@ export default {
   padding-left: 15px;
 }
 .all-product {
-  margin-top: 50px;
-  font-size: 22px;
+  margin-top: 40px;
+  font-size: 20px;
   color: green;
 }
 .san-pham {
@@ -306,9 +304,9 @@ export default {
 }
 .ten-danhmuc {
   color: green;
-  font-style: italic;
-  font-weight: bold;
-  font-size: 28px;
+  /* font-style: italic; */
+  /* font-weight: bold; */
+  font-size: 20px;
 }
 @media only screen and (max-width: 600px) {
   .khuyen-mai {

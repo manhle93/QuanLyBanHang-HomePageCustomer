@@ -1,8 +1,7 @@
 <template>
   <v-layout justify-center>
     <div class="page-width">
-      <div class="all-product">Món ngon mỗi ngày: {{now}}</div>
-      <v-progress-linear color="green darken-2" rounded value="100"></v-progress-linear>
+      <div style="border-bottom: solid 1px green;" class="all-product">MÓN NGON MỖI NGÀY ({{now}})</div>
       <v-text-field color="success" loading disabled v-if="loadSanPham"></v-text-field>
       <div
         style="margin-top: 50px; display: flex; flex-direction: row-reverse; flex-wrap: wrap;"
@@ -204,9 +203,10 @@ export default {
   width: 250px;
 }
 .all-product {
-  margin-top: 50px;
-  font-size: 26px;
-  font-weight: bold;
+  margin-top: 40px;
+  font-size: 20px;
+  color: green;
+  /* font-weight: bold; */
 }
 @media only screen and (max-width: 600px) {
   .san-pham {

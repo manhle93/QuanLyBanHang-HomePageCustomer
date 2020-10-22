@@ -31,19 +31,19 @@
         </div>
         <div class="c-flex flex-fill thongtin-sanpham" style="height: 400px; max-width: 90%">
           <div
-            style="font-size: 30px; font-weight: light; margin-bottom: 10px;"
+            style="font-size: 24px; font-weight: light; margin-bottom: 10px;color: #039a1f"
           >{{sanPham.ten_san_pham.toUpperCase()}}</div>
           <div class="c-flex khung-thuoctinh">
             <div
-              style="color: green; font-size: 24px; font-weight: 500"
-            >{{formatCurrency(sanPham.gia_ban)}} đ</div>
-            <div class="thuoc-tinh" style="margin-top: 20px">Đơn vị tính: {{sanPham.don_vi_tinh}}</div>
+              style="color: #f36523; font-size: 24px; font-weight: 500"
+            >{{formatCurrency(sanPham.gia_ban)}} <span style="color: #f36523; font-size: 24px;">VND</span></div>
+            <div class="thuoc-tinh" style="margin-top: 20px">Đơn vị tính: <span style="color: #1B5E20; font-size: 20px;font-style: italic;">{{sanPham.don_vi_tinh}}</span></div>
             <div
               class="thuoc-tinh"
-            >Thương hiệu: {{sanPham.thuong_hieu ? sanPham.thuong_hieu.ten: ''}}</div>
+            >Thương hiệu: <span style="color: #1B5E20; font-size: 20px;font-style: italic;">{{sanPham.thuong_hieu ? sanPham.thuong_hieu.ten: ''}}</span></div>
             <div
               class="thuoc-tinh"
-            >Thuộc danh mục: {{sanPham.danh_muc ? sanPham.danh_muc.ten_danh_muc : ""}}</div>
+            >Thuộc danh mục: <span style="color: #1B5E20; font-size: 20px;font-style: italic;">{{sanPham.danh_muc ? sanPham.danh_muc.ten_danh_muc : ""}}</span></div>
             <div
               v-if="(!sanPham.san_pham_ton_kho || !sanPham.san_pham_ton_kho.so_luong > 0)"
               class="co-hang"
@@ -258,7 +258,7 @@ export default {
 .co-hang {
   font-size: 14px;
   font-style: italic;
-  color: red;
+  color: #f36523;
   margin-bottom: 10px;
 }
 .text-icon {
@@ -267,9 +267,9 @@ export default {
   padding-left: 15px;
 }
 .thuoc-tinh {
-  font-size: 18px;
+  font-size: 17px;
   margin-bottom: 10px;
-  font-weight: bold;
+  /* font-weight: bold; */
 }
 .khung-thuoctinh {
   /* border: 2px solid green;

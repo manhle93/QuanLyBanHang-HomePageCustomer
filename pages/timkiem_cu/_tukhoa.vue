@@ -2,8 +2,7 @@
   <v-layout justify-center>
     <div class="page-width">
       <Slider />
-      <div class="all-product">KẾT QUẢ TÌM KIẾM CHO: {{tuKhoaTimKiem}}</div>
-      <v-progress-linear color="green darken-2" rounded value="100"></v-progress-linear>
+      <div style="border-bottom: solid 1px green;" class="all-product">KẾT QUẢ TÌM KIẾM CHO: {{tuKhoaTimKiem}}</div>
       <v-text-field color="success" loading disabled v-if="loadSanPham"></v-text-field>
       <div
         style="margin-top: 50px; display: flex; flex-direction: row-reverse; flex-wrap: wrap;"

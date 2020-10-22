@@ -32,14 +32,16 @@
           </NuxtLink>
 
           <v-card-title
-            style="height: 95px; color: #145A32"
+            style="height: 95px; color: black;font-size: 16px;font-weight: normal"
             class="ten-sanpham"
           >{{ sanPham.ten_san_pham }}</v-card-title>
           <v-card-subtitle class="d-flex align-center" style="justify-content: space-between">
             <span
               style="color: #764B09; font-size: 16px; font-weight: bold"
             >{{ formatCurrency(sanPham.gia_ban) }} đ</span>
-
+            <span style="color: black; font-size: 14px; font-weight: normal">
+              /{{sanPham.don_vi_tinh}} 
+            </span>
             <v-btn
               v-if="sanPham.san_pham_ton_kho && sanPham.san_pham_ton_kho.so_luong > 0"
               color="green"

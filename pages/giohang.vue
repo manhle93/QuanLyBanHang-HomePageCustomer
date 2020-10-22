@@ -16,20 +16,16 @@
           flex-direction: row;
           justify-content: space-between;
           margin-top: 50px;
+          border-bottom: solid 1px green;
         "
       >
-        <div style="font-size: 26px; font-weight: bold">GIỎ HÀNG</div>
+        <div style="font-size: 20px; font-weight: bold;color: green;">GIỎ HÀNG</div>
         <nuxt-link to="/">
           <v-btn color="primary">
             <v-icon class="mr-2">mdi-shopping</v-icon>Tiếp tục mua sắm
           </v-btn>
         </nuxt-link>
       </div>
-      <v-progress-linear
-        color="green darken-2"
-        rounded
-        value="100"
-      ></v-progress-linear>
       <v-text-field
         color="success"
         loading
@@ -80,6 +76,9 @@
                 <div class="danh-muc">{{ sanPham.ten_san_pham }}</div>
                 <div class="danh-muc mr-8">
                   {{ formatCurrency(sanPham.gia_ban) }} đ
+                  <span style="color: black; font-size: 14px; font-weight: normal">
+                    /{{sanPham.don_vi_tinh}} 
+                  </span>
                 </div>
               </div>
               <div class="hide-text">
@@ -183,10 +182,10 @@
         class="mb-3 pb-3 pr-3 mt-3"
         :elevation="20"
       >
-        <v-card-title style="color: #f60257"
+        <v-card-title style="color: black"
           >Danh sách sản phẩm đặt trước</v-card-title
         >
-        <v-card-subtitle>Giao hàng khi sản phẩm được nhập về</v-card-subtitle>
+        <v-card-subtitle>(Giao hàng khi sản phẩm được nhập về)</v-card-subtitle>
         <div
           class="pt-3 pr-3"
           style="
@@ -222,6 +221,9 @@
                 <div class="danh-muc">{{ sanPham.ten_san_pham }}</div>
                 <div class="danh-muc mr-8">
                   {{ formatCurrency(sanPham.gia_ban) }} đ
+                  <span style="color: black; font-size: 14px; font-weight: normal">
+                    /{{sanPham.don_vi_tinh}} 
+                  </span>
                 </div>
               </div>
               <div class="hide-text">
@@ -233,7 +235,7 @@
                 x-small
                 fab
                 dark
-                color="pink"
+                color="red"
                 @click="xoaSanPhamDatHang(sanPham.id)"
               >
                 <v-icon dark>mdi-delete</v-icon>
@@ -300,12 +302,12 @@
             </div>
             <v-btn class="ml-4 mr-3" color="primary">Áp dụng</v-btn>
           </div>-->
-          <div class="dat-hang ml-3">
+          <div style="font-size: 16px; font-style: normal" class="hide-text ml-3">
             Giảm giá: {{ formatCurrency(giamGiaDathang) }} đ
           </div>
           <div class="dat-hang ml-3">
             Tổng thanh toán:
-            <span style="color: #f60257; font-size: 22px"
+            <span style="color: #BF360C; font-size: 22px"
               >{{ formatCurrency(tongTienDatHang) }} đ</span
             >
           </div>

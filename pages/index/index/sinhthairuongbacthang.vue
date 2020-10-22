@@ -1,8 +1,7 @@
 <template>
   <v-layout justify-center>
     <div class="page-width">
-      <div style class="all-product">SINH THÁI RUỘNG BẬC THANG</div>
-      <v-progress-linear color="green darken-2" rounded value="100"></v-progress-linear>
+      <div style="border-bottom: solid 1px green;" class="all-product">SINH THÁI RUỘNG BẬC THANG</div>
       <v-text-field color="success" loading disabled v-if="loadSanPham"></v-text-field>
       <div class="d-flex mt-6" v-for="baiViet in baiViets" :key="baiViet.id">
         <nuxt-link :to="'baiviet/' + baiViet.id">
@@ -157,8 +156,8 @@ export default {
   padding-left: 15px;
 }
 .all-product {
-  margin-top: 50px;
-  font-size: 22px;
+  margin-top: 40px;
+  font-size: 20px;
   color: green;
 }
 .san-pham {

@@ -1,8 +1,7 @@
 <template>
   <v-layout justify-center>
     <div class="page-width">
-      <div class="all-product">KẾT QUẢ TÌM KIẾM CHO: {{tuKhoaTimKiem}}</div>
-      <v-progress-linear color="green darken-2" rounded value="100"></v-progress-linear>
+      <div style="border-bottom: solid 1px green;" class="all-product">KẾT QUẢ TÌM KIẾM TỪ KHÓA: <span style="color:black">{{tuKhoaTimKiem}}</span></div>
       <v-text-field color="success" loading disabled v-if="loadSanPham"></v-text-field>
       <div
         style="margin-top: 50px; display: flex; flex-direction: row-reverse; flex-wrap: wrap;"
@@ -32,14 +31,16 @@
           </NuxtLink>
 
           <v-card-title
-            style="height: 95px; color: #145A32"
+            style="height: 95px; color: black;font-size: 16px;font-weight: normal"
             class="ten-sanpham"
           >{{ sanPham.ten_san_pham }}</v-card-title>
           <v-card-subtitle class="d-flex align-center" style="justify-content: space-between">
             <span
               style="color: #764B09; font-size: 16px; font-weight: bold"
             >{{ formatCurrency(sanPham.gia_ban) }} đ</span>
-
+            <span style="color: black; font-size: 14px; font-weight: normal">
+              /{{sanPham.don_vi_tinh}} 
+            </span>
             <v-btn
               v-if="sanPham.san_pham_ton_kho && sanPham.san_pham_ton_kho.so_luong > 0"
               color="green"
@@ -217,9 +218,9 @@ export default {
   width: 250px;
 }
 .all-product {
-  margin-top: 50px;
-  font-size: 26px;
-  font-weight: bold;
+  margin-top: 40px;
+  font-size: 20px;
+  color: green;
 }
 @media only screen and (max-width: 600px) {
   .san-pham {
