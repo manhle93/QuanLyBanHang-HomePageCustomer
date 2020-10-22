@@ -1,45 +1,71 @@
 <template>
   <v-layout justify-center>
     <div class="page-width">
-      <div style="width: 100%; height: 400px;" class="d-flex">
+      <div style="width: 100%; height: 400px" class="d-flex">
         <div
           class="pt-1 pb-3 pl-3"
-          style="width: 250px; height: 100%; background-color: #F0F3F4"
+          style="width: 250px; height: 100%; background-color: #f0f3f4"
           v-show="$vuetify.breakpoint.lgAndUp"
         >
-          <div v-for="danhMuc in danhMucs" :key="danhMuc.id" style="height: 43px">
+          <div
+            v-for="danhMuc in danhMucs"
+            :key="danhMuc.id"
+            style="height: 43px"
+          >
             <n-link :to="'/danhmuc/' + danhMuc.id" class="d-flex align-center">
               <v-avatar size="36">
                 <img
-                  :src="danhMuc.anh_dai_dien ? END_POINT_IMAGE + danhMuc.anh_dai_dien : product "
+                  :src="
+                    danhMuc.anh_dai_dien
+                      ? END_POINT_IMAGE + danhMuc.anh_dai_dien
+                      : product
+                  "
                 />
               </v-avatar>
               <div
                 :title="danhMuc.ten_danh_muc"
                 class="danh-muc pr-2"
-                style="display: inline-block; width: 100%; white-space: nowrap; overflow: hidden !important; text-overflow: ellipsis;"
-              >{{danhMuc.ten_danh_muc}}</div>
+                style="
+                  display: inline-block;
+                  width: 100%;
+                  white-space: nowrap;
+                  overflow: hidden !important;
+                  text-overflow: ellipsis;
+                "
+              >
+                {{ danhMuc.ten_danh_muc }}
+              </div>
             </n-link>
           </div>
         </div>
 
-        <div style="height: 100%; object-fit: cover;" class="flex-fill">
-          <v-carousel height="400" cycle hide-delimiter-background show-arrows-on-hover>
+        <div style="height: 100%; object-fit: cover" class="flex-fill">
+          <v-carousel
+            height="400"
+            cycle
+            hide-delimiter-background
+            show-arrows-on-hover
+          >
             <v-carousel-item
-              v-for="(item,i) in sliders"
+              v-for="(item, i) in sliders"
               :key="i"
               reverse-transition="fade-transition"
               transition="fade-transition"
             >
               <div
                 class="image-cover"
-                :style="{background: 'url(' + END_POINT_IMAGE + item.hinh_anh + ')'}"
+                :style="{
+                  background: 'url(' + END_POINT_IMAGE + item.hinh_anh + ')',
+                }"
                 style="color: red; height: 100%"
               ></div>
             </v-carousel-item>
           </v-carousel>
         </div>
-        <div style="width: 300px; height: 100%; padding-left: 10px" class="khuyen-mai">
+        <div
+          style="width: 300px; height: 100%; padding-left: 10px"
+          class="khuyen-mai"
+        >
           <div style="width: 290px; height: 195px; margin-top: 5px">
             <img
               src="http://apiruongbacthang.skymapglobal.vn/storage/images/avatar/1596775187.PNG"
@@ -48,7 +74,12 @@
           </div>
 
           <div style="width: 290px; height: 195px; margin-top: 5px">
-             <v-img height="193px"  style="border-radius: 15px" src="http://apiruongbacthang.skymapglobal.vn/storage/images/avatar/1596775191.PNG" aspect-ratio="1.7"></v-img>
+            <v-img
+              height="193px"
+              style="border-radius: 15px"
+              src="http://apiruongbacthang.skymapglobal.vn/storage/images/avatar/1596775191.PNG"
+              aspect-ratio="1.7"
+            ></v-img>
             <!-- <img
               src="http://apiruongbacthang.skymapglobal.vn/storage/images/avatar/1596775191.PNG"
               style="height: 193px; width: 290px; border-radius: 15px"
@@ -94,7 +125,7 @@ async function getDanhMuc() {
 
 export default {
   head: () => ({
-    title: 'Trang Chủ'
+    title: "Trang Chủ",
   }),
   data: () => ({
     danhMucs: [],
@@ -108,6 +139,7 @@ export default {
   }),
   async asyncData({ params }) {
     let danhMucs = await getDanhMuc();
+    console.log("cas", danhMucs);
     return {
       danhMucs: danhMucs,
     };
@@ -119,6 +151,9 @@ export default {
     async getSlider() {
       let data = await api.get("slider");
       this.sliders = data.data;
+    },
+    clickDanhMuc(id) {
+      this.$router.push("/danhmuc/" + id);
     },
   },
 };

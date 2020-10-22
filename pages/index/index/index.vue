@@ -194,12 +194,12 @@ export default {
       let product = JSON.parse(localStorage.getItem("san_pham_yeu_thich"));
       this.loadSanPham = true;
       let data = await api.get("danhmucmobile");
-      data.data.map(el=>{
-        el.san_pham.map(it=>{
-          it.daYeuThich = false
-        })
-      })
-      this.dataSP = data.data
+      data.data.map((el) => {
+        el.san_pham.map((it) => {
+          it.daYeuThich = false;
+        });
+      });
+      this.dataSP = data.data;
       this.dataSP.map((el) => {
         for (let item of el.san_pham) {
           if (product && product.includes(item.id)) {
@@ -328,5 +328,16 @@ export default {
   .gio-hang {
     display: none;
   }
+}
+</style>
+
+<style>
+.v-card--reveal {
+  align-items: center;
+  bottom: 0;
+  justify-content: center;
+  opacity: 0.8;
+  position: absolute;
+  width: 100%;
 }
 </style>

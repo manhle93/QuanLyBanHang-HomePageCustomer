@@ -13,7 +13,7 @@
           :key="index"
           style="margin-bottom: 40px"
         >
-          <NuxtLink :to="'/sanpham/' + sanPham.id">
+          <NuxtLink :to="'/sanpham/' + sanPham.san_pham.id">
             <v-img
               :src=" sanPham.san_pham.anh_dai_dien ? END_POINT_IMAGE + sanPham.san_pham.anh_dai_dien : product"
               :lazy-src="product"
