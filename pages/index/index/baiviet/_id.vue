@@ -49,7 +49,7 @@ export default {
   data: () => ({
     baiViet: {
       user: {
-        name: "Manh Le",
+        name: "admin",
         avatar_url: null,
       },
     },
