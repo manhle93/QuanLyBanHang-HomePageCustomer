@@ -34,20 +34,32 @@
             style="font-size: 24px; font-weight: light; margin-bottom: 10px;color: #039a1f"
           >{{sanPham.ten_san_pham.toUpperCase()}}</div>
           <div class="c-flex khung-thuoctinh">
-            <div
-              style="color: #f36523; font-size: 24px; font-weight: 500"
-            >{{formatCurrency(sanPham.gia_ban)}} <span style="color: #f36523; font-size: 24px;">VND</span></div>
-            <div class="thuoc-tinh" style="margin-top: 20px">Đơn vị tính: <span style="color: #1B5E20; font-size: 20px;font-style: italic;">{{sanPham.don_vi_tinh}}</span></div>
-            <div
-              class="thuoc-tinh"
-            >Thương hiệu: <span style="color: #1B5E20; font-size: 20px;font-style: italic;">{{sanPham.thuong_hieu ? sanPham.thuong_hieu.ten: ''}}</span></div>
-            <div
-              class="thuoc-tinh"
-            >Thuộc danh mục: <span style="color: #1B5E20; font-size: 20px;font-style: italic;">{{sanPham.danh_muc ? sanPham.danh_muc.ten_danh_muc : ""}}</span></div>
+            <div style="color: #f36523; font-size: 24px; font-weight: 500">
+              {{formatCurrency(sanPham.gia_ban)}}
+              <span style="color: #f36523; font-size: 24px;">VND</span>
+            </div>
+            <div class="thuoc-tinh" style="margin-top: 20px">
+              Đơn vị tính:
+              <span
+                style="color: #1B5E20; font-size: 20px;font-style: italic;"
+              >{{sanPham.don_vi_tinh}}</span>
+            </div>
+            <div class="thuoc-tinh">
+              Thương hiệu:
+              <span
+                style="color: #1B5E20; font-size: 20px;font-style: italic;"
+              >{{sanPham.thuong_hieu ? sanPham.thuong_hieu.ten: ''}}</span>
+            </div>
+            <div class="thuoc-tinh">
+              Thuộc danh mục:
+              <span
+                style="color: #1B5E20; font-size: 20px;font-style: italic;"
+              >{{sanPham.danh_muc ? sanPham.danh_muc.ten_danh_muc : ""}}</span>
+            </div>
             <div
               v-if="(!sanPham.san_pham_ton_kho || !sanPham.san_pham_ton_kho.so_luong > 0)"
               class="co-hang"
-            >Dự kiến TG nhập hàng: {{ new Date().getDate() +1 }}/{{ new Date().getMonth()+1 }} </div>
+            >Dự kiến TG nhập hàng: {{ new Date().getDate() +1 }}/{{ new Date().getMonth()+1 }}</div>
           </div>
           <div class="d-flex">
             <div style="width: 200px" class="mr-4">
@@ -104,6 +116,70 @@
           </v-card>
         </div>
       </div>
+      <div v-if="sanPham.nguyen_lieus && sanPham.nguyen_lieus.length">
+        <div
+          class="ml-3"
+          style="font-size: 20px; font-weight: bold; margin-top: 20px"
+        >Nguyên liệu chế biến</div>
+        <br />
+        <v-simple-table>
+          <template v-slot:default>
+            <thead>
+              <tr>
+                <th style="font-size: 16px">STT</th>
+                <th style="font-size: 16px">Nguyên liệu</th>
+                <th style="font-size: 16px">Số lượng</th>
+                <th style="font-size: 16px">Đơn giá</th>
+                <th style="font-size: 16px">Đặt mua</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(item, index) in sanPham.nguyen_lieus" :key="item.name">
+                <td>{{ index + 1}}</td>
+                <td>{{ item.nguyen_lieus.ten_san_pham }}</td>
+                <td>{{ item.so_luong +' '+ item.nguyen_lieus.don_vi_tinh}}</td>
+                <td>{{ formatCurrency(item.nguyen_lieus.gia_ban) }} đ</td>
+                <td>
+                  <v-tooltip
+                    top
+                    v-if="(!item.nguyen_lieu_ton_kho || !(item.nguyen_lieu_ton_kho.so_luong > 0))"
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn
+                        tile
+                        color="pink"
+                        small
+                        v-bind="attrs"
+                        v-on="on"
+                        dark
+                        @click="datTruocNguyenLieu(item)"
+                      >
+                        <v-icon left>mdi-cart</v-icon>Đặt trước
+                      </v-btn>
+                    </template>
+                    <span>Nguyên liệu hết hàng. Nhấn để đặt trước</span>
+                  </v-tooltip>
+                  <v-tooltip top v-else>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn
+                        tile
+                        color="success"
+                        small
+                        v-bind="attrs"
+                        v-on="on"
+                        @click="muaNguyenLieu(item)"
+                      >
+                        <v-icon left>mdi-cart</v-icon>Mua hàng
+                      </v-btn>
+                    </template>
+                    <span>Thêm vào giỏ hàng</span>
+                  </v-tooltip>
+                </td>
+              </tr>
+            </tbody>
+          </template>
+        </v-simple-table>
+      </div>
       <div class="ml-3" style="font-size: 24px; font-weight: bold; margin-top: 20px">Mô tả sản phẩm</div>
       <div style="margin-top: 20px" class="mo-ta" v-html="parseText(sanPham.mo_ta_san_pham)"></div>
     </div>
@@ -111,7 +187,6 @@
 </template>
 <script>
 import md from "marked";
-
 import api from "@/api";
 import product from "@/assets/image/product.png";
 import customerIcon from "assets/image/icon/people.png";
@@ -180,6 +255,55 @@ export default {
     },
     showHinhAnh(val) {
       this.image = END_POINT_IMAGE + val;
+    },
+    datTruocNguyenLieu(data) {
+      let product = JSON.parse(localStorage.getItem("dat_truoc"));
+      if (!product) {
+        product = [];
+      }
+      let sP = {};
+
+      let check = product.find((el) => el.san_pham_id ==  data.nguyen_lieu_id);
+      if (check) {
+        check.so_luong = Number(check.so_luong) + Number(data.so_luong);
+      } else {
+        sP.so_luong = data.so_luong;
+        sP.san_pham_id =  data.nguyen_lieu_id;
+        product.push(sP);
+      }
+
+      let so_luong = 0;
+      for (let item of product) {
+        so_luong = Number(so_luong) + Number(item.so_luong);
+      }
+      localStorage.setItem("dat_truoc", JSON.stringify(product));
+      this.snackbar = true;
+      this.noiDung = "Đã thêm vào giỏ hàng";
+    },
+    muaNguyenLieu(data) {
+      let product = JSON.parse(localStorage.getItem("gio_hang"));
+      if (!product) {
+        product = [];
+      }
+      let sP = {};
+
+      let check = product.find((el) => el.san_pham_id == data.nguyen_lieu_id);
+      if (check) {
+        check.so_luong = Number(check.so_luong) + Number(data.so_luong);
+      } else {
+        sP.so_luong = Number(data.so_luong);
+        sP.san_pham_id = data.nguyen_lieu_id;
+        product.push(sP);
+      }
+
+      let so_luong = 0;
+      for (let item of product) {
+        so_luong = Number(so_luong) + Number(item.so_luong);
+      }
+      this.$store.commit("giohang/add", so_luong);
+      localStorage.setItem("gio_hang", JSON.stringify(product));
+      this.snackbar = true;
+      this.noiDung = "Đã thêm vào giỏ hàng";
     },
     addGioHang() {
       if (this.soLuong < 1) {

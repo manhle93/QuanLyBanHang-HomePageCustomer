@@ -537,7 +537,6 @@ export default {
         per_page: this.per_page,
         page: this.page,
       });
-      console.log(data);
       if (this.page == data.data.last_page) {
         this.all = true;
       }

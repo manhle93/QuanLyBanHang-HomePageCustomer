@@ -139,7 +139,6 @@ export default {
   }),
   async asyncData({ params }) {
     let danhMucs = await getDanhMuc();
-    console.log("cas", danhMucs);
     return {
       danhMucs: danhMucs,
     };

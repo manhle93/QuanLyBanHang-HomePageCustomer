@@ -7,7 +7,7 @@
       <div
         style="margin-top: 50px; display: flex; flex-direction: row-reverse; flex-wrap: wrap;"
         v-else
-        >
+      >
         <v-card
           class="mx-auto san-pham"
           v-for="(sanPham, index) in sanPhams"
@@ -20,15 +20,7 @@
               :lazy-src="product"
               width="100%"
               height="200"
-            >
-              <!-- <v-btn
-                small
-                color="pink"
-                dark
-                v-if="!sanPham.san_pham_ton_kho || !(sanPham.san_pham_ton_kho.so_luong > 0)"
-              >Hết hàng</v-btn>
-              <v-btn small color="success" dark v-else>Còn hàng</v-btn> -->
-            </v-img>
+            ></v-img>
           </NuxtLink>
 
           <v-card-title
@@ -39,9 +31,9 @@
             <span
               style="color: #764B09; font-size: 16px; font-weight: bold"
             >{{ formatCurrency(sanPham.gia_ban) }} đ</span>
-            <span style="color: black; font-size: 14px; font-weight: normal">
-              /{{sanPham.don_vi_tinh}} 
-            </span>
+            <span
+              style="color: black; font-size: 14px; font-weight: normal"
+            >/{{sanPham.don_vi_tinh}}</span>
             <v-btn
               v-if="sanPham.san_pham_ton_kho && sanPham.san_pham_ton_kho.so_luong > 0"
               color="green"
@@ -64,12 +56,6 @@
               <v-icon>mdi-heart</v-icon>
             </v-btn>
           </v-card-subtitle>
-          <!-- <v-card-actions class="mb-3">
-            <v-btn class="ma-1 mt-0" outlined color="green">
-              <v-icon left>mdi-cart</v-icon>THÊM VÀO GIỎ
-            </v-btn>
-            <v-spacer></v-spacer>
-          </v-card-actions>-->
         </v-card>
       </div>
       <div class="text-center">
