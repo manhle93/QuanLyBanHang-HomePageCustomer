@@ -119,7 +119,7 @@ import cartIcon from "assets/image/icon/cart.png";
 import shipIcon from "assets/image/icon/delivery.png";
 
 async function getDanhMuc() {
-  let data = await api.get("danhmuc", { per_page: 9 }, false, false);
+  let data = await api.get("danhmuckinhdoanh", { per_page: 9 }, false, false);
   return data.data.data;
 }
 

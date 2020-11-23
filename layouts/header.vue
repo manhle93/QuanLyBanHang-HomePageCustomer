@@ -137,13 +137,22 @@
           <div class="d-flex mr-6 ml-3">
             <!-- <v-btn x-small dark fab color="indigo" class="mr-3">
               <v-icon>mdi-facebook</v-icon>
-            </v-btn> -->
-           <a href=""> <img src="https://image.flaticon.com/icons/svg/145/145802.svg" height="33" class="mr-3"></a>
+            </v-btn>-->
+            <a href>
+              <img
+                src="https://image.flaticon.com/icons/svg/145/145802.svg"
+                height="33"
+                class="mr-3"
+              />
+            </a>
             <div class="pr-4 d-flex">
               <v-btn x-small dark fab color="pink">
                 <v-icon>mdi-phone</v-icon>
               </v-btn>
-              <span style="font-size: 20px; font-weight: bold; font-style: italic; font-family: 'time new roman" class="mt-1 ml-1 so-dien-thoai">086.296.8081</span>
+              <span
+                style="font-size: 20px; font-weight: bold; font-style: italic; font-family: 'time new roman"
+                class="mt-1 ml-1 so-dien-thoai"
+              >086.296.8081</span>
             </div>
           </div>
           <nuxt-link to="/dangky" v-if="!loggedIn">
@@ -241,9 +250,18 @@
             </div>
           </div>
           <div
-            class="page-width khuyen-mai"
-            style="width: 300px; height: 100%; background-color: #196F3D"
-          ></div>
+            class="page-width khuyen-mai d-flex align-center"
+            style="width: 300px; height: 100%; background-color: #196F3D; padding-left: 40px"
+          >
+            <img
+              class="khuyen-mai"
+              src="https://image.flaticon.com/icons/svg/415/415753.svg"
+              height="25"
+            />
+            <nuxt-link to="/homnayangi" style="margin-left: 20px">
+              <div class="tieu-de" style="color: white">Hôm nay ăn gì</div>
+            </nuxt-link>
+          </div>
         </div>
       </div>
     </v-app-bar>
@@ -256,19 +274,22 @@
       style="width: 100%; height: 250px"
       class="image-cover"
     >
-    </v-footer> -->
+    </v-footer>-->
     <v-footer class="d-flex" style="height: 110px; margin-top: 5px">
       <v-layout justify-center>
-      <div style="display: flex; flex-direction: row; justify-content: space-between" class="page-width">
-        <img :src="logo" style="height: 80px">
-        <div style="display: flex; flex-direction: column;" class="pl-4">
-          <div style="font-size: 16px; font-weight: bold">RUỘNG BẬC THANG</div>
-          <div style="font-size: 14px;">Số ĐKKD: 21A8000753</div>
-          <div style="font-size: 14px;">Hotline: 086.296.8081 - Email: hotro@ruongbacthang.com.vn</div>
-          <div style="font-size: 14px;">Địa chỉ: 54 Ngọc Hân Công Chúa – Tp Bắc Ninh</div>
+        <div
+          style="display: flex; flex-direction: row; justify-content: space-between"
+          class="page-width"
+        >
+          <img :src="logo" style="height: 80px" />
+          <div style="display: flex; flex-direction: column;" class="pl-4">
+            <div style="font-size: 16px; font-weight: bold">RUỘNG BẬC THANG</div>
+            <div style="font-size: 14px;">Số ĐKKD: 21A8000753</div>
+            <div style="font-size: 14px;">Hotline: 086.296.8081 - Email: hotro@ruongbacthang.com.vn</div>
+            <div style="font-size: 14px;">Địa chỉ: 54 Ngọc Hân Công Chúa – Tp Bắc Ninh</div>
+          </div>
+          <img :src="logoBoCongThuong" style="height: 60px" />
         </div>
-        <img :src="logoBoCongThuong" style="height: 60px">
-      </div>
       </v-layout>
     </v-footer>
   </v-app>
