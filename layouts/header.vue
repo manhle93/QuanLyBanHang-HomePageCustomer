@@ -219,7 +219,7 @@
               src="https://image.flaticon.com/icons/svg/415/415753.svg"
               height="25"
             />
-            <nuxt-link to="/monngonmoingay">
+            <nuxt-link to="/danhmuc/38">
               <div class="tieu-de" style="color: white">Bếp Nhà Ruộng</div>
             </nuxt-link>
             <img

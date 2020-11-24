@@ -6,16 +6,16 @@
       <div
         style="margin-top: 50px; display: flex; flex-direction: row-reverse; flex-wrap: wrap;"
         v-else
-       >
+        >
         <v-card
           class="mx-auto san-pham"
           v-for="(sanPham, index) in sanPhams"
           :key="index"
           style="margin-bottom: 40px"
         >
-          <NuxtLink :to="'/sanpham/' + sanPham.id">
+          <NuxtLink :to="'/sanpham/' + sanPham.san_pham.id">
             <v-img
-              :src=" sanPham.anh_dai_dien ? END_POINT_IMAGE + sanPham.anh_dai_dien : product"
+              :src=" sanPham.san_pham.anh_dai_dien ? END_POINT_IMAGE + sanPham.san_pham.anh_dai_dien : product"
               :lazy-src="product"
               width="100%"
               height="200"
@@ -24,7 +24,7 @@
                 small
                 color="pink"
                 dark
-                v-if="!sanPham.san_pham_ton_kho || !(sanPham.san_pham_ton_kho.so_luong > 0)"
+                v-if="!sanPham.san_pham.san_pham_ton_kho || !(sanPham.san_pham.san_pham_ton_kho.so_luong > 0)"
               >Hết hàng</v-btn>
               <v-btn small color="success" dark v-else>Còn hàng</v-btn> -->
             </v-img>
@@ -33,20 +33,20 @@
           <v-card-title
             style="height: 95px; color: #145A32"
             class="ten-sanpham"
-          >{{ sanPham.ten_san_pham }}</v-card-title>
+          >{{ sanPham.san_pham.ten_san_pham }}</v-card-title>
           <v-card-subtitle class="d-flex align-center" style="justify-content: space-between">
             <span
               style="color: #764B09; font-size: 16px; font-weight: bold"
-            >{{ formatCurrency(sanPham.gia_ban) }} đ</span>
+            >{{ formatCurrency(sanPham.san_pham.gia_ban) }} đ</span>
 
             <v-btn
-              v-if="sanPham.san_pham_ton_kho && sanPham.san_pham_ton_kho.so_luong > 0"
+              v-if="sanPham.san_pham.san_pham_ton_kho && sanPham.san_pham.san_pham_ton_kho.so_luong > 0"
               color="green"
               class="mx-2 gio-hang"
               fab
               dark
               small
-              @click="addGioHang(sanPham.id)"
+              @click="addGioHang(sanPham.san_pham_id)"
             >
               <v-icon>mdi-cart</v-icon>
             </v-btn>
@@ -55,7 +55,7 @@
             </v-btn>
             <v-btn
               icon
-              @click="addSanPhamYeuThich(sanPham.id)"
+              @click="addSanPhamYeuThich(sanPham.san_pham_id)"
               :style="{color: sanPham.daYeuThich ? 'red' : 'gray'}"
             >
               <v-icon>mdi-heart</v-icon>
@@ -68,15 +68,6 @@
             <v-spacer></v-spacer>
           </v-card-actions>-->
         </v-card>
-      </div>
-      <div class="text-center">
-        <v-pagination
-          v-model="page"
-          :length="total_page"
-          circle
-          @input="PaginateSanPham"
-          :total-visible="9"
-        ></v-pagination>
       </div>
     </div>
   </v-layout>
@@ -97,41 +88,30 @@ export default {
     total_page: 1,
     loadSanPham: true,
     product: product,
-    now: "",
   }),
   watch: {},
   mounted() {
     this.getSanPham();
-    let d = new Date();
-    let month = +d.getUTCMonth() + 1;
-    let day = d.getDate();
-    if (month < 10) {
-      month = "0" + month;
-    }
-    if (day < 10) {
-      day = "0" + day;
-    }
-    this.now = day + "/" + month + "/" + d.getUTCFullYear();
   },
   methods: {
     async getSanPham() {
       let product = JSON.parse(localStorage.getItem("san_pham_yeu_thich"));
       this.loadSanPham = true;
-      let data = await api.get("idmonngonmoingay");
+      let data = await api.get("sanphambanchaytrangchu", {});
       this.sanPhams = data.data.map((e) => {
         e.daYeuThich = false;
         return e;
       });
       for (let item of this.sanPhams) {
-        if (product && product.includes(item.id)) {
+        if (product && product.includes(item.san_pham_id)) {
           item.daYeuThich = true;
         } else item.daYeuThich = false;
       }
       this.loadSanPham = false;
     },
     addSanPhamYeuThich(id) {
-      this.sanPhams.find((el) => el.id == id).daYeuThich = !this.sanPhams.find(
-        (el) => el.id == id
+      this.sanPhams.find((el) => el.san_pham_id == id).daYeuThich = !this.sanPhams.find(
+        (el) => el.san_pham_id == id
       ).daYeuThich;
       let product = JSON.parse(localStorage.getItem("san_pham_yeu_thich"));
       if (!product) {
@@ -205,8 +185,8 @@ export default {
 .all-product {
   margin-top: 40px;
   font-size: 20px;
-  color: green;
   /* font-weight: bold; */
+  color: green;
 }
 @media only screen and (max-width: 600px) {
   .san-pham {

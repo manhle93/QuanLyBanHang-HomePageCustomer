@@ -16,7 +16,7 @@
           <NuxtLink :to="'/homnayangi/' + sanPham.id">
             <v-img
               :src=" sanPham.anh_dai_dien ? END_POINT_IMAGE + sanPham.anh_dai_dien : product"
-              :lazy-src="product"
+              :lazy-src="sanPham.anh_dai_dien ? END_POINT_IMAGE + sanPham.anh_dai_dien : product"
               width="100%"
               height="200"
             >

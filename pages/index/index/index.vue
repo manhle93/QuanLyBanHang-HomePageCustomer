@@ -8,12 +8,7 @@
     </v-snackbar>
     <div class="page-width">
       <div style="border-bottom: solid 1px green;" class="all-product">DANH SÁCH SẢN PHẨM</div>
-      <v-text-field
-        color="success"
-        loading
-        disabled
-        v-if="loadSanPham"
-      ></v-text-field>
+      <v-text-field color="success" loading disabled v-if="loadSanPham"></v-text-field>
       <div style="display: flex; flex-direction: column" v-else>
         <div
           style="margin-top: 50px; display: flex; flex-direction: column"
@@ -31,15 +26,9 @@
             <div
               class="mb-1 ten-danhmuc"
               style="font-size: 18px; font-style: normal"
-            >
-              {{ item.so_mat_hang }} Sản phẩm
-            </div>
+            >{{ item.so_mat_hang }} Sản phẩm</div>
           </div>
-          <v-progress-linear
-            color="teal"
-            rounded
-            value="100"
-          ></v-progress-linear>
+          <v-progress-linear color="teal" rounded value="100"></v-progress-linear>
           <br />
           <v-sheet class="mx-auto" elevation="8" max-width="100%">
             <v-slide-group
@@ -48,10 +37,7 @@
               active-class="success"
               show-arrows
             >
-              <v-slide-item
-                v-for="(sanPham, index) in item.san_pham"
-                :key="index"
-              >
+              <v-slide-item v-for="(sanPham, index) in item.san_pham" :key="index">
                 <v-card class="mx-auto san-pham ma-5 mr-5 ml-3">
                   <NuxtLink :to="'/sanpham/' + sanPham.id">
                     <v-img
@@ -60,28 +46,27 @@
                           ? END_POINT_IMAGE + sanPham.anh_dai_dien
                           : product
                       "
-                      :lazy-src="product"
+                      :lazy-src="sanPham.anh_dai_dien
+                          ? END_POINT_IMAGE + sanPham.anh_dai_dien
+                          : product"
                       width="100%"
                       height="200"
-                    >
-                    </v-img>
+                    ></v-img>
                   </NuxtLink>
                   <v-card-title
                     style="height: 95px; color: black;font-size: 16px;font-weight: normal"
                     class="ten-sanpham"
-                    >{{ sanPham.ten_san_pham }}</v-card-title
-                  >
+                  >{{ sanPham.ten_san_pham }}</v-card-title>
                   <v-card-subtitle
                     class="d-flex align-center"
                     style="justify-content: space-between"
                   >
                     <span
                       style="color: red; font-size: 16px; font-weight: bold"
-                      >{{ formatCurrency(sanPham.gia_ban) }} đ
-                    </span>
-                    <span style="color: black; font-size: 14px; font-weight: normal">
-                      /{{sanPham.don_vi_tinh}} 
-                    </span>
+                    >{{ formatCurrency(sanPham.gia_ban) }} đ</span>
+                    <span
+                      style="color: black; font-size: 14px; font-weight: normal"
+                    >/{{sanPham.don_vi_tinh}}</span>
 
                     <v-btn
                       v-if="
@@ -97,14 +82,7 @@
                     >
                       <v-icon>mdi-cart</v-icon>
                     </v-btn>
-                    <v-btn
-                      v-else
-                      color="#9E9E9E"
-                      class="mx-2 gio-hang"
-                      fab
-                      dark
-                      small
-                    >
+                    <v-btn v-else color="#9E9E9E" class="mx-2 gio-hang" fab dark small>
                       <v-icon>mdi-cart</v-icon>
                     </v-btn>
                     <v-btn
@@ -120,7 +98,7 @@
             </v-slide-group>
             <div class="text-center mb-6">
               <nuxt-link :to="'/danhmuc/' + item.id">
-                <v-btn class="ma-2" outlined color="green"> Xem tất cả </v-btn>
+                <v-btn class="ma-2" outlined color="green">Xem tất cả</v-btn>
               </nuxt-link>
             </div>
           </v-sheet>
@@ -300,7 +278,7 @@ export default {
   color: green;
 }
 .san-pham {
-  max-width: 240px;
+  width: 240px;
 }
 .ten-danhmuc {
   color: green;

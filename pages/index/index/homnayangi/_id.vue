@@ -19,15 +19,7 @@
             aspect-ratio="1.7"
             :src="(sanPham.anh_dai_dien && image) ? image : (sanPham.anh_dai_dien && !image) ? END_POINT_IMAGE + sanPham.anh_dai_dien : product"
             style="width: 550px; height: 450px"
-          >
-            <v-btn
-              small
-              color="pink"
-              dark
-              v-if="!sanPham.san_pham_ton_kho || !sanPham.san_pham_ton_kho.so_luong > 0"
-            >Hết hàng</v-btn>
-            <v-btn small color="success" dark v-else>Còn hàng</v-btn>
-          </v-img>
+          ></v-img>
         </div>
         <div class="c-flex flex-fill thongtin-sanpham" style="height: 400px; max-width: 90%">
           <div
@@ -71,10 +63,20 @@
         </div>
       </div>
       <div v-if="nguyenLieu.length">
-        <div
-          class="ml-3"
-          style="font-size: 20px; font-weight: bold; margin-top: 20px"
-        >Nguyên liệu chế biến</div>
+        <div class="ml-3 d-flex" style="font-size: 20px; font-weight: bold; margin-top: 20px">
+          <div>Nguyên liệu chế biến</div>
+          <div style="margin-left: 20px;">
+            <v-text-field
+              v-model="nguoi_an"
+              type="number"
+              hide-details
+              label="Số lượng người ăn"
+              @change="soNguoiAn()"
+              outlined
+              dense
+            ></v-text-field>
+          </div>
+        </div>
         <br />
         <v-simple-table>
           <template v-slot:default>
@@ -82,8 +84,10 @@
               <tr>
                 <th style="font-size: 16px">STT</th>
                 <th style="font-size: 16px">Nguyên liệu</th>
-                <th style="font-size: 16px">Số lượng</th>
+                <th style="font-size: 16px">Số lượng định mức</th>
+                <th style="font-size: 16px; width: 250px">Số lượng mua</th>
                 <th style="font-size: 16px">Đơn giá</th>
+                <th style="font-size: 16px">Thành tiền</th>
                 <th style="font-size: 16px">Đặt mua</th>
               </tr>
             </thead>
@@ -92,7 +96,20 @@
                 <td>{{ index + 1}}</td>
                 <td>{{ item.ten }}</td>
                 <td>{{ item.so_luong +' '+ item.don_vi}}</td>
+                <td>
+                  <v-text-field
+                    type="number"
+                    v-model="item.so_luong_mua"
+                    hide-details
+                    dense
+                    style="width: 80%"
+                    label="Số lượng"
+                    outlined
+                  ></v-text-field>
+                </td>
                 <td>{{ formatCurrency(item.gia_ban) }} đ</td>
+                <td>{{ formatCurrency((item.gia_ban * item.so_luong_mua)) }} đ</td>
+
                 <td>
                   <div v-if="!item.kinh_doanh">
                     <v-btn class="ma-2" outlined color="indigo">Không kinh doanh</v-btn>
@@ -135,6 +152,60 @@
             </tbody>
           </template>
         </v-simple-table>
+        <div
+          class="ml-3"
+          style="font-size: 20px; font-weight: bold; margin-top: 20px"
+        >Sản phẩm liên quan</div>
+        <div style="margin-top: 50px; display: flex; flex-direction: row-reverse; flex-wrap: wrap;">
+          <v-card
+            class="mx-auto san-pham"
+            v-for="(sanPham, index) in nguyenLieu"
+            :key="index"
+            style="margin-bottom: 40px;"
+          >
+            <NuxtLink :to="'/sanpham/' + sanPham.nguyen_lieu_id">
+              <v-img
+                :src="sanPham.hinh_anh ? END_POINT_IMAGE + sanPham.hinh_anh : product"
+                :lazy-src="sanPham.hinh_anh ? END_POINT_IMAGE + sanPham.hinh_anh : product"
+                width="100%"
+                height="200"
+              ></v-img>
+            </NuxtLink>
+
+            <v-card-title
+              style="height: 95px; color: black;font-size: 16px;font-weight: normal"
+              class="ten-sanpham"
+            >{{ sanPham.ten }}</v-card-title>
+            <v-card-subtitle class="d-flex align-center" style="justify-content: space-between">
+              <span
+                style="color: #764B09; font-size: 16px; font-weight: bold"
+              >{{ formatCurrency(sanPham.gia_ban) }} đ</span>
+              <span style="color: black; font-size: 14px; font-weight: normal">/{{sanPham.don_vi}}</span>
+              <v-btn
+                v-if="sanPham.ton_kho"
+                color="green"
+                class="mx-2 gio-hang"
+                fab
+                dark
+                small
+                @click="muaNguyenLieu(sanPham)"
+              >
+                <v-icon>mdi-cart</v-icon>
+              </v-btn>
+              <v-btn
+                v-else
+                color="pink"
+                class="mx-2 gio-hang"
+                fab
+                dark
+                small
+                @click="datTruocNguyenLieu(sanPham)"
+              >
+                <v-icon>mdi-cart</v-icon>
+              </v-btn>
+            </v-card-subtitle>
+          </v-card>
+        </div>
       </div>
     </div>
   </v-layout>
@@ -152,6 +223,7 @@ import { mapMutations } from "vuex";
 export default {
   layout: "header",
   data: () => ({
+    END_POINT_IMAGE: END_POINT_IMAGE,
     sanPham: {
       ten_san_pham: "",
       gia_ban: "",
@@ -160,7 +232,9 @@ export default {
       },
       hinh_anhs: [],
     },
+    nguoi_an: 0,
     nguyenLieu: [],
+    nguyenLieuOld: [],
     snackbar: false,
     noiDung: "",
     soLuong: 1,
@@ -188,8 +262,13 @@ export default {
       let data = await api.get("trangchuhomnayangi/" + this.$route.params.id);
       this.loadSanPham = false;
       this.sanPham = data.data.san_pham;
-      this.nguyenLieu = data.data.nguyen_lieu;
-      console.log(this.nguyenLieu);
+      this.nguoi_an = this.sanPham.so_nguoi_an;
+      let nguyenLieu = data.data.nguyen_lieu;
+      
+      nguyenLieu.map((el) => (el.so_luong_mua = el.so_luong));
+      this.nguyenLieu = nguyenLieu
+      this.nguyenLieuOld = [...this.nguyenLieu];
+
     },
     async getDanhMuc() {
       let data = await api.get("danhmuc", { per_page: 9 });
@@ -209,6 +288,16 @@ export default {
     showHinhAnh(val) {
       this.image = END_POINT_IMAGE + val;
     },
+    soNguoiAn() {
+      let n = this.nguoi_an / this.sanPham.so_nguoi_an;
+      n = Math.round(n * 100 + Number.EPSILON) / 100;
+      this.nguyenLieu = this.nguyenLieuOld.map((el) => ({
+        ...el,
+        so_luong: Math.round(+el.so_luong * n * 100 + Number.EPSILON) / 100,
+        so_luong_mua:
+         Math.round(+el.so_luong * n * 100 + Number.EPSILON) / 100,
+      }));
+    },
     datTruocNguyenLieu(data) {
       let product = JSON.parse(localStorage.getItem("dat_truoc"));
       if (!product) {
@@ -218,9 +307,9 @@ export default {
 
       let check = product.find((el) => el.san_pham_id == data.nguyen_lieu_id);
       if (check) {
-        check.so_luong = Number(check.so_luong) + Number(data.so_luong);
+        check.so_luong = Number(check.so_luong) + Number(data.so_luong_mua);
       } else {
-        sP.so_luong = data.so_luong;
+        sP.so_luong = data.so_luong_mua;
         sP.san_pham_id = data.nguyen_lieu_id;
         product.push(sP);
       }
@@ -242,9 +331,9 @@ export default {
 
       let check = product.find((el) => el.san_pham_id == data.nguyen_lieu_id);
       if (check) {
-        check.so_luong = Number(check.so_luong) + Number(data.so_luong);
+        check.so_luong = Number(check.so_luong) + Number(data.so_luong_mua);
       } else {
-        sP.so_luong = Number(data.so_luong);
+        sP.so_luong = Number(data.so_luong_mua);
         sP.san_pham_id = data.nguyen_lieu_id;
         product.push(sP);
       }
@@ -331,6 +420,9 @@ export default {
   font-size: 14px;
   font-weight: bold;
   margin-left: 15px;
+}
+.san-pham {
+  width: 250px;
 }
 .co-hang {
   font-size: 14px;
