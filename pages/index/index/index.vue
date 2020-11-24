@@ -301,7 +301,7 @@ export default {
     margin-left: 10px;
   }
   .san-pham {
-    max-width: 170px;
+    max-width: 240px;
   }
   .gio-hang {
     display: none;

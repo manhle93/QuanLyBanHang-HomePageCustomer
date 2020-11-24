@@ -62,18 +62,21 @@
           </v-card>
         </div>
       </div>
+      <br />
       <div v-if="nguyenLieu.length">
-        <div class="ml-3 d-flex" style="font-size: 20px; font-weight: bold; margin-top: 20px">
+        <div
+          class="ml-3 d-flex"
+          style="font-size: 20px; font-weight: bold; margin-top: 30px; flex-wrap: wrap; align-items: flex-end; justify-content: space-between"
+        >
           <div>Nguyên liệu chế biến</div>
-          <div style="margin-left: 20px;">
+          <div>
             <v-text-field
               v-model="nguoi_an"
               type="number"
               hide-details
-              label="Số lượng người ăn"
               @change="soNguoiAn()"
-              outlined
-              dense
+              suffix="Người ăn"
+              :rules="rules"
             ></v-text-field>
           </div>
         </div>
@@ -95,16 +98,17 @@
               <tr v-for="(item, index) in nguyenLieu" :key="item.nguyen_lieu_id">
                 <td>{{ index + 1}}</td>
                 <td>{{ item.ten }}</td>
-                <td>{{ item.so_luong +' '+ item.don_vi}}</td>
+                <td style="height: 60px">{{ item.so_luong +' '+ item.don_vi}}</td>
                 <td>
                   <v-text-field
-                    type="number"
-                    v-model="item.so_luong_mua"
+                    class="so-luong-mua"
                     hide-details
+                    v-model="item.so_luong_mua"
                     dense
-                    style="width: 80%"
-                    label="Số lượng"
                     outlined
+                    type="number"
+                    :suffix="item.don_vi"
+                    :rules="rules"
                   ></v-text-field>
                 </td>
                 <td>{{ formatCurrency(item.gia_ban) }} đ</td>
@@ -112,7 +116,7 @@
 
                 <td>
                   <div v-if="!item.kinh_doanh">
-                    <v-btn class="ma-2" outlined color="indigo">Không kinh doanh</v-btn>
+                    <v-btn small tile dark outlined color="indigo">Không kinh doanh</v-btn>
                   </div>
                   <div v-else>
                     <v-tooltip top v-if="(!item.ton_kho || !(item.ton_kho > 0))">
@@ -159,7 +163,7 @@
         <div style="margin-top: 50px; display: flex; flex-direction: row-reverse; flex-wrap: wrap;">
           <v-card
             class="mx-auto san-pham"
-            v-for="(sanPham, index) in nguyenLieu"
+            v-for="(sanPham, index) in nguyenLieu.filter(el => el.kinh_doanh)"
             :key="index"
             style="margin-bottom: 40px;"
           >
@@ -250,6 +254,7 @@ export default {
     cartIcon: cartIcon,
     shipIcon: shipIcon,
     END_POINT_IMAGE: END_POINT_IMAGE,
+    rules: [(v) => (v && v >= 0) || "Giá trị không hợp lệ"],
   }),
   computed: {},
   mounted() {
@@ -264,11 +269,10 @@ export default {
       this.sanPham = data.data.san_pham;
       this.nguoi_an = this.sanPham.so_nguoi_an;
       let nguyenLieu = data.data.nguyen_lieu;
-      
-      nguyenLieu.map((el) => (el.so_luong_mua = el.so_luong));
-      this.nguyenLieu = nguyenLieu
-      this.nguyenLieuOld = [...this.nguyenLieu];
 
+      nguyenLieu.map((el) => (el.so_luong_mua = el.so_luong));
+      this.nguyenLieu = nguyenLieu;
+      this.nguyenLieuOld = [...this.nguyenLieu];
     },
     async getDanhMuc() {
       let data = await api.get("danhmuc", { per_page: 9 });
@@ -289,16 +293,26 @@ export default {
       this.image = END_POINT_IMAGE + val;
     },
     soNguoiAn() {
+      if (this.nguoi_an <= 0) {
+        this.snackbar = true;
+        this.noiDung = "Số người không hợp lệ";
+        this.nguoi_an = this.sanPham.so_nguoi_an;
+        return;
+      }
       let n = this.nguoi_an / this.sanPham.so_nguoi_an;
       n = Math.round(n * 100 + Number.EPSILON) / 100;
       this.nguyenLieu = this.nguyenLieuOld.map((el) => ({
         ...el,
         so_luong: Math.round(+el.so_luong * n * 100 + Number.EPSILON) / 100,
-        so_luong_mua:
-         Math.round(+el.so_luong * n * 100 + Number.EPSILON) / 100,
+        so_luong_mua: Math.round(+el.so_luong * n * 100 + Number.EPSILON) / 100,
       }));
     },
     datTruocNguyenLieu(data) {
+      if (+data.so_luong_mua <= 0) {
+        this.snackbar = true;
+        this.noiDung = "Số người lượng mua không hợp lệ";
+        return;
+      }
       let product = JSON.parse(localStorage.getItem("dat_truoc"));
       if (!product) {
         product = [];
@@ -323,6 +337,11 @@ export default {
       this.noiDung = "Đã thêm vào giỏ hàng";
     },
     muaNguyenLieu(data) {
+      if (+data.so_luong_mua <= 0) {
+        this.snackbar = true;
+        this.noiDung = "Số người lượng mua không hợp lệ";
+        return;
+      }
       let product = JSON.parse(localStorage.getItem("gio_hang"));
       if (!product) {
         product = [];
@@ -455,6 +474,9 @@ export default {
   max-width: 600px;
   flex-wrap: wrap;
 }
+.so-luong-mua {
+  width: 150px;
+}
 @media only screen and (max-width: 600px) {
   .thongtin-sanpham {
     margin-left: 0px;
@@ -467,5 +489,8 @@ export default {
   .tiep-tuc {
     display: none;
   }
+  .so-luong-mua {
+  width: 100px;
+}
 }
 </style>

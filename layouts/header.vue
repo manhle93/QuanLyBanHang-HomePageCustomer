@@ -2,24 +2,6 @@
   <v-app id="inspire">
     <v-navigation-drawer v-model="leftMenu" app temporary>
       <div style="height: 100%; display: flex; flex-direction: column ">
-        <!-- <v-list dense>
-        <v-list-item link>
-          <v-list-item-action>
-            <v-icon>mdi-home</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>Home</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item link>
-          <v-list-item-action>
-            <v-icon>mdi-email</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>Contact</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        </v-list>-->
         <div
           class="d-flex pl-4"
           style="background-color: #F5B041; font-size: 20px; font-weight: bold; align-items: center; height: 60px; width: 100%;"
@@ -242,7 +224,7 @@
               <v-form v-on:submit.prevent="timKiem">
                 <input
                   v-model="search"
-                  style="height: 35px; width: 350px; background-color: white; border-radius: 5px"
+                  style="height: 35px; width: 350px; background-color: white; border-radius: 5px;"
                   type="text"
                   placeholder="Hôm nay bạn muốn ăn gì?"
                 />
@@ -275,20 +257,23 @@
       class="image-cover"
     >
     </v-footer>-->
-    <v-footer class="d-flex" style="height: 110px; margin-top: 5px">
+    <v-footer style="margin-top: 25px">
       <v-layout justify-center>
         <div
-          style="display: flex; flex-direction: row; justify-content: space-between"
+          style="display: flex; flex-direction: row; justify-content: space-around; flex-wrap: wrap"
           class="page-width"
         >
-          <img :src="logo" style="height: 80px" />
-          <div style="display: flex; flex-direction: column;" class="pl-4">
+          <img :src="logo" style="height: 80px" class="footer" />
+          <div
+            style="display: flex; flex-direction: column; justify-content: space-around"
+            class="pl-4"
+          >
             <div style="font-size: 16px; font-weight: bold">RUỘNG BẬC THANG</div>
             <div style="font-size: 14px;">Số ĐKKD: 21A8000753</div>
             <div style="font-size: 14px;">Hotline: 086.296.8081 - Email: hotro@ruongbacthang.com.vn</div>
             <div style="font-size: 14px;">Địa chỉ: 54 Ngọc Hân Công Chúa – Tp Bắc Ninh</div>
           </div>
-          <img :src="logoBoCongThuong" style="height: 60px" />
+          <img :src="logoBoCongThuong" style="height: 60px" class="footer" />
         </div>
       </v-layout>
     </v-footer>
@@ -395,7 +380,7 @@ export default {
     },
 
     async getDanhMuc() {
-      let data = await api.get("danhmuc", { per_page: 999999 });
+      let data = await api.get("danhmuckinhdoanh", { per_page: 999999 });
       this.danhMucs = data.data.data;
     },
     timKiem() {
@@ -447,6 +432,9 @@ export default {
   }
 }
 @media only screen and (max-width: 600px) {
+  .footer {
+    display: none;
+  }
   .button {
     display: none;
   }
@@ -454,12 +442,14 @@ export default {
     display: none;
   }
   .khuyen-mai {
-    display: none;
+    width: 0px !important;
+    display: none !important;
   }
   .tieu-de {
     display: none;
   }
   .search-mobile {
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;

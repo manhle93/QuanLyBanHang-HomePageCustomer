@@ -210,7 +210,7 @@ export default {
 }
 @media only screen and (max-width: 600px) {
   .san-pham {
-    max-width: 170px;
+    max-width: 240px;
   }
   .all-product {
     font-size: 24px;
