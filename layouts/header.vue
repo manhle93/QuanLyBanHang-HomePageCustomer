@@ -8,7 +8,32 @@
         >
           <v-icon style="margin-right: 15px">mdi-menu</v-icon>DANH MỤC
         </div>
-
+        <div class="page-width c-flex" style="width: 100%; background-color: #196F3D; padding-top: 10px; padding-bottom: 10px; padding-left: 10px">
+          <div class="d-flex" style="padding-bottom: 10px">
+            <img src="https://image.flaticon.com/icons/svg/415/415753.svg" height="25" />
+            <nuxt-link to="/homnayangi" style="margin-left: 15px">
+              <div style="color: white">Hôm nay ăn gì</div>
+            </nuxt-link>
+          </div>
+          <div class="d-flex" style="padding-bottom: 10px">
+            <img
+              src="https://image.flaticon.com/icons/svg/3163/3163689.svg"
+              height="25"
+            />
+            <nuxt-link to="/sanphambanchay" style="margin-left: 15px">
+              <div style="color: white">Sản phẩm bán chạy</div>
+            </nuxt-link>
+          </div>
+           <div class="d-flex">
+            <img
+              src="https://image.flaticon.com/icons/svg/3199/3199306.svg"
+              height="25"
+            />
+            <nuxt-link to="/sinhthairuongbacthang" style="margin-left: 15px">
+              <div style="color: white">Sinh thái Ruộng Bậc Thang</div>
+            </nuxt-link>
+          </div>
+        </div>
         <div dense class="pt-4 pl-4" style="height: 100%; background-color: #fff">
           <div v-for="danhMuc in danhMucs" :key="danhMuc.id" style="height: 45px">
             <NuxtLink :to="'/danhmuc/' + danhMuc.id" class="d-flex align-center">
