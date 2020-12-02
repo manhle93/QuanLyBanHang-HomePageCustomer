@@ -1,7 +1,7 @@
 <template>
   <v-layout justify-center>
     <div class="page-width">
-      <div style="border-bottom: solid 1px green;" class="all-product">MÓN NGON MỖI NGÀY ({{now}})</div>
+      <div style="border-bottom: solid 1px green;" class="all-product">MÓN NGON BẾP NHÀ RUỘNG ({{now}})</div>
       <v-text-field color="success" loading disabled v-if="loadSanPham"></v-text-field>
       <div
         style="margin-top: 50px; display: flex; flex-direction: row-reverse; flex-wrap: wrap;"
@@ -117,7 +117,7 @@ export default {
     async getSanPham() {
       let product = JSON.parse(localStorage.getItem("san_pham_yeu_thich"));
       this.loadSanPham = true;
-      let data = await api.get("idmonngonmoingay");
+      let data = await api.get("bepnharuong");
       this.sanPhams = data.data.map((e) => {
         e.daYeuThich = false;
         return e;

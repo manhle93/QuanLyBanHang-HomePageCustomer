@@ -226,7 +226,7 @@
               src="https://image.flaticon.com/icons/svg/415/415753.svg"
               height="25"
             />
-            <nuxt-link to="/danhmuc/38">
+            <nuxt-link to="/bepnharuong">
               <div class="tieu-de" style="color: white">Bếp Nhà Ruộng</div>
             </nuxt-link>
             <img
