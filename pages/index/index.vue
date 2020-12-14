@@ -51,11 +51,12 @@
               :key="i"
               reverse-transition="fade-transition"
               transition="fade-transition"
+              @click="showPage(item)"
             >
               <div
                 class="image-cover"
                 :style="{
-                  background: 'url(' + END_POINT_IMAGE + item.hinh_anh + ')',
+                  background: 'url(' + END_POINT_IMAGE + item.hinh_anh + ')'
                 }"
                 style="color: red; height: 100%"
               ></div>
@@ -68,7 +69,7 @@
         >
           <div style="width: 290px; height: 195px; margin-top: 5px">
             <img
-              src="http://apiruongbacthang.skymapglobal.vn/storage/images/avatar/1596775187.PNG"
+              :src="banner[0] ? END_POINT_IMAGE + banner[0].hinh_anh : ''"
               style="height: 193px; width: 290px; border-radius: 15px"
             />
           </div>
@@ -77,7 +78,7 @@
             <v-img
               height="193px"
               style="border-radius: 15px"
-              src="http://apiruongbacthang.skymapglobal.vn/storage/images/avatar/1596775191.PNG"
+             :src="banner[1] ? END_POINT_IMAGE + banner[1].hinh_anh : ''"
               aspect-ratio="1.7"
             ></v-img>
             <!-- <img
@@ -87,7 +88,10 @@
           </div>
         </div>
       </div>
-      <div class="d-flex mt-5" style="justify-content: space-around; flex-wrap: wrap">
+      <div
+        class="d-flex mt-5"
+        style="justify-content: space-around; flex-wrap: wrap"
+      >
         <div style="height: 80px;" class="d-flex align-center">
           <img :src="customerIcon" height="30" />
           <span class="text-icon">100.000 ++ KHÁCH HÀNG</span>
@@ -125,7 +129,7 @@ async function getDanhMuc() {
 
 export default {
   head: () => ({
-    title: "Trang Chủ",
+    title: "Trang Chủ"
   }),
   data: () => ({
     danhMucs: [],
@@ -136,25 +140,38 @@ export default {
     cartIcon: cartIcon,
     shipIcon: shipIcon,
     sliders: [],
+    banner: [],
   }),
   async asyncData({ params }) {
     let danhMucs = await getDanhMuc();
     return {
-      danhMucs: danhMucs,
+      danhMucs: danhMucs
     };
   },
   mounted() {
     this.getSlider();
+    this.getBanner()
   },
   methods: {
     async getSlider() {
       let data = await api.get("slider");
       this.sliders = data.data;
     },
+    async getBanner() {
+      let data = await api.get("banner")
+      this.banner = data.data
+            console.log(this.banner)
+
+    },
     clickDanhMuc(id) {
       this.$router.push("/danhmuc/" + id);
     },
-  },
+    showPage(data) {
+      if (data.link) {
+        location.assign(data.link);
+      }
+    }
+  }
 };
 </script>
 <style scoped>
