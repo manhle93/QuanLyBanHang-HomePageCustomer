@@ -1,6 +1,8 @@
 ## HỆ THỐNG QUẢN LÝ THƯƠNG MẠI ĐIỆN TỬ - GIAO DIỆN KHÁCH HÀNG
 
-### Demo
+### NuxtJS - Vuetify Frontend
+#### Demo: 
+http://rbt.skymapglobal.vn/
 
 ![demo](https://res.cloudinary.com/dsobei3hp/image/upload/v1608019430/GitHub/Untitlesd_ugg3nn.png)
 ##
