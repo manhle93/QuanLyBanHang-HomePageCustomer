@@ -9,7 +9,7 @@
     <div class="page-width">
       <div
         class="image-cover avatar mt-3"
-        style="max-width: 100%; height: 300px; background: url('https://hinhchuctet.com/wp-content/uploads/2018/06/anh-bia-facebook-doc-dao-8.jpg')"
+        style="max-width: 100%; height: 300px; background: url('https://res.cloudinary.com/dsobei3hp/image/upload/v1608542964/GitHub/1_b1cBcGGOy1djw8kbBkWOng_ad3auw.jpg')"
       >
         <a>
           <v-avatar
@@ -27,8 +27,43 @@
         <input ref="upload-image" style="display: none" type="file" @change="handleChange($event)" />
         <div class="name">{{User.ten}}</div>
       </div>
+      <!-- <v-card style="background-color: #1A237E">
+        <v-img
+          height="230px"
+          src="https://i.pinimg.com/originals/46/37/5b/46375b7d7d510611ed88ec2bace087a1.png"
+        >
+          <v-card-text>
+            <v-layout column>
+              <a>
+                <v-avatar
+                  size="200"
+                  style="margin-bottom: -60px; border: 4px solid white"
+                  @click="handleUpload"
+                >
+                  <img
+                    :src="
+                      User.user.avatar_url
+                        ? END_POINT_IMAGE + User.user.avatar_url
+                        : avatar
+                    "
+                    alt="John"
+                  />
+                </v-avatar>
+              </a>
+            </v-layout>
+          </v-card-text>
+          <input
+            ref="upload-image"
+            style="display: none"
+            type="file"
+            @change="handleChange($event)"
+          />
+        </v-img>
+        <div class="name" style="margin-left: 50px">{{ User.ten }}</div>
+      </v-card> -->
+
       <div class="d-flex" style="justify-content: center">
-        <div class="mobile-name">{{User.ten}}</div>
+        <div class="mobile-name">{{ User.ten }}</div>
       </div>
       <div
         style="width: 100%; display: flex;flex-direction: row; flex-wrap: wrap; justify-content: center"
@@ -38,60 +73,70 @@
             <div class="tieude">THÔNG TIN CÁ NHÂN</div>
             <div class="mb-2">
               <v-icon class="mr-3">mdi-email</v-icon>
-              Email: {{User.user.email}}
+              Email: {{ User.user.email }}
             </div>
             <div class="mb-2">
               <v-icon class="mr-3">mdi-account</v-icon>
-              Tên đăng nhập: {{User.user.username}}
+              Tên đăng nhập: {{ User.user.username }}
             </div>
             <div class="mb-2">
               <v-icon class="mr-3">mdi-phone</v-icon>
-              SĐT: {{User.so_dien_thoai}}
+              SĐT: {{ User.so_dien_thoai }}
             </div>
             <div class="mb-2">
               <v-icon class="mr-3">mdi-calendar</v-icon>
-              Ngày sinh: {{User.ngay_sinh}}
+              Ngày sinh: {{ User.ngay_sinh }}
             </div>
             <div class="mb-2">
               <v-icon class="mr-3">mdi-human</v-icon>
-              Giới tính: {{User.gioi_tinh ? 'Nam' : 'Nữ'}}
+              Giới tính: {{ User.gioi_tinh ? "Nam" : "Nữ" }}
             </div>
             <div class="mb-2">
               <v-icon class="mr-3">mdi-code-brackets</v-icon>
-              Mã số thuế: {{User.ma_so_thue}}
+              Mã số thuế: {{ User.ma_so_thue }}
             </div>
             <div class="mb-2">
               <v-icon class="mr-3">mdi-map-marker</v-icon>
-              Địa chỉ: {{User.dia_chi}}
+              Địa chỉ: {{ User.dia_chi }}
             </div>
             <div class="mb-2">
               <v-icon class="mr-3">mdi-facebook</v-icon>
-              Facebook: {{User.facebook}}
+              Facebook: {{ User.facebook }}
             </div>
             <div class="tieude mt-4">TÀI KHOẢN THANH TOÁN</div>
             <div class="mb-2">
               <v-icon class="mr-3">mdi-barcode</v-icon>
-              Số tài khoản: {{User.so_tai_khoan}}
+              Số tài khoản: {{ User.so_tai_khoan }}
             </div>
             <div class="mb-2">
               <v-icon class="mr-3">mdi-checkbox-marked-circle-outline</v-icon>
-              Số dư: {{formatCurrency(User.so_du)}} đ
+              Số dư: {{ formatCurrency(User.so_du) }} đ
             </div>
             <div class="mb-2">
               <v-icon class="mr-3">mdi-pencil</v-icon>
-              Tiền vay: {{User.tien_vay}}
+              Tiền vay: {{ User.tien_vay }}
             </div>
             <div class="mb-2">
               <v-icon class="mr-3">mdi-calendar</v-icon>
-              Giao dịch cuối: {{formatDatetime(User.giao_dich_cuoi)}}
+              Giao dịch cuối: {{ formatDatetime(User.giao_dich_cuoi) }}
             </div>
             <v-btn class="mt-3 mb-2 mr-6" color="teal" dark>
               <v-icon class="mr-3" small>mdi-book-open-variant</v-icon>Báo cáo
             </v-btn>
-            <v-btn class="mt-3 mb-3 mr-6" color="indigo" dark @click="showUpdate">
+            <v-btn
+              class="mt-3 mb-3 mr-6"
+              color="indigo"
+              dark
+              @click="showUpdate"
+            >
               <v-icon class="mr-3" small>mdi-pencil</v-icon>Cập nhật thông tin
             </v-btn>
-            <v-btn class="mt-1 mb-3 mr-6" color="green" dark @click="showChangePass">
+            <v-btn
+              class="mt-1 mb-3 mr-6"
+              color="green"
+              dark
+              @click="showChangePass"
+            >
               <v-icon class="mr-3" small>mdi-lock</v-icon>Đổi mật khẩu
             </v-btn>
           </div>
@@ -102,7 +147,14 @@
           >
             <div class="tieude ml-6">LỊCH SỬ GIAO DỊCH</div>
             <v-list-item v-for="item in giaoDich" :key="item.id">
-              <v-btn v-if="item.trang_thai == 'nop_tien'" class="mx-2" fab dark small color="green">
+              <v-btn
+                v-if="item.trang_thai == 'nop_tien'"
+                class="mx-2"
+                fab
+                dark
+                small
+                color="green"
+              >
                 <v-icon dark>mdi-database-plus</v-icon>
               </v-btn>
               <v-btn
@@ -136,15 +188,32 @@
                 <v-icon dark>mdi-cash</v-icon>
               </v-btn>
               <v-list-item-content>
-                <v-list-item-title v-if="item.trang_thai == 'mua_hang'">Giao dịch mua hàng</v-list-item-title>
-                <v-list-item-title v-if="item.trang_thai == 'nop_tien'">Nộp tiền vào tài khoản</v-list-item-title>
-                <v-list-item-title v-if="item.trang_thai == 'hoan_tac_nop_tien'">Hoàn tác nộp tiền</v-list-item-title>
-                <v-list-item-title v-if="item.trang_thai == 'hoan_tien'">Hoàn tiền mua hàng</v-list-item-title>
-                <v-list-item-subtitle>{{formatDatetime(item.created_at)}}</v-list-item-subtitle>
+                <v-list-item-title v-if="item.trang_thai == 'mua_hang'"
+                  >Giao dịch mua hàng</v-list-item-title
+                >
+                <v-list-item-title v-if="item.trang_thai == 'nop_tien'"
+                  >Nộp tiền vào tài khoản</v-list-item-title
+                >
+                <v-list-item-title v-if="item.trang_thai == 'hoan_tac_nop_tien'"
+                  >Hoàn tác nộp tiền</v-list-item-title
+                >
+                <v-list-item-title v-if="item.trang_thai == 'hoan_tien'"
+                  >Hoàn tiền mua hàng</v-list-item-title
+                >
+                <v-list-item-subtitle>{{
+                  formatDatetime(item.created_at)
+                }}</v-list-item-subtitle>
               </v-list-item-content>
 
               <v-list-item-action>
-                <h4>{{+item.so_tien> 0 ? '+' + formatCurrency(item.so_tien) : formatCurrency(item.so_tien)}} đ</h4>
+                <h4>
+                  {{
+                    +item.so_tien > 0
+                      ? "+" + formatCurrency(item.so_tien)
+                      : formatCurrency(item.so_tien)
+                  }}
+                  đ
+                </h4>
               </v-list-item-action>
             </v-list-item>
           </div>
@@ -160,7 +229,7 @@
 
           <v-card v-for="(item, index) in donHangs" :key="item.id" class="pb-4">
             <div style="font-weight: bold" class="mt-6 d-flex pt-4 pl-4">
-              <div>{{index + 1}}. Mã đơn: {{item.ma}}</div>
+              <div>{{ index + 1 }}. Mã đơn: {{ item.ma }}</div>
               <div class="flex-fill">
                 <v-btn
                   v-if="item.trang_thai == 'moi_tao'"
@@ -168,49 +237,56 @@
                   small
                   outlined
                   color="indigo"
-                >Mới tạo</v-btn>
+                  >Mới tạo</v-btn
+                >
                 <v-btn
                   v-if="item.trang_thai == 'mua_hang_online'"
                   class="ml-3"
                   small
                   outlined
                   color="indigo"
-                >Đơn mua hàng</v-btn>
+                  >Đơn mua hàng</v-btn
+                >
                 <v-btn
                   v-if="item.trang_thai == 'dat_hang_online'"
                   class="ml-3"
                   small
                   outlined
                   color="cyan "
-                >Đơn đặt trước</v-btn>
+                  >Đơn đặt trước</v-btn
+                >
                 <v-btn
                   v-if="item.trang_thai == 'hoa_don'"
                   class="ml-3 mr-2"
                   small
                   outlined
                   color="green"
-                >Đã thanh toán</v-btn>
+                  >Đã thanh toán</v-btn
+                >
                 <v-btn
                   v-if="item.trang_thai == 'khach_huy'"
                   class="ml-3 mr-3"
                   small
                   outlined
                   color="purple"
-                >Đã hủy đơn</v-btn>
+                  >Đã hủy đơn</v-btn
+                >
                 <v-btn
                   v-if="item.trang_thai == 'huy_hoa_don'"
                   class="ml-3 mr-3"
                   small
                   outlined
                   color="warning"
-                >Hủy hóa đơn</v-btn>
+                  >Hủy hóa đơn</v-btn
+                >
                 <v-btn
                   v-if="item.trang_thai == 'huy_bo'"
                   class="ml-3 mr-3"
                   small
                   outlined
                   color="pink"
-                >Admin hủy đơn</v-btn>
+                  >Admin hủy đơn</v-btn
+                >
               </div>
               <div>
                 <v-tooltip left>
@@ -223,7 +299,11 @@
                       dark
                       x-small
                       color="pink"
-                      v-if="item.trang_thai == 'moi_tao' || item.trang_thai == 'mua_hang_online'|| item.trang_thai == 'dat_hang_online'"
+                      v-if="
+                        item.trang_thai == 'moi_tao' ||
+                          item.trang_thai == 'mua_hang_online' ||
+                          item.trang_thai == 'dat_hang_online'
+                      "
                       @click="huyDon(item.id)"
                     >
                       <v-icon dark>mdi-close</v-icon>
@@ -253,7 +333,7 @@
             </div>
             <div class="ml-4 mt-3" style="font-size: 15px">
               <v-icon class="mr-1">mdi-calendar-clock</v-icon>
-              Thời gian: {{formatDatetime(item.created_at)}}
+              Thời gian: {{ formatDatetime(item.created_at) }}
             </div>
             <v-simple-table class="mb-4">
               <template v-slot:default>
@@ -270,24 +350,43 @@
                     <td>
                       <v-avatar class="mr-4 anhsanpham mt-2 mb-2">
                         <img
-                          :src="sanpham.san_pham ? END_POINT_IMAGE + sanpham.san_pham.anh_dai_dien : product"
+                          :src="
+                            sanpham.san_pham
+                              ? END_POINT_IMAGE + sanpham.san_pham.anh_dai_dien
+                              : product
+                          "
                           alt="John"
                         />
                       </v-avatar>
                       {{ sanpham.san_pham.ten_san_pham }}
                     </td>
-                    <td>{{ sanpham.so_luong }} {{sanpham.san_pham.don_vi_tinh}}</td>
-                    <td>{{ formatCurrency(sanpham.gia_ban)}} đ</td>
-                    <td>{{ formatCurrency(sanpham.gia_ban * sanpham.so_luong)}} đ</td>
+                    <td>
+                      {{ sanpham.so_luong }} {{ sanpham.san_pham.don_vi_tinh }}
+                    </td>
+                    <td>{{ formatCurrency(sanpham.gia_ban) }} đ</td>
+                    <td>
+                      {{ formatCurrency(sanpham.gia_ban * sanpham.so_luong) }} đ
+                    </td>
                   </tr>
                 </tbody>
               </template>
             </v-simple-table>
-            <div class="tien">Tổng tiền: {{formatCurrency(item.tong_tien)}} đ</div>
-            <div class="tien">Giảm giá: {{formatCurrency(item.giam_gia)}} đ</div>
-            <div class="tien">Thanh toán: {{formatCurrency(+item.tong_tien - +item.giam_gia)}} đ</div>
+            <div class="tien">
+              Tổng tiền: {{ formatCurrency(item.tong_tien) }} đ
+            </div>
+            <div class="tien">
+              Giảm giá: {{ formatCurrency(item.giam_gia) }} đ
+            </div>
+            <div class="tien">
+              Thanh toán:
+              {{ formatCurrency(+item.tong_tien - +item.giam_gia) }} đ
+            </div>
           </v-card>
-          <v-progress-linear v-show="loadMore" indeterminate color="green"></v-progress-linear>
+          <v-progress-linear
+            v-show="loadMore"
+            indeterminate
+            color="green"
+          ></v-progress-linear>
           <div class="mt-4 text-center" v-if="!all">
             <v-btn @click="getDonHang()" color="primary" dark>XEM THÊM</v-btn>
           </div>
@@ -382,8 +481,12 @@
         </v-form>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="green darken-1" text @click="dialogInFo = false">Hủy bỏ</v-btn>
-          <v-btn color="green darken-1" text @click="updateInfo()">Cập nhật</v-btn>
+          <v-btn color="green darken-1" text @click="dialogInFo = false"
+            >Hủy bỏ</v-btn
+          >
+          <v-btn color="green darken-1" text @click="updateInfo()"
+            >Cập nhật</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -429,8 +532,12 @@
         </v-form>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="green darken-1" text @click="dialogPass = false">Hủy bỏ</v-btn>
-          <v-btn color="green darken-1" text @click="updatePass()">Cập nhật</v-btn>
+          <v-btn color="green darken-1" text @click="dialogPass = false"
+            >Hủy bỏ</v-btn
+          >
+          <v-btn color="green darken-1" text @click="updatePass()"
+            >Cập nhật</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -444,7 +551,7 @@ import { END_POINT_IMAGE, END_POINT } from "@/env";
 
 export default {
   head: () => ({
-    title: 'Trang Cá Nhân'
+    title: "Trang Cá Nhân"
   }),
   layout: "header",
   data: () => ({
@@ -464,14 +571,14 @@ export default {
     pass: {
       oldPassword: null,
       newPassword: null,
-      reNewPassword: null,
+      reNewPassword: null
     },
     User: {
-      user: {},
+      user: {}
     },
     gioiTinh: [
       { ten: "Nam", id: true },
-      { ten: "Nữ", id: false },
+      { ten: "Nữ", id: false }
     ],
     dialogInFo: false,
     form: {
@@ -482,33 +589,33 @@ export default {
       email: "",
       ma_so_thue: "",
       facebook: "",
-      gioi_tinh: false,
+      gioi_tinh: false
     },
     diaChidRules: [
-      (v) => !!v || "Địa chỉ nhận hàng không thể bỏ trống",
-      (v) => (v && v.length >= 6) || "Địa chỉ tối thiểu 6 ký tự",
+      v => !!v || "Địa chỉ nhận hàng không thể bỏ trống",
+      v => (v && v.length >= 6) || "Địa chỉ tối thiểu 6 ký tự"
     ],
     emailRules: [
-      (v) => !!v || "Email không thể bỏ trống",
-      (v) => /.+@.+\..+/.test(v) || "E-mail không hợp lệ",
+      v => !!v || "Email không thể bỏ trống",
+      v => /.+@.+\..+/.test(v) || "E-mail không hợp lệ"
     ],
     nameRules: [
-      (v) => !!v || "Tên không thể bỏ trống",
-      (v) => (v && v.length >= 2) || "Tên tối thiểu 2 ký tự",
+      v => !!v || "Tên không thể bỏ trống",
+      v => (v && v.length >= 2) || "Tên tối thiểu 2 ký tự"
     ],
     phoneRules: [
-      (v) => !!v || "Số điện thoại Không thể bỏ trống",
-      (v) => (v && v.length == 10) || "Số điện thoại không hợp lệ",
+      v => !!v || "Số điện thoại Không thể bỏ trống",
+      v => (v && v.length == 10) || "Số điện thoại không hợp lệ"
     ],
-    oldPassRules: [(v) => !!v || "Mật khẩu cũ không thể bỏ trống"],
+    oldPassRules: [v => !!v || "Mật khẩu cũ không thể bỏ trống"],
     newPassRules: [
-      (v) => !!v || "Mật khẩu mới không thể bỏ trống",
-      (v) => (v && v.length >= 6) || "Mật khẩu tối thiểu 6 ký tự",
+      v => !!v || "Mật khẩu mới không thể bỏ trống",
+      v => (v && v.length >= 6) || "Mật khẩu tối thiểu 6 ký tự"
     ],
     renewPassRules: [
-      (v) => !!v || "Hãy nhập lại mật khẩu mới",
-      (v) => (v && v.length >= 6) || "Tối thiểu 6 ký tự",
-    ],
+      v => !!v || "Hãy nhập lại mật khẩu mới",
+      v => (v && v.length >= 6) || "Tối thiểu 6 ký tự"
+    ]
   }),
   mounted() {
     this.me();
@@ -517,7 +624,7 @@ export default {
   watch: {
     isActive(val) {
       console.log(val);
-    },
+    }
   },
   methods: {
     async me() {
@@ -535,7 +642,7 @@ export default {
       this.loadMore = true;
       let data = await api.get("donhangmobile", {
         per_page: this.per_page,
-        page: this.page,
+        page: this.page
       });
       if (this.page == data.data.last_page) {
         this.all = true;
@@ -691,8 +798,8 @@ export default {
         // this.me();
         window.location.assign("/");
       } catch (error) {}
-    },
-  },
+    }
+  }
 };
 </script>
 <style scoped>
