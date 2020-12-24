@@ -2,8 +2,17 @@
   <v-layout justify-center>
     <div class="page-width">
       <div class="all-product">{{ tenDanhMuc }}</div>
-      <v-progress-linear color="green darken-2" rounded value="100"></v-progress-linear>
-      <v-text-field color="success" loading disabled v-if="loadSanPham"></v-text-field>
+      <v-progress-linear
+        color="green darken-2"
+        rounded
+        value="100"
+      ></v-progress-linear>
+      <v-text-field
+        color="success"
+        loading
+        disabled
+        v-if="loadSanPham"
+      ></v-text-field>
       <div
         style="margin-top: 50px; display: flex; flex-direction: row-reverse; flex-wrap: wrap;"
         v-else
@@ -16,7 +25,11 @@
         >
           <NuxtLink :to="'/sanpham/' + sanPham.id">
             <v-img
-              :src=" sanPham.anh_dai_dien ? END_POINT_IMAGE + sanPham.anh_dai_dien : product"
+              :src="
+                sanPham.anh_dai_dien
+                  ? END_POINT_IMAGE + sanPham.anh_dai_dien
+                  : product
+              "
               :lazy-src="product"
               width="100%"
               height="200"
@@ -26,35 +39,74 @@
           <v-card-title
             style="height: 95px; color: black;font-size: 16px;font-weight: normal"
             class="ten-sanpham"
-          >{{ sanPham.ten_san_pham }}</v-card-title>
-          <v-card-subtitle class="d-flex align-center" style="justify-content: space-between">
-            <span
-              style="color: #764B09; font-size: 16px; font-weight: bold"
-            >{{ formatCurrency(sanPham.gia_ban) }} đ</span>
-            <span
-              style="color: black; font-size: 14px; font-weight: normal"
-            >/{{sanPham.don_vi_tinh}}</span>
-            <v-btn
-              v-if="sanPham.san_pham_ton_kho && sanPham.san_pham_ton_kho.so_luong > 0"
-              color="green"
-              class="mx-2 gio-hang"
-              fab
-              dark
-              small
-              @click="addGioHang(sanPham.id)"
+            >{{ sanPham.ten_san_pham }}</v-card-title
+          >
+          <v-card-subtitle
+            class="d-flex align-center"
+            style="justify-content: space-between; flex-wrap: wrap"
+          >
+            <span style="color: #764B09; font-size: 16px; font-weight: bold"
+              >{{ formatCurrency(sanPham.gia_ban) }} đ</span
             >
-              <v-icon>mdi-cart</v-icon>
-            </v-btn>
-            <v-btn v-else color="#9E9E9E" class="mx-2 gio-hang" fab dark small>
-              <v-icon>mdi-cart</v-icon>
-            </v-btn>
-            <v-btn
-              icon
-              @click="addSanPhamYeuThich(sanPham.id)"
-              :style="{color: sanPham.daYeuThich ? 'red' : 'gray'}"
+            <span style="color: black; font-size: 14px; font-weight: normal"
+              >/{{ sanPham.don_vi_tinh }}</span
             >
-              <v-icon>mdi-heart</v-icon>
-            </v-btn>
+            <div class="d-flex mt-3" style="flex-direction: row">
+              <v-btn
+                small
+                class="btnmobile"
+                outlined
+                color="green"
+                @click="addGioHang(sanPham.id)"
+                v-if="
+                  sanPham.san_pham_ton_kho &&
+                    sanPham.san_pham_ton_kho.so_luong > 0
+                "
+              >
+                <v-icon left>
+                  mdi-cart
+                </v-icon>
+                Mua hàng
+              </v-btn>
+              <v-btn class="btnmobile" outlined color="pink" v-else small>
+                <v-icon left>
+                  mdi-cart
+                </v-icon>
+                Đặt hàng
+              </v-btn>
+
+              <v-btn
+                v-if="
+                  sanPham.san_pham_ton_kho &&
+                    sanPham.san_pham_ton_kho.so_luong > 0
+                "
+                color="green"
+                class="mx-2 gio-hang btnweb"
+                fab
+                dark
+                small
+                @click="addGioHang(sanPham.id)"
+              >
+                <v-icon>mdi-cart</v-icon>
+              </v-btn>
+              <v-btn
+                v-else
+                color="#9E9E9E"
+                class="mx-2 gio-hang btnweb"
+                fab
+                dark
+                small
+              >
+                <v-icon>mdi-cart</v-icon>
+              </v-btn>
+              <v-btn
+                icon
+                @click="addSanPhamYeuThich(sanPham.id)"
+                :style="{ color: sanPham.daYeuThich ? 'red' : 'gray' }"
+              >
+                <v-icon>mdi-heart</v-icon>
+              </v-btn>
+            </div>
           </v-card-subtitle>
         </v-card>
       </div>
@@ -85,13 +137,13 @@ export default {
     per_page: 20,
     total_page: 1,
     loadSanPham: true,
-    product: product,
+    product: product
   }),
   watch: {
     $route(to, from) {
       this.getSanPham();
       this.getDanhMuc();
-    },
+    }
   },
   mounted() {
     this.getSanPham();
@@ -103,10 +155,10 @@ export default {
       let data = await api.get("sanpham", {
         danh_muc_id: this.$route.params.id,
         per_page: this.per_page,
-        page: this.page,
+        page: this.page
       });
 
-      this.sanPhams = data.data.data.data.map((e) => {
+      this.sanPhams = data.data.data.data.map(e => {
         e.daYeuThich = false;
         return e;
       });
@@ -120,15 +172,15 @@ export default {
       this.loadSanPham = false;
     },
     addSanPhamYeuThich(id) {
-      this.sanPhams.find((el) => el.id == id).daYeuThich = !this.sanPhams.find(
-        (el) => el.id == id
+      this.sanPhams.find(el => el.id == id).daYeuThich = !this.sanPhams.find(
+        el => el.id == id
       ).daYeuThich;
       let product = JSON.parse(localStorage.getItem("san_pham_yeu_thich"));
       if (!product) {
         product = [];
       }
       let sP = {};
-      let check = product.findIndex((el) => el == id);
+      let check = product.findIndex(el => el == id);
       if (check !== -1) {
         product.splice(check, 1);
       } else {
@@ -142,7 +194,7 @@ export default {
         product = [];
       }
       let sP = {};
-      let check = product.find((el) => el.san_pham_id == id);
+      let check = product.find(el => el.san_pham_id == id);
       if (check) {
         check.so_luong = check.so_luong + 1;
       } else {
@@ -163,7 +215,7 @@ export default {
     async getDanhMuc() {
       let data = await api.get("danhmuc");
       this.tenDanhMuc = data.data.data.find(
-        (el) => el.id == this.$route.params.id
+        el => el.id == this.$route.params.id
       ).ten_danh_muc;
     },
     PaginateSanPham(val) {
@@ -180,8 +232,8 @@ export default {
       } catch (error) {
         return "0";
       }
-    },
-  },
+    }
+  }
 };
 </script>
 <style scoped>
@@ -204,9 +256,18 @@ export default {
   font-weight: bold;
   color: green;
 }
+.btnmobile {
+  display: none;
+}
 @media only screen and (max-width: 600px) {
   .san-pham {
-    max-width: 240px;
+    max-width: 170px;
+  }
+  .btnmobile {
+    display: flex;
+  }
+  .btnweb {
+    display: none;
   }
   .all-product {
     font-size: 24px;

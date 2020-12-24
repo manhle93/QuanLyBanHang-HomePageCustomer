@@ -5,7 +5,7 @@
       <v-progress-linear color="green darken-2" rounded value="100"></v-progress-linear>
       <v-text-field color="success" loading disabled v-if="loadSanPham"></v-text-field>
       <div class="c-flex">
-        <div style="font-weight: bold; font-size: 26px" class="mt-3">{{baiViet.tieu_de}}</div>
+        <div style="font-weight: bold; font-size: 26px; text-align: justify" class="mt-3 pl-4 pr-4">{{baiViet.tieu_de}}</div>
         <div class="d-flex align-center mt-4">
           <v-avatar color="indigo">
             <img

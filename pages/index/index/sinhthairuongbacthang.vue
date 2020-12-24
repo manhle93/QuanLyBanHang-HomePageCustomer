@@ -1,34 +1,82 @@
 <template>
   <v-layout justify-center>
     <div class="page-width">
-      <div style="border-bottom: solid 1px green;" class="all-product">SINH THÁI RUỘNG BẬC THANG</div>
-      <v-text-field color="success" loading disabled v-if="loadSanPham"></v-text-field>
-      <div class="d-flex mt-6" v-for="baiViet in baiViets" :key="baiViet.id">
+      <div style="border-bottom: solid 1px green;" class="all-product">
+        SINH THÁI RUỘNG BẬC THANG
+      </div>
+      <v-text-field
+        color="success"
+        loading
+        disabled
+        v-if="loadSanPham"
+      ></v-text-field>
+      <div
+        class="d-flex mt-6 baiviet-mobile"
+        v-for="baiViet in baiViets"
+        :key="baiViet.id"
+      >
         <nuxt-link :to="'baiviet/' + baiViet.id">
-        <div style="height: 150px; width: 250px;">
-          <v-img
-            :src="baiViet.anh_dai_dien ? END_POINT_IMAGE + baiViet.anh_dai_dien : product"
-            aspect-ratio="1.7"
-            height="150px"
-            style="border-radius: 10px"
-          ></v-img>
-        </div>
+          <div class="image-mobile">
+            <v-img
+              :src="
+                baiViet.anh_dai_dien
+                  ? END_POINT_IMAGE + baiViet.anh_dai_dien
+                  : product
+              "
+              aspect-ratio="1.7"
+              height="150px"
+              style="border-radius: 10px"
+            ></v-img>
+          </div>
         </nuxt-link>
         <div class="flex-fill c-flex pl-6">
           <nuxt-link :to="'baiviet/' + baiViet.id">
-          <div v-if="baiViet.tieu_de.length > 90" style="font-weight: bold; font-size: 22px">{{baiViet.tieu_de.substr(0, 90)}}...</div>
-          <div v-else style="font-weight: bold; font-size: 22px">{{baiViet.tieu_de}}</div>
+            <div class="noidung-mobile" v-if="baiViet.tieu_de.length > 90">
+              {{ baiViet.tieu_de.substr(0, 90) }}...
+            </div>
+            <div v-else class="noidung-mobile">
+              {{ baiViet.tieu_de }}
+            </div>
           </nuxt-link>
           <!-- <div v-html="parseText(baiViet.noi_dung)"></div> -->
-          <div class="noi-dung" style="text-align: justify; text-justify: inter-word;" v-if="baiViet.noi_dung.length > 250">{{baiViet.noi_dung.substr(0, 250)}}...</div>
-          <div class="noi-dung" v-else style="text-align: justify; text-justify: inter-word;">{{baiViet.noi_dung}}</div>
+          <div
+            class="noi-dung"
+            style="text-align: justify; text-justify: inter-word;"
+            v-if="baiViet.noi_dung.length > 250"
+          >
+            {{ baiViet.noi_dung.substr(0, 250) }}...
+          </div>
+          <div
+            class="noi-dung"
+            v-else
+            style="text-align: justify; text-justify: inter-word;"
+          >
+            {{ baiViet.noi_dung }}
+          </div>
           <div class="d-flex align-center mt-4">
             <v-avatar color="indigo">
-              <img v-if="baiViet.user.avatar_url" :src="END_POINT_IMAGE + baiViet.user.avatar_url" alt="John" />
-              <span v-else class="white--text headline">{{baiViet.user.name.charAt(0)}}</span>
+              <img
+                v-if="baiViet.user.avatar_url"
+                :src="END_POINT_IMAGE + baiViet.user.avatar_url"
+                alt="John"
+              />
+              <span v-else class="white--text headline">{{
+                baiViet.user.name.charAt(0)
+              }}</span>
             </v-avatar>
-            <div class="ml-3" style="font-weight: bold; font-size: 16px"><span class="noi-dung" style="font-size: 14px; font-style: italic; font-weight: normal">Đăng bởi: </span>{{baiViet.user.name}}</div>
-            <div class="ml-3 noi-dung" style="font-style: italic; font-size: 14px">Lúc {{formatDatetime(baiViet.created_at)}}</div>
+            <div class="ml-3" style="font-weight: bold; font-size: 16px">
+              <span
+                class="noi-dung"
+                style="font-size: 14px; font-style: italic; font-weight: normal"
+                >Đăng bởi: </span
+              >{{ baiViet.user.name }}
+            </div>
+            <div
+              class="ml-3 noi-dung"
+              style="font-style: italic; font-size: 14px"
+            >
+              Lúc {{ formatDatetime(baiViet.created_at) }}
+            </div>
           </div>
         </div>
       </div>
@@ -62,7 +110,7 @@ export default {
     product: product,
     snackbar: false,
     noiDung: "",
-    test: "green",
+    test: "green"
   }),
   mounted() {
     this.getBaiViet();
@@ -73,7 +121,7 @@ export default {
       let data = await api.get("baiviet", {
         per_page: this.per_page,
         page: this.page,
-        trang_thai: 'xuat_ban'
+        trang_thai: "xuat_ban"
       });
       this.baiViets = data.data.data.data;
 
@@ -136,13 +184,16 @@ export default {
       } catch (error) {
         return "0";
       }
-    },
-  },
+    }
+  }
 };
 </script>
 <style scoped>
 .d-flex {
   display: flex;
+  flex-direction: row;
+}
+.baiviet-mobile {
   flex-direction: row;
 }
 .danh-muc {
@@ -163,9 +214,22 @@ export default {
 .san-pham {
   width: 250px;
 }
+.image-mobile {
+  height: 150px;
+  width: 250px;
+}
+  .noidung-mobile {
+    font-weight: bold;
+    font-size: 22px;
+  }
 @media only screen and (max-width: 600px) {
   .khuyen-mai {
     display: none;
+  }
+  .image-mobile {
+    width: 350px;
+    height: 160px;
+    margin-top: 20px;
   }
   .text-icon {
     font-size: 10px;
@@ -184,7 +248,15 @@ export default {
     display: none;
   }
   .noi-dung {
-    display: none
+    display: none;
+  }
+  .baiviet-mobile {
+    flex-direction: column;
+    align-items: center;
+  }
+  .noidung-mobile {
+    font-weight: bold;
+    font-size: 18px;
   }
 }
 </style>
