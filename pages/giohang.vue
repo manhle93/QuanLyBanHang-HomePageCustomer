@@ -66,7 +66,7 @@
                   {{ formatCurrency(sanPham.gia_ban) }} đ
                   <span
                     style="color: black; font-size: 14px; font-weight: normal"
-                  >/{{sanPham.don_vi_tinh}}</span>
+                  >/{{ sanPham.don_vi_tinh }}</span>
                 </div>
               </div>
               <div class="hide-text">
@@ -191,7 +191,7 @@
                   {{ formatCurrency(sanPham.gia_ban) }} đ
                   <span
                     style="color: black; font-size: 14px; font-weight: normal"
-                  >/{{sanPham.don_vi_tinh}}</span>
+                  >/{{ sanPham.don_vi_tinh }}</span>
                 </div>
               </div>
               <div class="hide-text">
@@ -398,6 +398,7 @@ export default {
     noiDung: "",
     snackbar: false,
     loadSanPham: true,
+    phanTramGiamGia: 0,
     product: product,
     customerIcon: customerIcon,
     refershIcon: refershIcon,
@@ -439,6 +440,15 @@ export default {
     this.getSanPhamDathang();
   },
   methods: {
+    async getGiamGia(){
+      try {
+        let data = await api.get("thongtindathang");
+        let gg = await api.get('chietkhaukhachhang/' +  data.data.data.tin_nhiem)
+        this.phanTramGiamGia =  gg.data.phan_tram
+      } catch (error) {
+        this.phanTramGiamGia = 0
+      }
+    },
     async getInfo() {
       try {
         let data = await api.get("thongtindathang");
@@ -450,7 +460,7 @@ export default {
         this.form.datHang = this.sanPhamDatHangs;
         this.form.mua_hang = true;
         this.form.danhSachHang = this.sanPhams;
-        this.form.phuong_thuc_thanh_toan = "tai_khoan";
+        this.form.phuong_thuc_thanh_toan = "tien_mat";
       } catch (error) {
         this.form = {
           ma: "DH" + new Date().getTime(),
@@ -504,6 +514,7 @@ export default {
           this.sanPhamDatHangs.push(item);
         }
       }
+      await this.getGiamGia()
       this.tinhTongTien();
       this.tinhTongTienDatHang();
       this.loadSanPham = false;
@@ -586,14 +597,16 @@ export default {
         this.tongTien =
           this.tongTien + Number(item.so_luong) * Number(item.gia_ban);
       }
+      this.giamGia = Number(this.tongTien) * Number(this.phanTramGiamGia)/100
       this.tongTien = this.tongTien - this.giamGia;
-    },
+    },  
     tinhTongTienDatHang() {
       this.tongTienDatHang = 0;
       for (let item of this.sanPhamDatHangs) {
         this.tongTienDatHang =
           this.tongTienDatHang + Number(item.so_luong) * Number(item.gia_ban);
       }
+      this.giamGiaDathang = Number(this.tongTienDatHang) * Number(this.phanTramGiamGia)/100
       this.tongTienDatHang = this.tongTienDatHang - this.giamGiaDathang;
     },
     doiSoLuong(val) {
@@ -615,6 +628,7 @@ export default {
     async datHang() {
       if (this.$refs.form.validate()) {
         try {
+          console.log(this.form)
           let data = await api.post("khachdathang", this.form);
           this.colorSnackbar = "green";
           this.snackbar = true;

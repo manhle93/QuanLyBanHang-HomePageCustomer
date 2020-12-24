@@ -233,6 +233,14 @@ export default {
       let data = await api.get("sanphamtrangchu/" + this.$route.params.id);
       this.loadSanPham = false;
       this.sanPham = data.data;
+      if(this.sanPham.anh_dai_dien){
+        if(!this.sanPham.hinh_anhs){this.sanPham.hinh_anhs = []}
+        let image = {
+          url_hinh_anh: this.sanPham.anh_dai_dien,
+          san_pham_id: this.sanPham.id
+        }
+        this.sanPham.hinh_anhs.push(image)
+      }
     },
     async getDanhMuc() {
       let data = await api.get("danhmuc", { per_page: 9 });

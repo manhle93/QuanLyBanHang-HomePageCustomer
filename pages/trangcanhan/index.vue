@@ -9,7 +9,7 @@
     <div class="page-width">
       <div
         class="image-cover avatar mt-3"
-        style="max-width: 100%; height: 300px; background: url('https://res.cloudinary.com/dsobei3hp/image/upload/v1608542964/GitHub/1_b1cBcGGOy1djw8kbBkWOng_ad3auw.jpg')"
+        style="max-width: 100%; height: 300px; background: url('https://res.cloudinary.com/dsobei3hp/image/upload/v1608782360/GitHub/043552009311f5b53aec70d9d354c0f5_uk9vup.jpg')"
       >
         <a>
           <v-avatar

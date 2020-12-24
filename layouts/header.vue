@@ -153,13 +153,15 @@
               />
             </a>
             <div class="pr-4 d-flex">
+              <a href="tel:+84862968081">
               <v-btn x-small dark fab color="pink">
                 <v-icon>mdi-phone</v-icon>
               </v-btn>
+              </a>
               <span
                 style="font-size: 20px; font-weight: bold; font-style: italic; font-family: 'time new roman"
                 class="mt-1 ml-1 so-dien-thoai"
-              >086.296.8081</span>
+              ><a href="tel:+84862968081" style="color: white">086.296.8081</a></span>
             </div>
           </div>
           <nuxt-link to="/dangky" v-if="!loggedIn">
