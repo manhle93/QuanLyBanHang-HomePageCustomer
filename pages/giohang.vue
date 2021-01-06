@@ -473,7 +473,7 @@ export default {
           datHang: this.sanPhamDatHangs,
           giam_gia: this.giamGia,
           tong_tien: this.tongTien,
-          phuong_thuc_thanh_toan: "cod",
+          phuong_thuc_thanh_toan: "tien_mat",
         };
       }
     },
