@@ -1,0 +1,1 @@
+__NUXT_JSONP__("/giohang", {data:[{}],fetch:[],mutations:[]});
