@@ -692,9 +692,10 @@ export default {
         return "";
       }
       try {
+        console.log(time)
         let d = new Date(time);
         let month = +d.getUTCMonth() + 1;
-        let hours = +d.getUTCHours();
+        let hours = +d.getHours();
         let min = +d.getMinutes();
         if (month < 10) {
           month = "0" + month;
