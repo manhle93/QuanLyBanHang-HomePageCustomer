@@ -1,16 +1,35 @@
 <template>
   <v-app id="inspire">
     <v-navigation-drawer v-model="leftMenu" app temporary>
-      <div style="height: 100%; display: flex; flex-direction: column ">
+      <div style="height: 100%; display: flex; flex-direction: column">
         <div
           class="d-flex pl-4"
-          style="background-color: #F5B041; font-size: 20px; font-weight: bold; align-items: center; height: 60px; width: 100%;"
+          style="
+            background-color: #f5b041;
+            font-size: 20px;
+            font-weight: bold;
+            align-items: center;
+            height: 60px;
+            width: 100%;
+          "
         >
           <v-icon style="margin-right: 15px">mdi-menu</v-icon>DANH MỤC
         </div>
-        <div class="page-width c-flex" style="width: 100%; background-color: #196F3D; padding-top: 10px; padding-bottom: 10px; padding-left: 10px">
+        <div
+          class="page-width c-flex"
+          style="
+            width: 100%;
+            background-color: #196f3d;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            padding-left: 10px;
+          "
+        >
           <div class="d-flex" style="padding-bottom: 10px">
-            <img src="https://image.flaticon.com/icons/svg/415/415753.svg" height="25" />
+            <img
+              src="https://image.flaticon.com/icons/svg/415/415753.svg"
+              height="25"
+            />
             <nuxt-link to="/homnayangi" style="margin-left: 15px">
               <div style="color: white">Hôm nay ăn gì</div>
             </nuxt-link>
@@ -24,7 +43,7 @@
               <div style="color: white">Sản phẩm bán chạy</div>
             </nuxt-link>
           </div>
-           <div class="d-flex">
+          <div class="d-flex">
             <img
               src="https://image.flaticon.com/icons/svg/3199/3199306.svg"
               height="25"
@@ -34,15 +53,30 @@
             </nuxt-link>
           </div>
         </div>
-        <div dense class="pt-4 pl-4" style="height: 100%; background-color: #fff">
-          <div v-for="danhMuc in danhMucs" :key="danhMuc.id" style="height: 45px">
-            <NuxtLink :to="'/danhmuc/' + danhMuc.id" class="d-flex align-center">
+        <div
+          dense
+          class="pt-4 pl-4"
+          style="height: 100%; background-color: #fff"
+        >
+          <div
+            v-for="danhMuc in danhMucs"
+            :key="danhMuc.id"
+            style="height: 45px"
+          >
+            <NuxtLink
+              :to="'/danhmuc/' + danhMuc.id"
+              class="d-flex align-center"
+            >
               <v-avatar size="36">
                 <img
-                  :src="danhMuc.anh_dai_dien ? END_POINT_IMAGE + danhMuc.anh_dai_dien : product "
+                  :src="
+                    danhMuc.anh_dai_dien
+                      ? END_POINT_IMAGE + danhMuc.anh_dai_dien
+                      : product
+                  "
                 />
               </v-avatar>
-              <div class="danh-muc">{{danhMuc.ten_danh_muc}}</div>
+              <div class="danh-muc">{{ danhMuc.ten_danh_muc }}</div>
             </NuxtLink>
           </div>
         </div>
@@ -59,9 +93,15 @@
     <v-app-bar app color="green" dark height="135">
       <div
         class="d-flex align-center flex-column"
-        style="width: calc(100% + 32px); height: 100%; margin-left: -16px; margin-right: -16px; margin-bottom: -8px"
+        style="
+          width: calc(100% + 32px);
+          height: 100%;
+          margin-left: -16px;
+          margin-right: -16px;
+          margin-bottom: -8px;
+        "
       >
-        <div class="d-flex align-center page-width" style="height: 85px;">
+        <div class="d-flex align-center page-width" style="height: 85px">
           <v-app-bar-nav-icon
             @click.stop="leftMenu = !leftMenu"
             v-show="!$vuetify.breakpoint.lgAndUp"
@@ -154,14 +194,17 @@
             </a>
             <div class="pr-4 d-flex">
               <a href="tel:+84862968081">
-              <v-btn x-small dark fab color="pink">
-                <v-icon>mdi-phone</v-icon>
-              </v-btn>
+                <v-btn x-small dark fab color="pink">
+                  <v-icon>mdi-phone</v-icon>
+                </v-btn>
               </a>
               <span
                 style="font-size: 20px; font-weight: bold; font-style: italic; font-family: 'time new roman"
                 class="mt-1 ml-1 so-dien-thoai"
-              ><a href="tel:+84862968081" style="color: white">086.296.8081</a></span>
+                ><a href="tel:+84862968081" style="color: white"
+                  >086.296.8081</a
+                ></span
+              >
             </div>
           </div>
           <nuxt-link to="/dangky" v-if="!loggedIn">
@@ -171,7 +214,12 @@
             <v-btn class="mr-4 button" small color="orange">Đăng nhập</v-btn>
           </nuxt-link>
 
-          <v-menu bottom origin="center center" transition="scale-transition" v-if="loggedIn">
+          <v-menu
+            bottom
+            origin="center center"
+            transition="scale-transition"
+            v-if="loggedIn"
+          >
             <template v-slot:activator="{ on }">
               <v-btn icon large v-on="on" class="mr-4">
                 <!-- <v-avatar size="40px" item v-if="user.anh_dai_dien">
@@ -181,7 +229,10 @@
               <v-img src="./assets/avatar.jpg" alt="Vuetify"></v-img>
                 </v-avatar>-->
                 <v-avatar>
-                  <img :src="User.avatar ? END_POINT_IMAGE + User.avatar : avatar" alt="John" />
+                  <img
+                    :src="User.avatar ? END_POINT_IMAGE + User.avatar : avatar"
+                    alt="John"
+                  />
                 </v-avatar>
               </v-btn>
             </template>
@@ -209,11 +260,15 @@
         </div>
         <div
           class="flex-fill d-flex"
-          style="background-color: #196F3D; width: 100%; justify-content: center"
+          style="
+            background-color: #196f3d;
+            width: 100%;
+            justify-content: center;
+          "
         >
           <div
             class="page-width d-flex align-center"
-            style="width: 250px; height: 100%; background-color: #F5B041"
+            style="width: 250px; height: 100%; background-color: #f5b041"
             v-if="$vuetify.breakpoint.lgAndUp"
           >
             <v-icon style="margin-left: 10px">mdi-menu</v-icon>
@@ -221,7 +276,12 @@
           </div>
           <div
             class="page-width d-flex align-center"
-            style="width: 650px; height: 100%; background-color: #196F3D; justify-content: space-around"
+            style="
+              width: 650px;
+              height: 100%;
+              background-color: #196f3d;
+              justify-content: space-around;
+            "
           >
             <img
               class="khuyen-mai"
@@ -245,13 +305,20 @@
               height="25"
             />
             <nuxt-link to="/sinhthairuongbacthang">
-              <div class="tieu-de" style="color: white">Sinh thái Ruộng Bậc Thang</div>
+              <div class="tieu-de" style="color: white">
+                Sinh thái Ruộng Bậc Thang
+              </div>
             </nuxt-link>
             <div class="search-mobile">
               <v-form v-on:submit.prevent="timKiem">
                 <input
                   v-model="search"
-                  style="height: 35px; width: 350px; background-color: white; border-radius: 5px;"
+                  style="
+                    height: 35px;
+                    width: 350px;
+                    background-color: white;
+                    border-radius: 5px;
+                  "
                   type="text"
                   placeholder="Hôm nay bạn muốn ăn gì?"
                 />
@@ -260,7 +327,12 @@
           </div>
           <div
             class="page-width khuyen-mai d-flex align-center"
-            style="width: 300px; height: 100%; background-color: #196F3D; padding-left: 40px"
+            style="
+              width: 300px;
+              height: 100%;
+              background-color: #196f3d;
+              padding-left: 40px;
+            "
           >
             <img
               class="khuyen-mai"
@@ -287,20 +359,64 @@
     <v-footer style="margin-top: 25px">
       <v-layout justify-center>
         <div
-          style="display: flex; flex-direction: row; justify-content: space-around; flex-wrap: wrap"
+          style="
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            flex-wrap: wrap;
+          "
           class="page-width"
         >
-          <img :src="logo" style="height: 80px" class="footer" />
+          <div style="height: 100%; padding-top: 20px">
+            <img :src="logo" style="height: 90px" class="footer" />
+          </div>
           <div
-            style="display: flex; flex-direction: column; justify-content: space-around"
+            style="
+              display: flex;
+              flex-direction: column;
+              justify-content: space-around;
+            "
             class="pl-4"
           >
-            <div style="font-size: 16px; font-weight: bold">RUỘNG BẬC THANG</div>
-            <div style="font-size: 14px;">Số ĐKKD: 21A8000753</div>
-            <div style="font-size: 14px;">Hotline: 086.296.8081 - Email: hotro@ruongbacthang.com.vn</div>
-            <div style="font-size: 14px;">Địa chỉ: 54 Ngọc Hân Công Chúa – Tp Bắc Ninh</div>
+            <div style="font-size: 16px; font-weight: bold">
+              RUỘNG BẬC THANG
+            </div>
+            <div style="font-size: 14px">Số ĐKKD: 21A8000753</div>
+            <div style="font-size: 14px">
+              Hotline: 086.296.8081 - Email: hotro@ruongbacthang.com.vn
+            </div>
+            <div style="font-size: 14px">
+              Địa chỉ: 82-84 Ngọc Hân Công Chúa – Tp Bắc Ninh
+            </div>
           </div>
-          <img :src="logoBoCongThuong" style="height: 60px" class="footer" />
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+            "
+          >
+            <div>
+              <img
+                :src="logoBoCongThuong"
+                style="height: 65px"
+                class="footer"
+              />
+            </div>
+            <a
+              href="https://play.google.com/store/apps/details?id=vn.skymapglobal.rbt_khachhang"
+              target="_blank"
+            >
+              <img :src="playStoreIcon" style="height: 40px" />
+            </a>
+            <a
+              href="https://apps.apple.com/vn/app/ru%E1%BB%99ng-b%E1%BA%ADc-thang/id1529846199"
+              target="_blank"
+            >
+              <img :src="appStoreIcon" style="height: 40px" />
+            </a>
+          </div>
         </div>
       </v-layout>
     </v-footer>
@@ -310,15 +426,14 @@
 <script>
 import api from "@/api";
 import logo from "@/assets/image/logo.jpg";
-
 import logoBoCongThuong from "@/assets/image/logobct.png";
-
 import logonew from "@/assets/image/logonew.jpg";
-
 import { END_POINT_IMAGE } from "@/env";
 import product from "@/assets/image/product.png";
 import avatar from "@/assets/image/avatar_none.png";
 import footer from "@/assets/image/footer.png";
+import playStoreIcon from "@/assets/image/google.png";
+import appStoreIcon from "@/assets/image/apple.png";
 
 export default {
   props: {
@@ -326,6 +441,8 @@ export default {
   },
   data: () => ({
     leftMenu: false,
+    playStoreIcon,
+    appStoreIcon,
     logo: logo,
     logonew: logonew,
     logoBoCongThuong: logoBoCongThuong,
